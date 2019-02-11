@@ -1,0 +1,1564 @@
+/* font Body Global*/
+.outer label{
+  font-weight: 100;
+  color:black;
+}
+/* body GLOBAL header-bar*/
+#header_login , #header_queue , #header_order , #header_product , #header_report , #header_configuration,#header_semester,
+#header_semester_search,#header_student,#header_student_search,#header_subject,#header_subject_search,#header_teacher,
+#header_teacher_search,#header_user,#header_user_search{
+padding-top: 3.1%;
+height: 10%;
+}
+/*GLOBAL*/
+label{
+  align-items: center;
+  margin-top: 1%; margin-bottom: 1%;
+}
+div .status{
+  align-items: center;
+}
+/* body GLOBAL Footer*/
+div.footer{
+  text-align: center;
+  position: relative;
+  top: 1000px;
+}
+.outer{
+  height: 1000px;
+}
+/* body Login*/
+.login{
+  width: 25%;
+  margin-left: 37.5%;
+}
+.login h1{
+    font-size: 2.5rem;
+    font-weight: 700!important;
+}
+.login .btn{
+  width: 100%
+}
+
+/*HomePage*/
+.homepage{
+  display: flex;
+  justify-content: center;
+}
+.homepage img{
+  width: 450px;
+  height:450px;
+  margin-top: 8%; margin-right: auto; margin-bottom: 3%; margin-left: auto;
+}
+/* body Queue*/
+.queue .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.queue .button{
+width: 60%;
+margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.queue .button button{
+  width: 20%;
+  margin: 0% 2% 0% 2%;
+}
+.queue .status .top , .queue .status .middle , .queue .status .bottom , .queue .status .top label , .queue .status .middle label , .queue .status .bottom label{
+display: flex;
+}
+.queue .status .top{
+margin-left: 0%;
+}
+.queue .status .top label{
+  padding: 0% 1% 0% 0.8%;
+  width: 100%;
+}
+.queue .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 52%;
+}
+.queue .status .top input#queuecode{
+  margin: 0% 5% 0% 4.3%;
+  width: 57%;
+}
+.queue .status .middle{
+  width: 65%;
+}
+.queue .status .middle label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.queue .status .middle input{
+  margin: 0% 5% 0% 5%;
+  width: 60%;
+}
+.queue .status .middle label#customername{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.queue .status .middle input#customername{
+  margin: 0% 5% 0% 14%;
+  width: 55%;
+}
+.queue .status .middle label#customeramount{
+  padding: 0% 0% 0% 0%;
+  margin-left: 1%;
+  width:95%;
+}
+.queue .status .middle input#customeramount{
+  margin: 0% 5% 0% 17%;
+  width: 30%;
+}
+.queue .status .middle label#customertelephone{
+  padding: 0% 10% 0% 0%;
+  margin-left: 3.5%;
+  width:100%;
+}
+.queue .status .middle input#customertelephone{
+  margin: 0% 5% 0% 9.5%;
+  width: 55%;
+}
+.queue .status .bottom label#email{
+  padding: 0% 1% 0% 1%;
+  width: 21%;
+}
+.queue .status .bottom input#email{
+  margin: 0% 5% 0% 20%;
+  width: 55%;
+}
+.queue .status .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 33.4%;
+}
+.queue .status .bottom label#queuestatus{
+  padding: 0% 1% 0% 0%;
+  width: 33.4%;
+}
+.queue .status .bottom input#queuestatus{
+  margin: 0% 5% 0% 7%;
+  width: 17%;
+}
+/* body QueueManage*/
+.queue_manage .status .queue_table{
+  width: 100%;
+  margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.queue_manage .button{
+width: 60%;
+margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.queue_manage .button button{
+  width: 20%;
+  margin: 0% 2% 0% 2%;
+}
+.queue_manage .status{
+display: flex;
+}
+.queue_manage .table-wrapper-scroll-y#first{
+  display: block;
+  max-height: 780px;
+  height: 780px;
+  width:350px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  margin-left:1%; 
+border: solid #b9def0 5px;
+border-radius: 10px;
+width: 30%;
+}
+.queue_manage .table-wrapper-scroll-y#second{
+  display: block;
+  max-height: 490px;
+  height: 490px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  max-width: 90%;
+  width: 90%;
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  margin-top: 0; margin-right: auto; margin-bottom: 3%; margin-left: auto;
+}
+.queue_manage .table-wrapper-scroll-y#third{
+  display: block;
+  max-height: 255px;
+  height: 255px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  max-width: 90%;
+  width:90%;
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  margin-top: 0%; margin-right: auto; margin-bottom: 3%; margin-left: auto;
+}
+th.stickqueue{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:white;
+}
+/* body Order*/
+.order .status , .order .food{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+width: 98%;
+margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.order .status .top , .order .status .middle , .order .status .bottom , .order .food .top , .order .food .bottom , .order .food .middle ,
+.order .status label , .order .food label{
+  display: flex;
+}
+.order .status{
+ margin-bottom:1%; 
+}
+.order .status .top label .selectpicker{
+  width: 180px;
+  margin-left: 17.5%;
+}
+.order .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 55%;
+}
+.order .status .top input{
+  margin: 0% 5% 0% 4%;
+  width: 50%;
+}
+.order .status .top input#tablecapacity{
+  margin: 0% 5% 0% 7.5%;
+  width: 50%;
+}
+.order .status .top input#tablestatus{
+  margin: 0% 5% 0% 1%;
+  width: 50%;
+}
+.order .status .middle label{
+  margin: 0% 1% 0% 1%;
+  width: 23%;
+}
+.order .status .middle input#queuecode{
+  margin: 0% 1% 0% 20%;
+  width: 50%;
+}
+.order .status .middle input#customername{
+  margin: 0% 1% 0% 20%;
+  width: 50%;
+}
+.order .status .middle input#customeramount{
+  margin: 0% 1% 0% 5%;
+  width: 50%;
+}
+.order .status .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 55%;
+}
+.order .status .bottom input#ordercode{
+  margin: 0% 5% 0% 0%;
+  width: 50%;
+}
+.order .status .bottom input#orderdate{
+  margin: 0% 5% 0% 10%;
+  width: 50%;
+}
+.order .status .bottom input#ordertime{
+  margin: 0% 5% 0% 2%;
+  width: 50%;
+}
+.order .status .bottom input#ordertotalprice{
+  margin: 0% 5% 0% 19%;
+  width: 50%;
+}
+.order .food .top{ 
+margin-left: 15px;
+}
+.order .food .top button{ 
+  height:36px;
+  width: 300px;
+  margin: 0% 2% 0% 3%;
+}
+.order .food .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.order .food .top input{
+  margin: 0% 5% 0% 5%;
+  width: 45%;
+}
+.order .food .middle label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.order .food .middle input{
+  margin: 0% 5% 0% 5%;
+  width: 45%;
+}
+.order .food .middle input#foodcode{
+  margin: 0% 5% 0% 7.5%;
+  width: 45%;
+}
+.order .food .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 33.5%;
+} 
+.order .food .bottom input{
+  margin: 0% 5% 0% 5%;
+  width: 40%;
+}
+.order .food .bottom input#foodprice{
+  margin: 0% 5% 0% 5%;
+  width: 45%;
+}
+.order .food .bottom input#foodamount{
+  margin: 0% 5% 0% 9%;
+  width: 45%;
+}
+.order .food .bottom button{ 
+  height:36px;
+  width: 312px;
+  margin: 0.5% 2% 0% 0.8%;
+}
+.order .table{
+  width: 80%;
+  margin-top: 0%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.order .table-wrapper-scroll-y{
+  display: block;
+  max-height: 450px;
+  height: 450px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+th.stickyorder{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:white;
+}
+/* body Payment*/
+.order .button button{
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.order .button{
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.order .status .top input#paymentdate{
+  margin: 0% 5% 0% 6%;
+  width: 50%;
+}
+.order .status .top input#paymenttime{
+  margin: 0% 5% 0% 15%;
+  width: 50%;
+}
+.order .status .bottom input#receiveamount{
+  margin: 0% 5% 0% 14.5%;
+  width: 50%;
+}
+.order .status .bottom input#exchangeamount{
+  margin: 0% 5% 0% 2.5%;
+  width: 50%;
+}
+.order .status .bottom input#paymentstatus{
+  margin: 0% 5% 0% 2.7%;
+  width: 50%;
+}
+.order .table#firstpayment{
+  width: 80%;
+  margin-top: 0%;
+  margin-right: auto;
+  margin-bottom: 0;
+  margin-left: auto;
+}
+.order .table-wrapper-scroll-y#firstpayment{
+  display: block;
+  max-height: 350px;
+  height: 350px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+th.stickpayment{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:white;
+}
+/* body PaymentSearch*/
+.payment_search .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.payment_search .button button{
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.payment_search .button{
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.payment_search .status .top , .payment_search .status .bottom , .payment_search .status .top label , .payment_search .status .bottom label{
+display: flex;
+}
+.payment_search .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.payment_search .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 40%;
+}
+.payment_search .status .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 25%;
+}
+.payment_search .status .bottom input{
+  margin: 0% 5% 0% 9%;
+  width: 63%;
+}
+.payment_search .status .bottom button.navbar-btn{
+  height:36px;
+  width: 1020px;
+  margin: 1% 2% 1% 1%;
+}
+.payment_search .selectpicker{
+  margin-left: 15px;
+  width: 120px;
+}
+.payment_search .table{
+  margin-top: 2%;
+  width: 85%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.payment_search .table-wrapper-scroll-y{
+  display: block;
+  max-height: 420px;
+  height: 420px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+th.stickypaymentsearch{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:white;
+}
+/* body Cooking*/
+.cooking .table-wrapper-scroll-y#first{
+  display: block;
+  max-height: 300px;
+  height: 300px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  margin-top: 2%;
+  width: 95%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.cooking .table-wrapper-scroll-y#second{
+  display: block;
+  max-height: 300px;
+  height: 300px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  margin-top: 50px;
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  margin-top: 2%;
+  width: 95%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0%; margin-left: auto;
+}
+th.stickycooking{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:white;
+}
+/* body Product*/
+.product .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+  }
+.product .button{
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+  }
+.product .button button{
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.product .status .top , .product .status .bottom , .product .status .top label , .product .status .bottom label{
+display: flex;
+}
+.product .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.product .status .top input#foodcode{
+  margin: 0% 2% 0% 10%;
+}
+.product .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.product .status .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 25%;
+}
+.product .status .bottom input{
+  margin: 0% 5% 0% 9%;
+  width: 50%;
+}
+.product .status .bottom label.status{
+margin-left: 130px;
+border-style: none;
+}
+.product .status .bottom label#foodprice{
+  padding: 0% 1% 0% 1%;
+  width: 27%;
+}
+.product .status .bottom input#foodprice{
+  margin: 0% 2% 0% 9.5%;
+  width: 63%;
+}
+.product .status .top label .selectpicker{
+  width: 180px;
+  margin-left: 15px;
+}
+.product .status .bottom label .selectpicker{
+  width: 181px;
+  margin-left: 68px;
+}
+.product .status .bottom label#foodstatus{
+  padding: 0% 1% 0% 1%;
+  margin-left: 6.5%;
+  width: 30%;
+}
+/* body ProductSearch*/
+.product_search .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+  }
+.product_search .button{
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+  }
+.product_search .button button{
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.product_search .status .top , .product_search .status .bottom , .product_search .status .top label , .product_search .status .bottom label{
+display: flex;
+}
+.product_search .status .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 40%;
+}
+.product_search .status .bottom label#search_methods{
+  width: 42%;
+  margin-left: 2%;
+}
+.product_search .status .bottom input{
+  margin: 0% 5% 0% 3%;
+  width: 53%;
+}
+.product_search .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 34.5%;
+}
+.product_search .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.product_search .status .bottom .selectpicker{
+  margin-left: 15px;
+  width: 41.5%;
+}
+.product_search .status .bottom button.btn{ 
+  height:36px;
+  width: 500px;
+  margin-right: 5%;
+}
+.product_search .table{
+  margin-top: 2%;
+  width: 70%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.product_search .table-wrapper-scroll-y{
+  display: block;
+  max-height: 700px;
+  height: 700px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+th.stickyfoodsearch{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:white;
+}
+/* body Table*/
+.table .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+  }
+.table .button{
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+  }
+.table .button button{
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.table .status .top , .table .status .top label{
+display: flex;
+}
+.table .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.table .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.table .status .top label .selectpicker{
+  margin-left: 15px;
+  width: 40%;
+} 
+/* body TableSearch*/
+.table_search .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+  }
+.table_search .button{
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+  }
+.table_search .button button{
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.table_search .status .top , .table_search .status .bottom , .table_search .status .top label , .table_search .status .bottom label{
+display: flex;
+}
+.table_search .status .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 25%;
+}
+.table_search .status .bottom input{
+  margin: 0% 5% 0% 9%;
+  width: 50%;
+}
+.table_search .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 34.5%;
+}
+.table_search .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.table_search .status .top label .selectpicker{
+  margin-left: 15px;
+  width: 38.5%;
+}
+.table_search .status .bottom label .selectpicker{
+  margin-left: 15px;
+  width: 44%;
+}
+.table_search .status .bottom button.navbar-btn{ 
+  height:36px;
+  width: 1080px;
+  margin: 1% 2% 1% 1%;
+}
+.table_search .table{
+  margin-top: 2%;
+  width: 70%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.table_search .table-wrapper-scroll-y{
+  display: block;
+  max-height: 700px;
+  height: 700px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+th.stickytablesearch{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:white;
+}
+/* body Configuration*/
+.configuration .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+  padding-bottom: 1%;
+}
+.configuration .button button{
+    width: 20%;
+    margin: 0% 2% 0% 1%;
+}
+.configuration .status #top , .configuration .status #bottom , .configuration .status #top label{
+display: flex;
+}
+.configuration .status #top label{ 
+  width: 25%;
+  padding: 0% 1% 0% 1%;
+}
+.configuration .status #top label .selectpicker{ 
+  margin-left: 15px;
+  width: 45%;
+}
+.configuration .status #top label input{
+  width: 47%;
+  margin-left: 15px;
+}
+.configuration .status #top li{
+  width: 20%;
+  border-style:none;
+
+}
+
+.configuration .status #bottom li#first{
+  border-style:none;
+}
+.configuration .status #bottom li#second{
+  border-style:none;
+left: 158px;
+}
+.configuration .status #bottom li#third{
+  border-style:none;
+  left: 293px;
+}
+.configuration .status #bottom{
+margin-left: 23.9%;
+
+}
+.configuration .status #top li span , .configuration .status #bottom li span{
+margin-left: 5px;
+}
+.configuration .status #top li input , .configuration .status #bottom li input{
+  width: 13px;
+  height: 13px;
+}
+.configuration .table{
+  margin-top: 2%;
+  width: 70%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+/* body User*/
+.user .status , .user .status1{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.user .button button{
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.user .button{
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.user .status .top , .user .status .bottom , .user .status .top label , .user .status .bottom label ,
+.user .status1 .top , .user .status1 .bottom , .user .status1 .top label , .user .status1 .bottom label{
+display: flex;
+}
+.user .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.user .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.user .status .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 30%;
+}
+.user .status .bottom input{
+  margin: 0% 5% 0% 9%;
+  width: 50%;
+}
+.user .status .bottom label#status .selectpicker{ 
+  margin-left: 40px;
+  width: 56%;
+}
+.user .status .bottom label .selectpicker{ 
+  margin-left: 58px;
+  width: 56%;
+}
+.user .status .bottom label .selectpicker#first{ 
+  position: relative;
+right: 7px;
+}
+.user .status .bottom label .selectpicker#second{ 
+  position: relative;
+right: 5px;
+}
+.user .status .bottom label#status{
+margin-left: 50px;
+border-style:none;
+}
+.user .status1 .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.user .status1 .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.user .status1 .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 30%;
+}
+.user .status1 .bottom input{
+  margin: 0% 5% 0% 9%;
+  width: 50%;
+}
+.user .status1 .bottom label#inactivetime{
+  padding: 0% 1% 0% 1%;
+  margin-left: 4%;
+  width: 30%;
+}
+.user .status1 .bottom{
+  margin-left: 275px;
+}
+/* body UserSearch*/ 
+.user_search .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.user_search .button button{
+    width: 20%;
+    margin: 0% 2% 0% 1%;
+}
+.user_search .status .top , .user_search .status .top label{
+  display: flex;
+}  
+.user_search .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.user_search .status .top label input{
+  margin: 0px 0px 0px 15px;
+  width: 60%;
+}
+.user_search .table{
+  margin-top: 2%;
+  width: 70%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.user_search .status .top button{ 
+  height:36px;
+  width: 1000px;
+  margin: 1% 2% 1% 1%;
+}
+
+/* body Teacher*/ 
+.teacher .status {
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.teacher .button button {
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.teacher .button {
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.teacher .status .top , .teacher .status .top label {
+display: flex;
+}
+.teacher .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.teacher .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.teacher .status .top label#status div .selectpicker{ 
+  margin-left: 25px;
+  width: 56%;
+}
+.teacher .status .top label#status div{
+margin-left: 50px;
+border-style:none;
+width: 100%;
+}
+
+/* body TeacherSearch */
+
+.teacher_search .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.teacher_search .button button{
+    width: 20%;
+    margin: 0% 2% 0% 1%;
+}
+
+.teacher_search .status .top , .teacher_search .status .top label{
+  display: flex;
+}  
+.teacher_search .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.teacher_search .status .top label input{
+  margin: 0px 0px 0px 15px;
+  width: 60%;
+}
+.teacher_search .table{
+  margin-top: 2%;
+  width: 70%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.teacher_search .status .top button{ 
+  height:36px;
+  width: 1000px;
+  margin: 1% 2% 1% 1%;
+}
+.teacher_search .status .top label .selectpicker{
+  width: 180px;
+  margin-left: 15px;
+}
+
+/* body Student */
+.student .status {
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.student .button button {
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.student .button {
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.student .status .top , .student .status .top label {
+display: flex;
+}
+.student .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.student .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.student .status .top label .selectpicker{ 
+  margin-left: 25px;
+  width: 56%;
+}
+.student .status .top label#status{
+margin-left: 50px;
+border-style:none;
+right: 40px;
+position: relative;
+}
+.student .status .top label#name input{
+  width: 70%;
+}
+.student .status .top label#lastname input{
+  width: 70%;
+}
+.student .status .top label#studentImage{
+  width: 100%;
+}
+.student .status .top label#studentImage input{
+  width: 100%;
+}
+.student .status .bottom{
+  display: flex;
+  justify-content: center;
+}
+.student .status .bottom img{
+  width: 450px;
+  height:450px;
+  margin-top: 3%; margin-right: auto; margin-bottom: 3%; margin-left: auto;
+}
+
+/* body StudentSearch */
+.student_search .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.student_search .button button{
+    width: 20%;
+    margin: 0% 2% 0% 1%;
+}
+
+.student_search .status .top , .student_search .status .top label{
+  display: flex;
+}  
+.student_search .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.student_search .status .top label input{
+  margin: 0px 0px 0px 15px;
+  width: 60%;
+}
+.student_search .table{
+  margin-top: 2%;
+  width: 80%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.student_search .status .top button{ 
+  height:36px;
+  width: 1000px;
+  margin: 1% 2% 1% 1%;
+}
+.student_search .status .top label .selectpicker{
+  width: 180px;
+  margin-left: 15px;
+}
+
+/* body Semester */
+.semester .status {
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.semester .button button {
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.semester .button {
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.semester .status .top , .semester .status .top label {
+display: flex;
+}
+.semester .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.semester .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.semester .status .top label .selectpicker{ 
+  margin-left: 25px;
+  width: 56%;
+}
+.semester .status .top label#status{
+margin-left: 50px;
+border-style:none;
+}
+.semester .status .top h3#slash{
+position:relative;
+width: 5px;
+bottom: 5x;
+}
+/* body SemesterSearch */
+.semester_search .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.semester_search .button button{
+    width: 20%;
+    margin: 0% 2% 0% 1%;
+}
+
+.semester_search .status .top , .semester_search .status .top label{
+  display: flex;
+}  
+.semester_search .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.semester_search .status .top label input{
+  margin: 0px 0px 0px 15px;
+  width: 60%;
+}
+.semester_search .table{
+  margin-top: 2%;
+  width: 80%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.semester_search .status .top button{ 
+  height:36px;
+  width: 1000px;
+  margin: 1% 2% 1% 1%;
+}
+.semester_search .status .top label .selectpicker{
+  width: 180px;
+  margin-left: 15px;
+}
+
+/* body Subject*/
+.subject .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+  }
+.subject .button{
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+  }
+.subject .button button{
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.subject .status .top , .subject .status .bottom , .subject .status .top label , .subject .status .bottom label{
+display: flex;
+}
+.subject .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.subject .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.subject .status .bottom label#first{
+  padding: 0% 1% 0% 1%;
+  width: 45%;
+}
+
+.subject .status .top label .selectpicker{
+  width: 180px;
+  margin-left: 15px;
+}
+.subject .status .bottom label .selectpicker{
+  width: 450px;
+  margin-left: 68px;
+}
+
+
+/* body SubjectSearch */
+.subject_search .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.subject_search .button button{
+    width: 20%;
+    margin: 0% 2% 0% 1%;
+}
+
+.subject_search .status .top , .subject_search .status .top label{
+  display: flex;
+}  
+.subject_search .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 100%;
+}
+.subject_search .status .top label input{
+  margin: 0px 0px 0px 15px;
+  width: 60%;
+}
+.subject_search .table{
+  margin-top: 2%;
+  width: 80%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.subject_search .status .top button{ 
+  height:36px;
+  width: 1000px;
+  margin: 1% 2% 1% 1%;
+}
+.subject_search .status .top label .selectpicker{
+  width: 180px;
+  margin-left: 15px;
+}
+
+/* ClassAttendance.jsx */
+.classattendance .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.classattendance .status1{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 0; margin-left: auto;
+}
+.classattendance .button button{
+    width: 20%;
+    margin: 0% 2% 0% 2%;
+}
+.classattendance .button{
+  width: 60%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.classattendance .status .top , .classattendance .status .bottom , .classattendance .status .top label , .classattendance .status .bottom label ,
+.classattendance .status .middle , .classattendance .status .middle label ,
+.classattendance .status1 .top , .classattendance .status1 .bottom , .classattendance .status1 .top label , .classattendance .status1 .bottom label,
+.classattendance .status1 .middle , .classattendance .status1 .middle label{
+display: flex;
+}
+.classattendance .status .top #label{
+  padding: 0% 1% 0% 1%;
+  width: 110%;
+}
+.classattendance .status .top #label input{
+  margin: 0% 5% 0% 5%;
+  width: 40%;
+}
+.classattendance .status .top #label1{
+  padding: 0% 1% 0% 1%;
+  width: 80%;
+}
+.classattendance .status .top #label1 input{
+  margin: 0% 5% 0% 5%;
+  width: 51%;
+}
+.classattendance .status .top #label2{
+  padding: 0% 1% 0% 1%;
+  width: 85%;
+}
+.classattendance .status .top #label2 input{
+  margin: 0% 5% 0% 5%;
+  width: 40%;
+}
+.classattendance .status .top #label3{
+  padding: 0% 1% 0% 1%;
+  width: 95%;
+}
+.classattendance .status .top #label3 input{
+  margin: 0% 5% 0% 5%;
+  width: 48%;
+}
+.classattendance .status .top #label4{
+  padding: 0% 1% 0% 1%;
+  width: 85%;
+  position: relative;
+  right: 30px;
+}
+.classattendance .status .top #label4 input{
+  margin: 0% 5% 0% 5%;
+  width: 65%;
+}
+.classattendance .status .top #label5{
+  padding: 0% 1% 0% 1%;
+  width: 20%;
+  position: relative;
+  right: 30px;
+}
+.classattendance .status .top #label5 a{
+  margin: 0% 5% 0% 5%;
+  width: 30%;
+}
+/**/
+.classattendance .status .middle #label{
+  padding: 0% 1% 0% 1%;
+  width: 30%;
+}
+.classattendance .status .middle #label input{
+  margin: 0% 5% 0% 5%;
+  width: 41.5%;
+  position: relative;
+  left: 33px;
+}
+.classattendance .status .middle #label1{
+  padding: 0% 1% 0% 1%;
+  width: 36%;
+  position: relative;
+  left: 7px;
+}
+.classattendance .status .middle #label1 input{
+  margin: 0% 5% 0% 5%;
+  width: 65%;
+  position: relative;
+  right: 5px;
+}
+.classattendance .status .middle #label2{
+  padding: 0% 1% 0% 1%;
+  width: 30%;
+  position: relative;
+  left: 73px;
+}
+.classattendance .status .middle #label2 input{
+  margin: 0% 5% 0% 5%;
+  width: 42%;
+}
+.classattendance .status .middle #label3{
+  padding: 0% 1% 0% 1%;
+  width: 30%;
+  position: relative;
+  left: 60px;
+}
+.classattendance .status .middle #label3 input{
+  margin: 0% 5% 0% 5%;
+  width: 51%;
+  position: relative;
+  left: 3px;
+}
+.classattendance .status .middle #label4{
+  padding: 0% 1% 0% 1%;
+  width: 36%;
+  position: relative;
+  left: 10px;
+}
+.classattendance .status .middle #label4 input{
+  margin: 0% 5% 0% 5%;
+  width: 64%;
+}
+/**/
+
+.classattendance .status .bottom #label{
+  padding: 0% 1% 0% 1%;
+  width: 30%;
+}
+.classattendance .status .bottom #label input{
+  margin: 0% 5% 0% 9%;
+  width: 30%;
+  position: relative;
+  left: 8px;
+}
+.classattendance .status .bottom #label1{
+  padding: 0% 1% 0% 1%;
+  width: 30%;
+  position: relative;
+  right: 94px;
+}
+.classattendance .status .bottom #label1 input{
+  margin: 0% 5% 0% 9%;
+  width: 35%;
+  position: relative;
+  right: 7px;
+}
+
+.classattendance .status .bottom #label2{
+  padding: 0% 1% 0% 1%;
+  width: 30%;
+  position: relative;
+  right: 133px;
+}
+.classattendance .status .bottom #label2 input{
+  margin: 0% 5% 0% 9%;
+  width: 30%;
+  position: relative;
+  right: 18px;
+}
+
+.classattendance .status .bottom #label3{
+  padding: 0% 1% 0% 1%;
+  width: 30%;
+  position: relative;
+  right: 182px;
+}
+.classattendance .status .bottom #label3 input{
+  margin: 0% 5% 0% 9%;
+  width: 38%;
+}
+/**/
+
+.classattendance .status1 .top{
+  justify-content: space-around;
+  margin-top: 0%; margin-right: auto; margin-bottom: 0%; margin-left: auto;
+  }
+.classattendance .status1 .top label{
+  padding: 0% 0% 0% 0%;
+  width: 100%;
+}
+.classattendance .status1 .top img {
+  width: 280px;
+  height:280px;
+}
+.classattendance .status1 .top div button{
+display: block;
+}
+.classattendance .status1 .top div#search {
+display: flex;
+}
+.classattendance .status1 .top button#button1,.classattendance .status1 .top button#button2,
+.classattendance .status1 .top button#button3,.classattendance .status1 .top button#button4{
+width: 100%;
+}
+.classattendance .status1 .top div#searchinput {
+display: flex;
+flex-direction:column;
+justify-content: center;
+margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: 1%;
+}
+.classattendance .status1 .top div#searchinput label input , 
+.classattendance .status1 .top div#searchinput label select{
+margin-left: 2%;
+}
+.classattendance .status1 .top div#searchinput label#label{
+bottom:30px;
+position: relative;
+margin-bottom: 3%;
+}
+.classattendance .status1 .top div#searchinput label#label1{
+bottom:25px;
+position: relative;
+margin-bottom: 3%;
+}
+.classattendance .status1 .top div#searchinput label#label2{
+  bottom:20px;
+  position: relative;
+  margin-bottom: 3%;
+}
+.classattendance .status1 .top div#searchinput label#label3{
+  bottom:15px;
+  position: relative;
+}
+.classattendance .status1 .top div#searchinput legend{
+  bottom:20px;
+  position: relative;
+}
+.classattendance .status1 .top div#searchinput label select{
+width: 100%;
+  }
+.classattendance .table{
+  margin-top: 2%;
+  width: 70%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.classattendance .table-wrapper-scroll-y{
+  display: block;
+  max-height: 700px;
+  height: 700px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+th.stickytablesearch{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:white;
+}
+/*ClassAttendanceSearch.jsx*/
+.classattendance_search .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+  }
+.classattendance_search .status .top , .classattendance_search .status .bottom , .classattendance_search .status .top label , .classattendance_search .status .bottom label{
+display: flex;
+}
+.classattendance_search .status .bottom label{
+  padding: 0% 1% 0% 1%;
+  width: 40%;
+}
+.classattendance_search .status .bottom input{
+  margin: 0% 5% 0% 3%;
+  width: 53%;
+}
+.classattendance_search .status .top label{
+  padding: 0% 1% 0% 1%;
+  width: 34.5%;
+}
+.classattendance_search .status .top input{
+  margin: 0% 5% 0% 5%;
+  width: 50%;
+}
+.classattendance_search .status .top .selectpicker{
+  margin-left: 15px;
+  width: 47%;
+}
+.classattendance_search .status .bottom .selectpicker{
+  margin-left: 15px;
+  width: 41.5%;
+}
+.classattendance_search .status .bottom button.btn{ 
+  height:36px;
+  width: 500px;
+  margin-right: 5%;
+}
+.classattendance_search .status .bottom #second{ 
+position: relative;
+left: 96px;
+}
+.classattendance_search .table{
+  margin-top: 2%;
+  width: 100%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+.classattendance_search .table-wrapper-scroll-y{
+  display: block;
+  max-height: 700px;
+  height: 700px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+th.stickyfoodsearch{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:white;
+}
+/* body Report*/
+.report .status{
+  border: solid #b9def0 5px;
+  border-radius: 10px;
+  width: 98%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+  padding-bottom: 1%;
+}
+.report .status button{
+  width: 20%;
+  margin: 1% 2% 0% 1%;
+}
+.report .status button#first{
+  position: relative;
+left: 385px;
+}
+.report .status #top , .report .status #top label{
+display: flex;
+}
+.report .status #top label{ 
+  width: 25%;
+  padding: 0% 1% 0% 1%;
+}
+.report .status #top label .selectpicker{ 
+  margin-left: 15px;
+  width: 45%;
+}
+.report .status #top label input{
+  width: 47%;
+  margin-left: 15px;
+}
+.report .table{
+  margin-top: 2%;
+  width: 70%;
+  margin-top: 1%; margin-right: auto; margin-bottom: 1%; margin-left: auto;
+}
+/*ShowPdf*/
+#plugin {
+  height: 100%;
+  position: fixed;
+  touch-action: pan-x pan-y;
+  width: 100%;
+  z-index: 1;
+}

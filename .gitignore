@@ -1,0 +1,9 @@
+# Logs
+logs
+*.Logs
+# Compiled directory and file
+react-client/dist/bundle.js
+# production
+build/
+# dependencies
+node_modules/
