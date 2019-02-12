@@ -13,3 +13,10 @@ exports.connectConfig =
         database: 'cos4105',
         multipleStatements: true,
     }
+
+exports.googleCloudConfig =
+    {
+        CLOUD_BUCKET_IMG: 'student_upload_images',
+        CLOUD_BUCKET_PDF: 'reportfacerecognizer',
+        PROJECT_ID: '627471179698',
+    }

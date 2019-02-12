@@ -3,10 +3,8 @@ const fs = require('fs')
 const mysql = require('mysql2')
 var { Storage } = require('@google-cloud/storage');
 
-const { connectConfig } = require('./../configDB')
+const { connectConfig , googleCloudConfig } = require('./../configDB')
 
-const CLOUD_BUCKET = 'student_upload_images'
-const PROJECT_ID = '627471179698'
 
 exports.selectStudentInfoStudentCodeName = (req, res) => {
   const mysqlConnection = mysql.createConnection(connectConfig)
@@ -38,12 +36,12 @@ exports.updateStudentInfo = (req, res) => {
   if (!req.files) { return res.status(400).send('No image files were uploaded.') }
   if (req.files.studentImage.mimetype === 'image/jpeg' || req.files.studentImage.mimetype === 'image/png' || req.files.studentImage.mimetype === 'image/gif') {
       var gcs = new Storage({
-        projectId: PROJECT_ID,
+        projectId: googleCloudConfig['PROJECT_ID'],
         keyFilename: 'My Project 84922-7f660b6844bf.json'
       });
   
       // Reference an existing bucket.
-      var bucket = gcs.bucket(CLOUD_BUCKET);
+      var bucket = gcs.bucket(googleCloudConfig['CLOUD_BUCKET_IMG']);
       // var localReadStream = fs.createReadStream('C:\\Users\\nalig\\FaceRecognizerWeb\\server\\1111111111.jpeg');
       var remoteWriteStream = bucket.file(req.files.studentImage.name).createWriteStream({
         metadata: {
@@ -121,20 +119,20 @@ exports.insertStudentInfo = (req, res, next) => {
   if (!req.files) { return res.status(400).send('No image files were uploaded.'); }
   if (req.files.studentImage.mimetype === 'image/jpeg' || req.files.studentImage.mimetype === 'image/png' || req.files.studentImage.mimetype === 'image/gif') {
     var gcs = new Storage({
-      projectId: PROJECT_ID,
+      projectId: googleCloudConfig['PROJECT_ID'],
       keyFilename: 'My Project 84922-7f660b6844bf.json'
     });
 
     // Create a new bucket.
-    gcs.createBucket(CLOUD_BUCKET, function (err, bucket) {
+    gcs.createBucket(googleCloudConfig['CLOUD_BUCKET_IMG'], function (err, bucket) {
       if (!err) {
         // "my-new-bucket" was successfully created.
-        console.log(`"${CLOUD_BUCKET}" was successfully created.`)
+        console.log(`"${googleCloudConfig['CLOUD_BUCKET_IMG']}" was successfully created.`)
       }
     });
 
     // Reference an existing bucket.
-    var bucket = gcs.bucket(CLOUD_BUCKET);
+    var bucket = gcs.bucket(googleCloudConfig['CLOUD_BUCKET_IMG']);
     // var localReadStream = fs.createReadStream('C:\\Users\\nalig\\FaceRecognizerWeb\\server\\1111111111.jpeg');
     var remoteWriteStream = bucket.file(req.files.studentImage.name).createWriteStream({
       metadata: {

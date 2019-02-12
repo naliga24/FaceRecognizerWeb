@@ -6,4 +6,4 @@ react-client/dist/bundle.js
 # production
 build/
 # dependencies
-node_modules/
+#node_modules/

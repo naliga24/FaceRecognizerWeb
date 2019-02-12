@@ -1,3 +1,4 @@
+'use strict';
 var { Storage } = require('@google-cloud/storage');
 
 const { Report } = require('fluentreports');
@@ -5,8 +6,7 @@ const { Report } = require('fluentreports');
 const dateFormat = require('dateformat')
 const displayReport = require('./reportDisplayer')
 
-const CLOUD_BUCKET = 'reportfacerecognizer'
-const PROJECT_ID = '627471179698'
+const { googleCloudConfig } = require('./../configDB')
 
 exports.displayReport = (rows, startDate, endDate, userTypeName, res) => {
   const header = (rpt) => {
@@ -81,12 +81,12 @@ exports.displayReport = (rows, startDate, endDate, userTypeName, res) => {
     console.timeEnd('Rendered')
     //displayReport(err, name, res);
     var gcs = new Storage({
-      projectId: PROJECT_ID,
+      projectId: googleCloudConfig['PROJECT_ID'],
       keyFilename: 'My Project 84922-7f660b6844bf.json'
     });
 
     // Reference an existing bucket.
-    var bucket = gcs.bucket(CLOUD_BUCKET);
+    var bucket = gcs.bucket(googleCloudConfig['CLOUD_BUCKET_PDF']);
     // var localReadStream = fs.createReadStream('C:\\Users\\nalig\\FaceRecognizerWeb\\server\\1111111111.jpeg');
     var remoteWriteStream = bucket.file(rptName).createWriteStream({
       metadata: {
