@@ -33,7 +33,7 @@ export default class report {
   }
 
   displayReportAttendance(dataReport, subjectCodeName, semesterName) {
-    request.post('http://localhost:9000/displayReportClassAttendance')
+    request.post('https://facerecognizerweb.herokuapp.com/displayReportClassAttendance')
       .send({ dataReport, subjectCodeName, semesterName })
       .end((err, res) => {
         if (err) { console.log(err);  }
@@ -41,7 +41,7 @@ export default class report {
   }
 
   displayReportTransaction(dataReport, startDate, endDate, userTypeName) {
-    request.post('http://localhost:9000/displayReportUserTransaction')
+    request.post('https://facerecognizerweb.herokuapp.com/displayReportUserTransaction')
       .send({dataReport, startDate, endDate, userTypeName })
       .end((err, res) => {
         if (err) { console.log(err);  }

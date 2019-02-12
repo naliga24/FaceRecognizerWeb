@@ -2,7 +2,7 @@ const request = require('superagent')
 
 export default class userType {
   listPermission() {
-    request.get('http://localhost:9000/selectUserTypeInfo')
+    request.get('https://facerecognizerweb.herokuapp.com/selectUserTypeInfo')
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -11,7 +11,7 @@ export default class userType {
   }
 
   editPermission(userTypePermission, userTypeNo) {
-    request.put(`http://localhost:9000/updateUserTypeInfo/${userTypePermission}/${userTypeNo}`)
+    request.put(`https://facerecognizerweb.herokuapp.com/updateUserTypeInfo/${userTypePermission}/${userTypeNo}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -22,7 +22,7 @@ export default class userType {
   }
 
   getPermissionDetail(userLogin, userPassword) {
-    request.post('http://localhost:9000/selectUserPermission')
+    request.post('https://facerecognizerweb.herokuapp.com/selectUserPermission')
       .send({ userLogin, userPassword })
       .end((err, res) => {
         if (err) { return; }
@@ -33,7 +33,7 @@ export default class userType {
   }
 
   listPermissionAll() {
-    request.get('http://localhost:9000/selectUserTypeInfoAll')
+    request.get('https://facerecognizerweb.herokuapp.com/selectUserTypeInfoAll')
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }

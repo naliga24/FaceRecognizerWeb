@@ -6,7 +6,7 @@ const request = require('superagent')
 
 export default class classAttendance {
   updateClassAttendance(studentNo, confirmStatusNo, classAttendanceCode) {
-    request.get(`http://localhost:9000/updateClassAttendanceInfo/${studentNo}/${confirmStatusNo}/${classAttendanceCode}`)
+    request.get(`https://facerecognizerweb.herokuapp.com/updateClassAttendanceInfo/${studentNo}/${confirmStatusNo}/${classAttendanceCode}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -15,7 +15,7 @@ export default class classAttendance {
   }
 
   listSearchClassAttendance(data) {
-    request.post('http://localhost:9000/selectClassAttendanceInfoSearch')
+    request.post('https://facerecognizerweb.herokuapp.com/selectClassAttendanceInfoSearch')
       .send({
         classAttendanceCode: data.get('classAttendanceCode'),
         startDateSTR: data.get('startDateSTR'),
@@ -46,11 +46,6 @@ export default class classAttendance {
     this.student.getStudentNoByStudentCodeName(studentCodeName)
   }
 
-  // callGetFileNameInFolder(classAttendanceStudentKeyCodeName) {
-  //   this.student = new student()
-  //   this.student.getFileNameInFolder(classAttendanceStudentKeyCodeName)
-  // }
-
   callListSearchStudent(data) {
     this.student = new student()
     this.student.listSearchStudent(data)
@@ -62,7 +57,7 @@ export default class classAttendance {
   }
 
   listReportAttendance(data) {
-    request.post('http://localhost:9000/selectClassAttendanceInfoForReport')
+    request.post('https://facerecognizerweb.herokuapp.com/selectClassAttendanceInfoForReport')
       .send({
         subjectNo: data.subjectNo, semesterNo: data.semesterNo,
       })

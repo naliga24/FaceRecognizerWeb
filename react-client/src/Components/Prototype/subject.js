@@ -10,7 +10,7 @@ export default class subject {
   }
 
   addSubject(subjectCodeName, subjectName, subjectDescription, teacherNo, clear) {
-    request.get(`http://localhost:9000/insertSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}`)
+    request.get(`https://facerecognizerweb.herokuapp.com/insertSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -26,7 +26,7 @@ export default class subject {
   }
 
   editSubject(subjectCodeName, subjectName, subjectDescription, teacherNo, subjectStatus, subjectNo, clear) {
-    request.get(`http://localhost:9000/updateSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}/${subjectStatus}/${subjectNo}`)
+    request.get(`https://facerecognizerweb.herokuapp.com/updateSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}/${subjectStatus}/${subjectNo}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -42,7 +42,7 @@ export default class subject {
   }
 
   listSearchSubject(data) {
-    request.post('http://localhost:9000/selectSubjectInfoSearchSubject')
+    request.post('https://facerecognizerweb.herokuapp.com/selectSubjectInfoSearchSubject')
       .send({
         subjectCodeName: data.get('subjectCodeName'),
         subjectName: data.get('subjectName'),
@@ -58,7 +58,7 @@ export default class subject {
   }
 
   checkSubjectId(subjectCodeName) {
-    request.get(`http://localhost:9000/selectSubjectInfoSubjectCodeName/${subjectCodeName}`)
+    request.get(`https://facerecognizerweb.herokuapp.com/selectSubjectInfoSubjectCodeName/${subjectCodeName}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -72,7 +72,7 @@ export default class subject {
   }
 
   listSubject() {
-    request.get('http://localhost:9000/selectSubjectInfo')
+    request.get('https://facerecognizerweb.herokuapp.com/selectSubjectInfo')
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
