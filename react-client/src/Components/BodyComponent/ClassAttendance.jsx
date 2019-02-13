@@ -155,7 +155,7 @@ class ClassAttendance extends Component {
                             </div>
                             <div class="alert alert-secondary" role="alert">
                                 <h3>รูปจากการกรอกรหัสนักศึกษา</h3>
-                                <img alt='ไม่พบรูปภาพ'
+                                <img
                                     src={(this.state.flagConfirm || this.state.flagEdit) && this.state.showClassAttendanceStudentKeyCodeName ? `https://storage.cloud.google.com/student_upload_images/${this.state.showClassAttendanceStudentKeyCodeName}.jpeg` : imagenotfound}>
                                 </img>
                                 <button id='button2' type="button" class="btn btn-default navbar-btn" onClick={() => this.saveClassAttendance(this.state.studentNoFromClassAttendanceStudentKeyCodeName, '2')} disabled={!this.state.studentNoFromClassAttendanceStudentKeyCodeName || (this.state.studentNo === this.state.studentNoFromClassAttendanceStudentKeyCodeName)}>ยืนยันตัวต้นจากการกรอกรหัสของนักศึกษา</button>
