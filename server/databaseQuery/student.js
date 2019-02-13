@@ -176,7 +176,7 @@ exports.insertStudentInfo = (req, res, next) => {
 }
 
 function getPublicUrl (filename) {
-  return `https://storage.cloud.google.com/${CLOUD_BUCKET}/${filename}`;
+  return `https://storage.cloud.google.com/${googleCloudConfig['CLOUD_BUCKET_IMG']}/${filename}`;
 }
 
 exports.selectStudentInfoSearchStudent = (req, res) => {

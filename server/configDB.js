@@ -5,6 +5,7 @@ exports.connectConfig = {
   database: 'heroku_766db354cb15187',
   multipleStatements: true,
 }
+
 // exports.connectConfig =
 //     {
 //         host: '127.0.0.1',
