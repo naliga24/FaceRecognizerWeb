@@ -5,6 +5,9 @@
   "main": "sever.js",
   "author": "andrew",
   "license": "ISC",
+   "engines": {
+    "node": "8.11.1"
+  },
   "dependencies": {
     "@google-cloud/storage": "^2.4.2",
     "alertifyjs": "^1.11.2",
