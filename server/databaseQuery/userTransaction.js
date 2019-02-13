@@ -16,7 +16,7 @@ exports.selectUserTransactionForReport = (req, res) => {
   sql += ` AND (a.LOGIN_DATE BETWEEN '${req.body.startDate}' AND '${req.body.endDate}'`
   sql += ` OR a.LOGOUT_DATE BETWEEN '${req.body.startDate}' AND '${req.body.endDate}')`
   sql += ` AND c.USER_TYPE_NO LIKE '%${req.body.userTypeNo}%'`
-  sql += ` ORDER BY LOGIN_DATE DESC , a.LOGIN_TIME DESC`
+  sql += ` ORDER BY LOGIN_DATE ASC , a.LOGIN_TIME ASC`
 
   console.log(sql)
   mysqlConnection.query(sql, (err, rows) => {
