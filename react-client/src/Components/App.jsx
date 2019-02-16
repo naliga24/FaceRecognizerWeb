@@ -18,7 +18,6 @@ import Subject from './BodyComponent/Subject';
 import SubjectSearch from './BodyComponent/SubjectSearch';
 import Teacher from './BodyComponent/Teacher';
 import TeacherSearch from './BodyComponent/TeacherSearch';
-import Title from './BodyComponent/Title';
 import User from './BodyComponent/User';
 import UserSearch from './BodyComponent/UserSearch';
 import ShowPdfTransaction from './BodyComponent/ShowPdfTransaction';
@@ -40,7 +39,6 @@ class App extends Component {
       <Router>
         <div>
           {!this.state.pdf && <NavBar />}
-          <Route name="title" exact path="/Title" component={Title} />
           <Route name="login" exact path="/" component={Login} />
           <Route name="home" exact path="/HomePage" component={HomePage} />
           <Route name="subject" exact path="/Subject" component={Subject} />

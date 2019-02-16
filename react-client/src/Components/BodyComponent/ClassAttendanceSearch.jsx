@@ -41,7 +41,6 @@ class ClassAttendanceSearch extends Component {
             listSemester: '',
             listSubject: '',
         };
-        //stateLocal && (this.state = Object.assign({}, this.state, JSON.parse(stateLocal)))
         this.searchClassAttendance = this.searchClassAttendance.bind(this);
         this.searchClassAttendance1 = this.searchClassAttendance1.bind(this);
         this.handleChange = this.handleChange.bind(this);

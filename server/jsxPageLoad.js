@@ -5,9 +5,6 @@ module.exports = (app) => {
     res.sendFile(path.resolve(`${__dirname}/../react-client/dist/index.html`))
   })
   // JSX file page.
-  app.get('/Title', (req, res) => {
-    res.sendFile(path.resolve(`${__dirname}/../react-client/dist/index.html`))
-  })
   app.get('/HomePage', (req, res) => {
     res.sendFile(path.resolve(`${__dirname}/../react-client/dist/index.html`))
   })

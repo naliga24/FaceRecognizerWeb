@@ -1,7 +1,7 @@
 import { withRouter } from 'react-router-dom';
 import React, { Component } from 'react';
 
-import  login  from './../Prototype/login'
+import login from './../Prototype/login'
 
 let auth = sessionStorage.getItem('token');
 
@@ -11,7 +11,7 @@ class NavBar extends Component {
 
     this.state = {
       data: '00000000',
-      userName:'',
+      userName: '',
     }
 
     this.logout = this.logout.bind(this);
@@ -23,6 +23,7 @@ class NavBar extends Component {
     this.openPageUser = this.openPageUser.bind(this);
     this.openPageReport = this.openPageReport.bind(this);
     this.openPageConfiguration = this.openPageConfiguration.bind(this);
+    this.removeStroage = this.removeStroage.bind(this);
     this.clear = this.clear.bind(this);
   }
 
@@ -31,8 +32,20 @@ class NavBar extends Component {
     if (auth) {
       tmp.callSetPermission()
       tmp.getUserName()
-      this.setState({ data: tmp.data2.data, userName:tmp.data7})
+      this.setState({ data: tmp.data2.data, userName: tmp.data7 })
     }
+  }
+
+  removeStroage() {
+    let keysToRemove = 
+    ["stateClassAttendanceSearch",
+     "stateSemesterSearch",
+     "stateStudentSearch",
+    "stateSubjectSearch",
+    "stateTeacherSearch",
+    "stateUserSearch"];
+    keysToRemove.forEach(k =>localStorage.removeItem(k))
+    sessionStorage.removeItem('token')
   }
 
   logout() {
@@ -73,8 +86,8 @@ class NavBar extends Component {
   }
 
   clear() {
-    this.setState({ data: '00000000',userName:'' });
-    sessionStorage.removeItem('token')
+    this.setState({ data: '00000000', userName: '' });
+    this.removeStroage()
   }
 
   render() {
@@ -82,15 +95,15 @@ class NavBar extends Component {
       <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
           <ul class="nav nav-tabs">
-          {this.state.data ? this.state.data[0] === '1' ?  (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageSubject}> <a class="nav-link" href="#">วิชาเปิดสอน</a></li>) : (<li></li>) : (<li></li>)}
+            {this.state.data ? this.state.data[0] === '1' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageSubject}> <a class="nav-link" href="#">วิชาเปิดสอน</a></li>) : (<li></li>) : (<li></li>)}
             {this.state.data ? this.state.data[1] === '1' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageSemester}> <a class="nav-link" href="#">ภาคการศึกษา</a></li>) : (<li></li>) : (<li></li>)}
             {this.state.data ? this.state.data[2] === '1' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageStudent}><a class="nav-link" href="#">นักศึกษา</a></li>) : (<li></li>) : (<li></li>)}
             {this.state.data ? this.state.data[3] === '1' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageTeacher}><a class="nav-link" href="#">อาจารย์</a></li>) : (<li></li>) : (<li></li>)}
-            {this.state.data ? this.state.data[4] === '1' ?  (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageClassAttendanceSearch}> <a class="nav-link" href="#">การเข้าชั้นเรียนนักศึกษา</a></li>) : (<li></li>) : (<li></li>)}
+            {this.state.data ? this.state.data[4] === '1' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageClassAttendanceSearch}> <a class="nav-link" href="#">การเข้าชั้นเรียนนักศึกษา</a></li>) : (<li></li>) : (<li></li>)}
             {this.state.data ? this.state.data[5] === '1' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageUser}> <a class="nav-link" href="#">ผู้ใช้งานระบบ</a></li>) : (<li></li>) : (<li></li>)}
             {this.state.data ? this.state.data[6] === '1' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageReport}><a class="nav-link" href="#">รายงาน</a></li>) : (<li></li>) : (<li></li>)}
             {this.state.data ? this.state.data[7] === '1' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={this.openPageConfiguration}><a class="nav-link" href="#">การตั่งค่า</a></li>) : (<li></li>) : (<li></li>)}
-            {this.state.data !== '00000000' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={()=>{this.logout();this.clear()}}><a class="nav-link" href="#">ออกจากระบบ</a></li>) : (<li></li>)}</ul>
+            {this.state.data !== '00000000' ? (<li class="nav-item" style={linkStyle} role="presentation" onClick={() => { this.logout(); this.clear() }}><a class="nav-link" href="#">ออกจากระบบ</a></li>) : (<li></li>)}</ul>
         </div>
         <h3><b><i><mark>{this.state.userName}</mark></i></b></h3>
       </nav>

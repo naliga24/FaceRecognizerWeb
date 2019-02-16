@@ -2,7 +2,7 @@ const request = require('superagent')
 
 export default class student {
   checkStudentCodeName(studentCodeName) {
-    request.get(`https://facerecognizerweb.herokuapp.com/selectStudentInfoStudentCodeName/${studentCodeName}`)
+    request.get(`http://localhost:9000/selectStudentInfoStudentCodeName/${studentCodeName}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -24,7 +24,7 @@ export default class student {
       console.log('object')
       const imgType = data.studentImage.type.split('/')
       formData.append('studentImage', data.studentImage, `${data.studentCodeName}.${imgType[1]}`)
-      request.post('https://facerecognizerweb.herokuapp.com/updateStudentInfo')
+      request.post('http://localhost:9000/updateStudentInfo')
         .send(formData)
         .query({
           studentCodeName: data.studentCodeName,
@@ -45,7 +45,7 @@ export default class student {
   }
 
   editStudentNoImgEdit(data, clear) {
-    request.post('https://facerecognizerweb.herokuapp.com/updateStudentInfoNoImg')
+    request.post('http://localhost:9000/updateStudentInfoNoImg')
       .send()
       .query({
         studentCodeName: data.studentCodeName,
@@ -67,7 +67,7 @@ export default class student {
     const imgType = data.studentImage.type.split('/')
     const formData = new FormData();
     formData.append('studentImage', data.studentImage, `${data.studentCodeName}.${imgType[1]}`);
-    request.post('https://facerecognizerweb.herokuapp.com/insertStudentInfo')
+    request.post('http://localhost:9000/insertStudentInfo')
       .send(formData)
       .query({
         studentCodeName: data.studentCodeName,
@@ -85,7 +85,7 @@ export default class student {
   }
 
   listSearchStudent(data) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectStudentInfoSearchStudent')
+    request.post('http://localhost:9000/selectStudentInfoSearchStudent')
       .send({
         studentCodeName: data.get('studentCodeName'),
         studentFirstName: data.get('studentFirstName'),
@@ -99,7 +99,7 @@ export default class student {
   }
 
   getStudentNoByStudentCodeName(data) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectStudentNoByStudentCodeName')
+    request.post('http://localhost:9000/selectStudentNoByStudentCodeName')
       .send({ studentCodeName: data.get('studentCodeName') })
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -112,7 +112,7 @@ export default class student {
   }
 
   getStudentNoByClassAttendanceStudentKeyCodeName(classAttendanceStudentKeyCodeName) {
-    request.get(`https://facerecognizerweb.herokuapp.com/selectStudenNoByClassAttendanceStudentKeyCodeName/${classAttendanceStudentKeyCodeName}`)
+    request.get(`http://localhost:9000/selectStudenNoByClassAttendanceStudentKeyCodeName/${classAttendanceStudentKeyCodeName}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
