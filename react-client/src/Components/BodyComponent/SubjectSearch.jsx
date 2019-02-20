@@ -26,7 +26,6 @@ class SubjectSearch extends Component {
             tmpSubjectStatus: '',
             dataListSubject: '',
         };
-        //stateLocal && (this.state = Object.assign({}, this.state, JSON.parse(stateLocal)))
 
         this.searchSubject = this.searchSubject.bind(this)
         this.searchSubject1 = this.searchSubject1.bind(this)
