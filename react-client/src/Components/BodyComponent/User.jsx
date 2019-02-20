@@ -25,13 +25,15 @@ class User extends Component {
             oldUserStatus: this.props.location.userStatus,
             flagEdit: this.props.location.flagEdit,
             buttonDisble: this.props.location.flagEdit,
+            tmpDate: new Date(),
         };
         this.add = this.add.bind(this)
         this.clear = this.clear.bind(this)
         this.onChange = this.onChange.bind(this)
         this.userInactiveInfo = this.userInactiveInfo.bind(this)
         this.saveUser = this.saveUser.bind(this)
-        this.gotoUserSearch = this.gotoUserSearch.bind(this)
+        this.gotoUserSearch = this.gotoUserSearch.bind(this) 
+        this.getCurrentDate = this.getCurrentDate.bind(this)
 
     }
 
@@ -132,6 +134,13 @@ class User extends Component {
         this.props.history.push('/UserSearch');
     }
 
+    getCurrentDate() {
+        setInterval(() => {
+            this.state.tmpDate.setSeconds(this.state.tmpDate.getSeconds() + 1);
+            this.setState({ tmpDate: this.state.tmpDate })
+        }, 1000)
+    }
+
     render() {
         if (!sessionStorage.getItem('token')) { return (<Redirect to={'/'} />) }
         return (
@@ -171,8 +180,8 @@ class User extends Component {
                             <label>รายละเอียดในการไม่ใช้งาน<input value={this.state.inactiveDetail && this.state.userStatus == '2' ? this.state.inactiveDetail : ''} type="text" maxLength="50" class="form-control" aria-describedby="sizing-addon1" name="inactiveDetail" onChange={this.onChange} disabled={!this.state.flagEdit || this.state.userStatus == '1'} required /></label>
                         </div>
                         <div class='bottom'>
-                            <label>วันหยุดใช้งาน<input value={this.state.inactiveDate && this.state.userStatus == '2' ? this.state.inactiveDate.slice(0, 10) : "YYYY-MM-DD"} type="text" class="form-control" aria-describedby="sizing-addon1" name="inactiveDate" disabled /></label>
-                            <label id='inactivetime' >เวลาหยุดใช้งาน<input value={this.state.inactiveTime && this.state.userStatus == '2' ? this.state.inactiveTime : "hh:mm:ss"} type="text" class="form-control" aria-describedby="sizing-addon1" name="inactiveTime" disabled /></label>
+                            <label>วันหยุดใช้งาน<input value={this.state.inactiveDate && this.state.userStatus == '2' ? this.state.inactiveDate.slice(0, 10) : dateFormat(this.state.tmpDate, "yyyy-mm-dd")} type="text" class="form-control" aria-describedby="sizing-addon1" name="inactiveDate" disabled /></label>
+                            <label id='inactivetime' >เวลาหยุดใช้งาน<input value={this.state.inactiveTime && this.state.userStatus == '2' ? this.state.inactiveTime : dateFormat(this.state.tmpDate, "HH:MM:ss")} type="text" class="form-control" aria-describedby="sizing-addon1" name="inactiveTime" disabled /></label>
                         </div>
                     </div>
                 </div>
