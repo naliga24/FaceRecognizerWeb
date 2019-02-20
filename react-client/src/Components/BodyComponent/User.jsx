@@ -4,6 +4,8 @@ import React, { Component } from 'react'
 import  login  from './../Prototype/login'
 import  user  from './../Prototype/user'
 
+let dateFormat = require('dateformat')
+
 class User extends Component {
     constructor(props) {
         super(props);
