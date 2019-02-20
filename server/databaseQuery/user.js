@@ -161,8 +161,8 @@ exports.insertUserTransaction = (req, res) => {
   let sql = 'INSERT INTO user_transaction (LOGIN_NO, LOGIN_DATE , LOGIN_TIME , LOGIN_STATUS)'
   sql += ' VALUES ('
   sql += ` ${req.params.loginNo},`
-  sql += ' CURRENT_DATE,'
-  sql += ' CURRENT_TIME,'
+  sql += ' SUBSTRING(DATE_ADD(NOW(), INTERVAL 7 HOUR), 1,10),'
+  sql += ` ADDTIME(CURRENT_TIME(), '07:00:00'),`
   sql += ` '${req.params.loginStatus}')`
   console.log(sql)
   mysqlConnection.query(sql, (err, rows) => {
@@ -187,8 +187,8 @@ exports.updateUserTransaction = (req, res) => {
   })
   let sql = 'UPDATE user_transaction'
   sql += ` SET LOGIN_STATUS = '${req.params.loginStatus}',`
-  sql += ' LOGOUT_DATE = CURRENT_DATE,'
-  sql += ' LOGOUT_TIME = CURRENT_TIME'
+  sql += ' LOGOUT_DATE = SUBSTRING(DATE_ADD(NOW(), INTERVAL 7 HOUR), 1,10),'
+  sql += ` LOGOUT_TIME = ADDTIME(CURRENT_TIME(), '07:00:00')`
   sql += ` WHERE LOGIN_NO = ${req.params.loginNo}`
   sql += ' AND LOGIN_DATE = (SELECT MAX(LOGIN_DATE)'
   sql += ' FROM (SELECT LOGIN_DATE FROM user_transaction)AS X'
