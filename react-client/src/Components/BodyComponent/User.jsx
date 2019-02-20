@@ -43,6 +43,7 @@ class User extends Component {
         if (this.state.flagEdit && this.state.userStatus == '2') {
             this.userInactiveInfo()
         }
+        this.getCurrentDate()
     }
 
     userInactiveInfo() {
