@@ -77,7 +77,7 @@ exports.updateUserInfo = (req, res) => {
   sql += ` USER_TYPE = '${req.body.data.userType}',`
   sql += ` USER_STATUS = '${req.body.data.userStatus}'`
   sql += ` WHERE USER_NO = ${req.body.data.userNo};`
-  sql += req.body.data.userStatus === '2' ? `INSERT INTO user_inactive_info ( USER_NO , INACTIVE_DATE , INACTIVE_TIME , INACTIVE_DETAIL ) 
+  sql += req.body.data.userStatus === '2' ? `INSERT INTO user_inactive_info ( USER_NO , SUBSTRING(DATE_ADD(NOW(), INTERVAL 7 HOUR), 1,10) , ADDTIME(CURRENT_TIME(), '07:00:00') , INACTIVE_DETAIL ) 
       VALUES ( ${req.body.data.userNo}, '${req.body.data.inactiveDate}' , '${req.body.data.inactiveTime}' , '${req.body.data.inactiveDetail}')` : ''
   console.log(sql)
   mysqlConnection.query(sql, (err, rows) => {
