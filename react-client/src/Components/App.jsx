@@ -29,9 +29,8 @@ class App extends Component {
     this.state = {
       pdf: false
     }
-    this.hide = this.hide.bind(this);
   }
-  hide() {
+  hide=()=> {
     this.setState({ pdf: true })
   }
   render() {

@@ -12,15 +12,14 @@ class Login extends Component {
             userLogin: '',
             userPassword: '',
         };
-        this.onChange = this.onChange.bind(this)
-        this.login = this.login.bind(this);
+
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    login() {
+    login=() =>{
         if(this.state.userLogin && this.state.userPassword){
             let tmp = new login()
             tmp.callCheckUserLogin(this.state.userLogin)

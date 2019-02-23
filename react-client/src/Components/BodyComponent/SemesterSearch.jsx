@@ -23,17 +23,13 @@ class SemesterSearch extends Component {
             tmpSemesterYear: '',
             dataListSemester:'',
         };
-        //stateLocal && (this.state=Object.assign({}, this.state, JSON.parse(stateLocal) ) )
-        this.searchSemester = this.searchSemester.bind(this)
-        this.searchSemester1 = this.searchSemester1.bind(this)
-        this.onChange = this.onChange.bind(this)
     }
     
-    componentDidMount() {
+    componentDidMount=()=> {
         this.searchSemester1()
     }
 
-    searchSemester() {
+    searchSemester=()=> {
         let search = this.state.search.set('semesterStatusNo', this.state.tmpSemesterStatusNo)
         .set('semesterTerm', this.state.tmpSemesterTerm)
         .set('semesterYear', this.state.tmpSemesterYear)
@@ -53,7 +49,7 @@ class SemesterSearch extends Component {
         log.writeLogLogout('3')
     }
 
-    searchSemester1() {
+    searchSemester1=()=> {
         let stateLocal = localStorage.getItem('stateSemesterSearch')
         let search = Map(JSON.parse(stateLocal))
         this.setState({ search })
@@ -68,7 +64,7 @@ class SemesterSearch extends Component {
         log.writeLogLogout('3')
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value })
     }
 

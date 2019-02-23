@@ -22,7 +22,7 @@ export default class login {
 
   writeLogLogin(loginStatus) {
     this.getLoginNoLocalStorage()
-    request.get(`https://facerecognizerweb.herokuapp.com/insertUserTransaction/${this.data1}/${loginStatus}`)
+    request.get(`/insertUserTransaction/${this.data1}/${loginStatus}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -36,7 +36,7 @@ export default class login {
 
   writeLogLogout(loginStatus) {
     this.getLoginNoLocalStorage()
-    request.get(`https://facerecognizerweb.herokuapp.com/updateUserTransaction/${this.data1}/${loginStatus}`)
+    request.get(`/updateUserTransaction/${this.data1}/${loginStatus}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -51,7 +51,7 @@ export default class login {
   writeLogLoginError(loginStatus, userLogin) {
     this.callGetLoginNo(userLogin)
     setTimeout(() => {
-      request.get(`https://facerecognizerweb.herokuapp.com/insertUserTransaction/${this.data6.data6}/${loginStatus}`)
+      request.get(`/insertUserTransaction/${this.data6.data6}/${loginStatus}`)
         .send()
         .end((err, res) => {
           if (err) { console.log(err); return; }
@@ -95,7 +95,7 @@ export default class login {
   }
 
   listReportTransaction(data) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectUserTransactionForReport')
+    request.post('/selectUserTransactionForReport')
       .send({ startDate: data.startDateSTR, endDate: data.endDateSTR, userTypeNo: data.userTypeNo })
       .end((err, res) => {
         if (err) { console.log(err); return; }

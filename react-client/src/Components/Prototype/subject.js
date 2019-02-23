@@ -10,7 +10,7 @@ export default class subject {
   }
 
   addSubject(subjectCodeName, subjectName, subjectDescription, teacherNo, clear) {
-    request.get(`https://facerecognizerweb.herokuapp.com/insertSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}`)
+    request.get(`/insertSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -26,7 +26,7 @@ export default class subject {
   }
 
   editSubject(subjectCodeName, subjectName, subjectDescription, teacherNo, subjectStatus, subjectNo, clear) {
-    request.get(`https://facerecognizerweb.herokuapp.com/updateSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}/${subjectStatus}/${subjectNo}`)
+    request.get(`/updateSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}/${subjectStatus}/${subjectNo}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -42,7 +42,7 @@ export default class subject {
   }
 
   listSearchSubject(data) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectSubjectInfoSearchSubject')
+    request.post('/selectSubjectInfoSearchSubject')
       .send({
         subjectCodeName: data.get('subjectCodeName'),
         subjectName: data.get('subjectName'),
@@ -58,7 +58,7 @@ export default class subject {
   }
 
   checkSubjectId(subjectCodeName) {
-    request.get(`https://facerecognizerweb.herokuapp.com/selectSubjectInfoSubjectCodeName/${subjectCodeName}`)
+    request.get(`/selectSubjectInfoSubjectCodeName/${subjectCodeName}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -72,7 +72,7 @@ export default class subject {
   }
 
   listSubject() {
-    request.get('https://facerecognizerweb.herokuapp.com/selectSubjectInfo')
+    request.get('/selectSubjectInfo')
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }

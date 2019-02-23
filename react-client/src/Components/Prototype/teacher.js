@@ -2,7 +2,7 @@ const request = require('superagent')
 
 export default class teacher {
   listTeacher() {
-    request.get('https://facerecognizerweb.herokuapp.com/selectTeacherInfo')
+    request.get('/selectTeacherInfo')
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -11,7 +11,7 @@ export default class teacher {
   }
 
   addTeacher(teacherFirstName, teacherLastName, clear) {
-    request.get(`https://facerecognizerweb.herokuapp.com/insertTeacherInfo/${teacherFirstName}/${teacherLastName}`)
+    request.get(`/insertTeacherInfo/${teacherFirstName}/${teacherLastName}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -24,7 +24,7 @@ export default class teacher {
   }
 
   editTeacher(teacherFirstName, teacherLastName, teacherStatus, teacherNo, clear) {
-    request.get(`https://facerecognizerweb.herokuapp.com/updateTeacherInfo/${teacherFirstName}/${teacherLastName}/${teacherStatus}/${teacherNo}`)
+    request.get(`/updateTeacherInfo/${teacherFirstName}/${teacherLastName}/${teacherStatus}/${teacherNo}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -37,7 +37,7 @@ export default class teacher {
   }
 
   checkTeacherFirstNameAndLastName(teacherFirstName, teacherLastName) {
-    request.get(`https://facerecognizerweb.herokuapp.com/selectTeacherFirstNameAndLastName/${teacherFirstName}/${teacherLastName}`)
+    request.get(`/selectTeacherFirstNameAndLastName/${teacherFirstName}/${teacherLastName}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -51,7 +51,7 @@ export default class teacher {
   }
 
   listSearchTeacher(data) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectTeacherInfoSearchTeacher')
+    request.post('/selectTeacherInfoSearchTeacher')
       .send({
         teacherFirstName: data.get('teacherFirstName'),
         teacherLastName: data.get('teacherLastName'),

@@ -29,24 +29,16 @@ class User extends Component {
             buttonDisble: this.props.location.flagEdit,
             tmpDate: new Date(),
         };
-        this.add = this.add.bind(this)
-        this.clear = this.clear.bind(this)
-        this.onChange = this.onChange.bind(this)
-        this.userInactiveInfo = this.userInactiveInfo.bind(this)
-        this.saveUser = this.saveUser.bind(this)
-        this.gotoUserSearch = this.gotoUserSearch.bind(this) 
-        this.getCurrentDate = this.getCurrentDate.bind(this)
-
     }
 
-    componentDidMount() {
+    componentDidMount=() =>{
         if (this.state.flagEdit && this.state.userStatus == '2') {
             this.userInactiveInfo()
         }
         this.getCurrentDate()
     }
 
-    userInactiveInfo() {
+    userInactiveInfo=()=> {
         let tmp = new user()
         tmp.getInactiveInfo(this.state.userNo)
         window.setTimeout(() => {
@@ -54,7 +46,7 @@ class User extends Component {
         }, 1000);
     }
 
-    saveUser() {
+    saveUser=()=> {
         if (this.state.userLogin && this.state.userPassword && this.state.userName && this.state.userType && this.state.userStatus) {
             let tmp = new user()
             if ((this.state.userLogin !== this.state.oldUserLogin)
@@ -121,23 +113,23 @@ class User extends Component {
         log.writeLogLogout('6')
     }
 
-    add() {
+    add=() =>{
         this.setState({ buttonDisble: !this.state.buttonDisble })
     }
 
-    clear() {
+    clear=()=> {
         this.setState({ buttonDisble: !this.state.buttonDisble, flagEdit: false, userLogin: '', userPassword: '', userName: '', userType: '', userStatus: '1' })
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    gotoUserSearch() {
+    gotoUserSearch=()=> {
         this.props.history.push('/UserSearch');
     }
 
-    getCurrentDate() {
+    getCurrentDate=()=> {
         setInterval(() => {
             this.state.tmpDate.setSeconds(this.state.tmpDate.getSeconds() + 1);
             this.setState({ tmpDate: this.state.tmpDate })

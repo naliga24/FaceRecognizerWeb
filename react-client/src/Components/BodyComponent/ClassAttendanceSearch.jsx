@@ -41,23 +41,15 @@ class ClassAttendanceSearch extends Component {
             listSemester: '',
             listSubject: '',
         };
-        this.searchClassAttendance = this.searchClassAttendance.bind(this);
-        this.searchClassAttendance1 = this.searchClassAttendance1.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.onChange = this.onChange.bind(this);
-        this.getStudentNo = this.getStudentNo.bind(this);
-        this.getListSemester = this.getListSemester.bind(this);
-        this.getListSubject = this.getListSubject.bind(this);
-        this.clear = this.clear.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount=()=> {
         this.searchClassAttendance1()
         this.getListSemester()
         this.getListSubject()
     }
 
-    getStudentNo() {
+    getStudentNo=()=> {
         let classAttendanceObj = new classAttendance()
         classAttendanceObj.callGetStudentNoByStudentCodeName(this.state.search)
         window.setTimeout(() => {
@@ -68,7 +60,7 @@ class ClassAttendanceSearch extends Component {
         }, 1000);
     }
 
-    getListSemester() {
+    getListSemester=() =>{
         let classAttendancetObj1 = new classAttendance()
         classAttendancetObj1.callListSemester()
         setTimeout(() => {
@@ -76,7 +68,7 @@ class ClassAttendanceSearch extends Component {
         }, 1000)
     }
 
-    getListSubject() {
+    getListSubject=()=> {
         let classAttendancetObj2 = new classAttendance()
         classAttendancetObj2.callListSubject()
         setTimeout(() => {
@@ -85,11 +77,11 @@ class ClassAttendanceSearch extends Component {
 
     }
 
-    clear() {
+    clear=()=> {
         this.setState({ tmpStartDate: new Date(), tmpEndDate: new Date() })
     }
 
-    searchClassAttendance() {
+    searchClassAttendance=()=> {
         let search = this.state.search.set('classAttendanceCode', this.state.tmpClassAttendanceCode)
             .set('studentCodeName', this.state.tmpStudentCodeName)
             .set('confirmStatusNo', this.state.tmpConfirmStatusNo)
@@ -123,7 +115,7 @@ class ClassAttendanceSearch extends Component {
         log.writeLogLogout('10')
     }
 
-    searchClassAttendance1() {
+    searchClassAttendance1=()=> {
         let stateLocal = localStorage.getItem('stateClassAttendanceSearch')
         let search = Map(JSON.parse(stateLocal))
         this.setState({ search })
@@ -138,11 +130,11 @@ class ClassAttendanceSearch extends Component {
         log.writeLogLogout('10')
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    handleChange(name, date) {
+    handleChange=(name, date) =>{
         let change1 = {}
         change1[name] = date
         this.setState(change1);

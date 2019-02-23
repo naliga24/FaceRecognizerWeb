@@ -18,15 +18,9 @@ class Semester extends Component {
             flagEdit: this.props.location.flagEdit,
             buttonDisble: this.props.location.flagEdit,
         };
-
-        this.saveSemester = this.saveSemester.bind(this)
-        this.add = this.add.bind(this)
-        this.clear = this.clear.bind(this)
-        this.onChange = this.onChange.bind(this)
-        this.gotoSemesterSearch = this.gotoSemesterSearch.bind(this)
     }
 
-    saveSemester() {
+    saveSemester=()=> {
         if (this.state.tmpSemesterTerm && this.state.tmpSemesterYear) {
             let semesterObj = new semester()
             if ((this.state.semesterName !== this.state.oldSemesterName)
@@ -82,19 +76,19 @@ class Semester extends Component {
         log.writeLogLogout('3')
     }
 
-    add() {
+    add=()=> {
         this.setState({ buttonDisble: !this.state.buttonDisble });
     }
 
-    clear() {
+    clear=()=> {
         this.setState({ buttonDisble: !this.state.buttonDisble, flagEdit: false, semesterName: '', tmpSemesterTerm: '', tmpSemesterYear: '', semesterStatusNo: '' })
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value }, () => { this.setState({ semesterName: this.state.tmpSemesterTerm + '/' + this.state.tmpSemesterYear }) })
     }
 
-    gotoSemesterSearch() {
+    gotoSemesterSearch=()=> {
         this.props.history.push('/semesterSearch');
     }
 

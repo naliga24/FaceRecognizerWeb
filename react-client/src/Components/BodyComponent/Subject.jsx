@@ -24,14 +24,9 @@ class Subject extends Component {
             flagEdit: this.props.location.flagEdit,
             buttonDisble: this.props.location.flagEdit,
         };
-        this.saveSubject = this.saveSubject.bind(this)
-        this.add = this.add.bind(this)
-        this.clear = this.clear.bind(this)
-        this.gotoSubjectSearch = this.gotoSubjectSearch.bind(this)
-        this.onChange = this.onChange.bind(this)
     }
 
-    componentDidMount() {
+    componentDidMount=()=> {
         let subjectObj = new subject()
         subjectObj.callListTeacher()
         setTimeout(() => {
@@ -39,7 +34,7 @@ class Subject extends Component {
         }, 1000)
     }
 
-    saveSubject() {
+    saveSubject=()=> {
         if (this.state.subjectCodeName.length === 7 && this.state.subjectName && this.state.teacherNo) {
             let subjectObj = new subject()
             if ((this.state.subjectCodeName !== this.state.oldSubjectCodeName)
@@ -105,19 +100,19 @@ class Subject extends Component {
         let log = new login()
         log.writeLogLogout('2')
     }
-    add() {
+    add=()=> {
         this.setState({ buttonDisble: !this.state.buttonDisble });
     }
 
-    clear() {
+    clear=()=> {
         this.setState({ buttonDisble: !this.state.buttonDisble, flagEdit: false, subjectCodeName: '', subjectName: '', subjectDescription: '', teacherNo: '', subjectStatus: '1' })
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    gotoSubjectSearch() {
+    gotoSubjectSearch=()=> {
         this.props.history.push('/SubjectSearch');
     }
 

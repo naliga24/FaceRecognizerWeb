@@ -2,7 +2,7 @@ const request = require('superagent')
 
 export default class semester {
   checkSemesterName(semesterName) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectSemesterInfoSemesterName')
+    request.post('/selectSemesterInfoSemesterName')
       .send({ semesterName })
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -16,7 +16,7 @@ export default class semester {
   }
 
   editSemester(data, clear) {
-    request.post('https://facerecognizerweb.herokuapp.com/updateSemesterInfo')
+    request.post('/updateSemesterInfo')
       .send({
         semesterName: data.semesterName,
         semesterStatusNo: data.semesterStatusNo,
@@ -34,7 +34,7 @@ export default class semester {
   }
 
   addSemester(semesterName, clear) {
-    request.post('https://facerecognizerweb.herokuapp.com/insertSemesterInfo')
+    request.post('/insertSemesterInfo')
       .send({ semesterName })
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -47,7 +47,7 @@ export default class semester {
   }
 
   listSearchSemester(data) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectSemesterInfoSearchSemester')
+    request.post('/selectSemesterInfoSearchSemester')
       .send({
         semesterTerm: data.get('semesterTerm'),
         semesterYear: data.get('semesterYear'),
@@ -60,7 +60,7 @@ export default class semester {
   }
 
   listSemester() {
-    request.get('https://facerecognizerweb.herokuapp.com/selectSemesterInfo')
+    request.get('/selectSemesterInfo')
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }

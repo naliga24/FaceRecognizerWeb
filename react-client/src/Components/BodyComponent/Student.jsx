@@ -27,15 +27,9 @@ class Student extends Component {
             flagEdit: this.props.location.flagEdit,
             buttonDisble: this.props.location.flagEdit,
         };
-
-        this.saveStudent = this.saveStudent.bind(this)
-        this.add = this.add.bind(this)
-        this.clear = this.clear.bind(this)
-        this.gotoStudentSearch = this.gotoStudentSearch.bind(this)
-        this.onChange = this.onChange.bind(this)
     }
 
-    saveStudent() {
+    saveStudent=()=> {
         let log = new login()
         log.writeLogLogout('5')
         if ((this.state.studentCodeName.length === 10 && !isNaN(this.state.studentCodeName)) 
@@ -111,15 +105,15 @@ class Student extends Component {
         }
     }
 
-    add() {
+    add=()=> {
         this.setState({ buttonDisble: !this.state.buttonDisble });
     }
 
-    clear() {
+    clear=()=> {
         this.setState({ buttonDisble: !this.state.buttonDisble, flagEdit: false, studentCodeName: '', studentFirstName: '', studentLastName: '', studentStatus: '1', studentImage: null, studentImagePreview: null })
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         if (e.target.name === "studentImage") {
             this.setState({ [e.target.name]: e.target.files[0], studentImagePreview: URL.createObjectURL(e.target.files[0]) })
             console.log(e.target.files[0])
@@ -128,7 +122,7 @@ class Student extends Component {
         }
     }
 
-    gotoStudentSearch() {
+    gotoStudentSearch=()=> {
         this.props.history.push('/StudentSearch');
     }
 

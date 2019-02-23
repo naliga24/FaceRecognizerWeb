@@ -26,24 +26,15 @@ class Report extends Component {
             listUserType: '',
             flagReport: 0
         }
-
-        this.onChange = this.onChange.bind(this);
-        this.getDataReportAttendance = this.getDataReportAttendance.bind(this);
-        this.getDataReportTransaction = this.getDataReportTransaction.bind(this);
-        this.setDateString = this.setDateString.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.selectUserTypeInfo = this.selectUserTypeInfo.bind(this);
-        this.selectSemesterInfo = this.selectSemesterInfo.bind(this);
-        this.selectSubjectInfo = this.selectSubjectInfo.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount=() =>{
         this.selectSemesterInfo()
         this.selectSubjectInfo()
         this.selectUserTypeInfo()
     }
 
-    selectSemesterInfo() {
+    selectSemesterInfo=()=> {
         let reportObj = new report()
         reportObj.callListSemester()
         setTimeout(() => {
@@ -51,7 +42,7 @@ class Report extends Component {
         }, 2000)
     }
 
-    selectSubjectInfo() {
+    selectSubjectInfo=()=> {
         let reportObj = new report()
         reportObj.callListSubject()
         setTimeout(() => {
@@ -59,7 +50,7 @@ class Report extends Component {
         }, 2000)
     }
 
-    selectUserTypeInfo() {
+    selectUserTypeInfo=()=> {
         let tmp = new report()
         tmp.callListPermissionAll()
         window.setTimeout(() => {
@@ -67,7 +58,7 @@ class Report extends Component {
         }, 2000);
     }
 
-    onChange(e) {
+    onChange=(e) =>{
         let tmp = e.target.value.split(',')
         if (e.target.name === "subjectNo") {
             this.setState({ [e.target.name]: tmp[0], subjectCodeName: tmp[1] })
@@ -78,7 +69,7 @@ class Report extends Component {
         }
     }
 
-    getDataReportAttendance() {
+    getDataReportAttendance=()=> {
         if (this.state.subjectNo && this.state.semesterNo) {
             let reportObj = new report()
             reportObj.callListReportAttendance(this.state)
@@ -104,7 +95,7 @@ class Report extends Component {
         log.writeLogLogout('7')
     }
 
-    getDataReportTransaction() {
+    getDataReportTransaction=()=> {
         if (this.state.startDateSTR && this.state.endDateSTR) {
             let reportObj = new report()
             reportObj.callListReportTransaction(this.state)
@@ -126,7 +117,7 @@ class Report extends Component {
         log.writeLogLogout('7')
     }
 
-    handleChange(name, date) {
+    handleChange=(name, date)=> {
         let change1 = {}
         change1[name] = date
         this.setState(change1);
@@ -136,7 +127,7 @@ class Report extends Component {
         this.setState(change2);
     }
 
-    setDateString() {
+    setDateString=() =>{
         this.setState({ startDateSTR: dateFormat(this.state.startDate, "yyyy-mm-dd") });
         this.setState({ endDateSTR: dateFormat(this.state.endDate, "yyyy-mm-dd") });
     }

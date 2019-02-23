@@ -20,16 +20,13 @@ class UserSearch extends Component {
             tmpUserName: '',
             dataListUser: '',
         };
-        this.searchUser = this.searchUser.bind(this)
-        this.searchUser1 = this.searchUser1.bind(this)
-        this.onChange = this.onChange.bind(this)
     }
 
-    componentWillMount() {
+    componentWillMount=()=> {
         this.searchUser1()
     }
 
-    searchUser() {
+    searchUser=()=> {
         let search = this.state.search.set('userLogin', this.state.tmpUserLogin)
         .set('userName', this.state.tmpUserName)
         this.setState({ search });
@@ -48,7 +45,7 @@ class UserSearch extends Component {
         log.writeLogLogout('9')
     }
 
-    searchUser1() {
+    searchUser1=()=> {
         let stateLocal = localStorage.getItem('stateUserSearch')
         let search = Map(JSON.parse(stateLocal))
         this.setState({ search })
@@ -63,7 +60,7 @@ class UserSearch extends Component {
         log.writeLogLogout('9')
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value });
         console.log(this.state)
     }

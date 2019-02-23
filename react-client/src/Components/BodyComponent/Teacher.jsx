@@ -19,14 +19,9 @@ class Teacher extends Component {
             flagEdit: this.props.location.flagEdit,
             buttonDisble: this.props.location.flagEdit,
         };
-        this.saveTeacher = this.saveTeacher.bind(this)
-        this.add = this.add.bind(this)
-        this.clear = this.clear.bind(this)
-        this.gotoTeacherSearch = this.gotoTeacherSearch.bind(this)
-        this.onChange = this.onChange.bind(this)
     }
 
-    saveTeacher() {
+    saveTeacher=()=> {
         if (this.state.teacherFirstName && this.state.teacherLastName) {
             let teacherObj = new teacher()
             if ((this.state.teacherFirstName !== this.state.oldTeaherFirstName)
@@ -86,19 +81,19 @@ class Teacher extends Component {
         log.writeLogLogout('5')
     }
 
-    add() {
+    add=()=> {
         this.setState({ buttonDisble: !this.state.buttonDisble });
     }
 
-    clear() {
+    clear=()=> {
         this.setState({ buttonDisble: !this.state.buttonDisble, flagEdit: false, teacherFirstName: '', teacherLastName: '', teacherClassCount: '', teacherStatus: '1' })
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    gotoTeacherSearch() {
+    gotoTeacherSearch=()=> {
         this.props.history.push('/TeacherSearch');
     }
 

@@ -34,7 +34,7 @@ class ClassAttendance extends Component {
             studentNoFromClassAttendanceStudentKeyCodeName: '',//update
             studentNoFromSearch: '',//update
             confirmStatusNo: '',//update
-            search:Map({
+            search: Map({
                 studentCodeName: '',//search
                 studentFirstName: '',//search
                 studentLastName: '',//search
@@ -43,20 +43,13 @@ class ClassAttendance extends Component {
             flagEdit: this.props.location.flagEdit,
             flagConfirm: this.props.location.flagConfirm,
         };
-
-        this.onChange = this.onChange.bind(this);
-        this.searchStudent = this.searchStudent.bind(this);
-        this.saveClassAttendance = this.saveClassAttendance.bind(this);
-        this.clear = this.clear.bind(this);
-        this.getStudentNoByClassAttendanceStudentKeyCodeName = this.getStudentNoByClassAttendanceStudentKeyCodeName.bind(this);
-        this.gotoClassAttendanceSearch = this.gotoClassAttendanceSearch.bind(this);
     }
 
-    componentWillMount() {
+    componentWillMount=()=> {
         this.getStudentNoByClassAttendanceStudentKeyCodeName()
     }
 
-    searchStudent() {
+    searchStudent = () => {
         let classAttendanceObj = new classAttendance()
         classAttendanceObj.callListSearchStudent(this.state.search)
         window.setTimeout(() => {
@@ -67,7 +60,7 @@ class ClassAttendance extends Component {
         log.writeLogLogout('10')
     }
 
-    getStudentNoByClassAttendanceStudentKeyCodeName() {
+    getStudentNoByClassAttendanceStudentKeyCodeName = () => {
         let classAttendanceObj = new classAttendance()
         classAttendanceObj.callGetStudentNoByClassAttendanceStudentKeyCodeName(this.state.showClassAttendanceStudentKeyCodeName)
         setTimeout(() => {
@@ -75,7 +68,7 @@ class ClassAttendance extends Component {
         }, 2000)
     }
 
-    saveClassAttendance(studentNo, confirmStatusNo) {
+    saveClassAttendance = (studentNo, confirmStatusNo) => {
         let log = new login()
         log.writeLogLogout('10')
         this.setState({ confirmStatusNo })
@@ -102,15 +95,15 @@ class ClassAttendance extends Component {
         }, 2000)
     }
 
-    clear() {
+    clear = () => {
         this.setState({ state: null })
     }
 
-    gotoClassAttendanceSearch() {
+    gotoClassAttendanceSearch = () => {
         this.props.history.push('/ClassAttendanceSearch');
     }
 
-    onChange(e) {
+    onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 

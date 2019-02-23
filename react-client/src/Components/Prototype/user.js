@@ -4,7 +4,7 @@ const request = require('superagent')
 
 export default class user {
   searchUser(data) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectUserInfo')
+    request.post('/selectUserInfo')
       .send({ data })
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -14,7 +14,7 @@ export default class user {
   }
 
   addUser(data, clear) {
-    request.post('https://facerecognizerweb.herokuapp.com/insertUserInfo')
+    request.post('/insertUserInfo')
       .send({ data })
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -31,7 +31,7 @@ export default class user {
   }
 
   editUser(data, clear) {
-    request.post('https://facerecognizerweb.herokuapp.com/updateUserInfo')
+    request.post('/updateUserInfo')
       .send({ data })
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -48,7 +48,7 @@ export default class user {
   }
 
   getInactiveInfo(userNo) {
-    request.get(`https://facerecognizerweb.herokuapp.com/selectUserInactiveInfo/${userNo}`)
+    request.get(`/selectUserInactiveInfo/${userNo}`)
       .send()
       .end((err, res) => {
         if (err) { console.log(err); return; }
@@ -60,7 +60,7 @@ export default class user {
   }
 
   checkUserLogin(userLogin) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectUserInfoUserLogin')
+    request.post('/selectUserInfoUserLogin')
       .send({ userLogin })
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -74,7 +74,7 @@ export default class user {
   }
 
   checkUserPassword(userLogin, userPassword) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectUserInfoUserPassword')
+    request.post('/selectUserInfoUserPassword')
       .send({ userLogin, userPassword })
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -88,7 +88,7 @@ export default class user {
   }
 
   checkUserStatus(userLogin, userPassword) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectUserInfoUserStatus')
+    request.post('/selectUserInfoUserStatus')
       .send({ userLogin, userPassword })
       .end((err, res) => {
         if (err) { console.log(err); return }
@@ -102,7 +102,7 @@ export default class user {
   }
 
   getUserNo(userLogin) {
-    request.post('https://facerecognizerweb.herokuapp.com/selectUserInfoUserLoginValue')
+    request.post('/selectUserInfoUserLoginValue')
       .send({ userLogin })
       .end((err, res) => {
         if (err) { console.log(err); return }

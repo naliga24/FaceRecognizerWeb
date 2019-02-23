@@ -26,17 +26,13 @@ class SubjectSearch extends Component {
             tmpSubjectStatus: '',
             dataListSubject: '',
         };
-
-        this.searchSubject = this.searchSubject.bind(this)
-        this.searchSubject1 = this.searchSubject1.bind(this)
-        this.onChange = this.onChange.bind(this)
     }
 
-    componentWillMount() {
+    componentWillMount=()=> {
         this.searchSubject1()
     }
 
-    searchSubject() {
+    searchSubject=()=> {
         let search = this.state.search.set('subjectCodeName', this.state.tmpSubjectCodeName)
             .set('subjectName', this.state.tmpSubjectName)
             .set('teacherFirstName', this.state.tmpTeacherFirstName)
@@ -60,7 +56,7 @@ class SubjectSearch extends Component {
     }
 
 
-    searchSubject1() {
+    searchSubject1=()=> {
         let stateLocal = localStorage.getItem('stateSubjectSearch')
         let search = Map(JSON.parse(stateLocal))
         this.setState({ search })
@@ -75,7 +71,7 @@ class SubjectSearch extends Component {
         log.writeLogLogout('2')
     }
 
-    onChange(e) {
+    onChange=(e)=> {
         this.setState({ [e.target.name]: e.target.value });
         console.log(this.state)
     }

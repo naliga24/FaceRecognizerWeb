@@ -24,15 +24,13 @@ class Configuration extends Component {
             userTypeName: null,
             inputDisable: true,
         };
-        this.saveConfiguration = this.saveConfiguration.bind(this)
-        this.edit = this.edit.bind(this)
     }
 
-    componentWillMount() {
+    componentWillMount=()=> {
         this.selectUserTypeInfo()
     }
 
-    selectUserTypeInfo() {
+    selectUserTypeInfo=()=> {
         let tmp = new configuration()
         tmp.callListPermission()
         window.setTimeout(() => {
@@ -40,7 +38,7 @@ class Configuration extends Component {
         }, 1000);
     }
 
-    saveConfiguration() {
+    saveConfiguration=()=> {
         let userTypePermission = '';
         let tmp = [this.state.subject, this.state.semester, this.state.student, this.state.teacher, this.state.classAttendance, this.state.user, this.state.report, this.state.admin, this.state.userTypeNo]
         for (let i = 0; i <= 7; i++) {
@@ -67,7 +65,7 @@ class Configuration extends Component {
         log.writeLogLogout('8')
     }
 
-    edit(index) {
+    edit=(index)=> {
         let tmp = this.state.data1[index].USER_TYPE_PERMISSION
         let i = 0
         for (let obj in this.state.input) {

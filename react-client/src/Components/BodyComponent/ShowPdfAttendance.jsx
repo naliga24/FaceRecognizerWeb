@@ -3,14 +3,7 @@ import React, { Component } from 'react';
 
 
 class ShowPdfAttendance extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-
-        }
-
-    }
-    componentWillMount(){
+    componentWillMount=()=>{
          this.props.hide();
       }
     render() {
