@@ -37,7 +37,7 @@ exports.updateStudentInfo = (req, res) => {
   if (req.files.studentImage.mimetype === 'image/jpeg' || req.files.studentImage.mimetype === 'image/png' || req.files.studentImage.mimetype === 'image/gif') {
       var gcs = new Storage({
         projectId: googleCloudConfig['PROJECT_ID'],
-        keyFilename: 'My Project 84922-7f660b6844bf.json'
+        keyFilename: 'my-project-1528106461323-04e18a9b4635.json'
       });
   
       // Reference an existing bucket.
@@ -120,7 +120,7 @@ exports.insertStudentInfo = (req, res, next) => {
   if (req.files.studentImage.mimetype === 'image/jpeg' || req.files.studentImage.mimetype === 'image/png' || req.files.studentImage.mimetype === 'image/gif') {
     var gcs = new Storage({
       projectId: googleCloudConfig['PROJECT_ID'],
-      keyFilename: 'My Project 84922-7f660b6844bf.json'
+      keyFilename: 'my-project-1528106461323-04e18a9b4635.json'
     });
 
     // Create a new bucket.

@@ -15,9 +15,15 @@ exports.connectConfig = {
 //         multipleStatements: true,
 //     }
 
+// exports.googleCloudConfig =
+//     {
+//         CLOUD_BUCKET_IMG: 'student_upload_images',
+//         CLOUD_BUCKET_PDF: 'reportfacerecognizer',
+//         PROJECT_ID: '627471179698',
+//     }
 exports.googleCloudConfig =
     {
         CLOUD_BUCKET_IMG: 'student_upload_images',
-        CLOUD_BUCKET_PDF: 'reportfacerecognizer',
-        PROJECT_ID: '627471179698',
+        CLOUD_BUCKET_PDF: 'report_facerecognizer',
+        PROJECT_ID: '204186457948',
     }
