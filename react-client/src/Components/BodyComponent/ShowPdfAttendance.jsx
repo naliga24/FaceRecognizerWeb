@@ -9,7 +9,7 @@ class ShowPdfAttendance extends Component {
     render() {
         if (!sessionStorage.getItem('token')) { return (<Redirect to={'/'} />) }
         return (
-                <embed id='plugin' src='https://storage.cloud.google.com/reportfacerecognizer/ReportAttendance.pdf' />
+                <embed id='plugin' src='https://storage.cloud.google.com/report_facerecognizer/ReportAttendance.pdf' />
         );
     }
 }

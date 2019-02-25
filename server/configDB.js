@@ -23,7 +23,7 @@ exports.connectConfig = {
 //     }
 exports.googleCloudConfig =
     {
-        CLOUD_BUCKET_IMG: 'student_upload_images',
+        CLOUD_BUCKET_IMG: 'student_upload',
         CLOUD_BUCKET_PDF: 'report_facerecognizer',
         PROJECT_ID: '204186457948',
     }

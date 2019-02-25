@@ -82,7 +82,15 @@ exports.displayReport = (rows, startDate, endDate, userTypeName, res) => {
     //displayReport(err, name, res);
     var gcs = new Storage({
       projectId: googleCloudConfig['PROJECT_ID'],
-      keyFilename: 'My Project 84922-7f660b6844bf.json'
+      keyFilename: 'my-project-1528106461323-04e18a9b4635.json'
+    });
+
+    // Create a new bucket.
+    gcs.createBucket(googleCloudConfig['CLOUD_BUCKET_PDF'], function (err, bucket) {
+      if (!err) {
+        // "my-new-bucket" was successfully created.
+        console.log(`"${googleCloudConfig['CLOUD_BUCKET_PDF']}" was successfully created.`)
+      }
     });
 
     // Reference an existing bucket.
