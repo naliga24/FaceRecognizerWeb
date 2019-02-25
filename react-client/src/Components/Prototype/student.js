@@ -23,7 +23,7 @@ export default class student {
     } else if (typeof (data.studentImage) === 'object') {
       console.log('object')
       const imgType = data.studentImage.type.split('/')
-      formData.append('studentImage', data.studentImage, `${data.studentCodeName}.${imgType[1]}`)
+      formData.append('studentImage', data.studentImage, `${Date.now()}.${imgType[1]}`)
       request.post('/updateStudentInfo')
         .send(formData)
         .query({
@@ -66,7 +66,7 @@ export default class student {
   addStudent(data, clear) {
     const imgType = data.studentImage.type.split('/')
     const formData = new FormData();
-    formData.append('studentImage', data.studentImage, `${data.studentCodeName}.${imgType[1]}`);
+    formData.append('studentImage', data.studentImage, `${Date.now()}.${imgType[1]}`);
     request.post('/insertStudentInfo')
       .send(formData)
       .query({
