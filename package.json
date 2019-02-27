@@ -74,5 +74,5 @@
     "postinstall": "webpack",
     "heroku-postbuild": "webpack -p"
   },
-  "proxy": "https://facerecognizerweb.herokuapp.com"
+  "proxy": "http://localhost:9000"
 }

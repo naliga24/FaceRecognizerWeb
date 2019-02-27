@@ -1,5 +1,5 @@
-import teacher from './teacher.js'
-import semester from './semester.js'
+import teacher from './teacher'
+import semester from './semester'
 
 const request = require('superagent')
 
