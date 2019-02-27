@@ -26,15 +26,13 @@ class Subject extends Component {
         };
     }
 
-    componentDidMount=()=> {
+    componentDidMount=async()=> {
         let subjectObj = new subject()
-        subjectObj.callListTeacher()
-        setTimeout(() => {
-            subjectObj.teacher.listTeacher.length > 0 && this.setState({ listTeacher: subjectObj.teacher.listTeacher })
-        }, 1000)
+        let listTeacher = await subjectObj.callListTeacher()
+        listTeacher.length > 0 && this.setState({ listTeacher })
     }
 
-    saveSubject=()=> {
+    saveSubject=async()=> {
         if (this.state.subjectCodeName.length === 7 && this.state.subjectName && this.state.teacherNo) {
             let subjectObj = new subject()
             if ((this.state.subjectCodeName !== this.state.oldSubjectCodeName)
@@ -44,9 +42,7 @@ class Subject extends Component {
                 || (this.state.teacherNo !== this.state.oldTeacherNo)
                 || (this.state.subjectStatus !== this.state.oldSubjectStatus)) {
                 if (this.state.subjectCodeName !== this.state.oldSubjectCodeName) {
-                    subjectObj.checkSubjectId(this.state.subjectCodeName)
-                    setTimeout(() => {
-                        if (subjectObj.flagSubjectId === '0') {
+                        if (await subjectObj.checkSubjectId(this.state.subjectCodeName) === '0') {
                             if (this.state.flagEdit) {
                                 subjectObj.editSubject(this.state.subjectCodeName, this.state.subjectName, this.state.subjectDescription, this.state.teacherNo, this.state.subjectStatus, this.state.subjectNo, this.clear)
                                 alertify.alert('แก้ไข',`แก้ไขข้อมูลวิชาเปิดสอน "${this.state.subjectCodeName}" เรียบร้อย`,()=>{
@@ -58,17 +54,16 @@ class Subject extends Component {
                                     alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
                                 }).show()
                             }
-                        } else if (subjectObj.flagSubjectId === '1' && this.state.flagEdit) {
+                        } else if (await subjectObj.checkSubjectId(this.state.subjectCodeName) === '1' && this.state.flagEdit) {
                             alertify.alert('แก้ไข',`ไม่สามารถเแก้ไขข้อมูลวิชาเปิดสอน "${this.state.subjectCodeName}" ชื่อมีในระบบแล้ว`,()=>{
                                 alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()                
                         }
-                        else if (subjectObj.flagSubjectId === '1' && !this.state.flagEdit) {
+                        else if (await subjectObj.checkSubjectId(this.state.subjectCodeName) === '1' && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม',`ไม่สามารถเพิ่มข้อมูลวิชาเปิดสอน "${this.state.subjectCodeName}" ชื่อมีในระบบแล้ว`,()=>{
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()   
                         }
-                    }, 1000)
                 } else if (this.state.flagEdit) {
                     subjectObj.editSubject(this.state.subjectCodeName, this.state.subjectName, this.state.subjectDescription, this.state.teacherNo, this.state.subjectStatus, this.state.subjectNo, this.clear)
                     alertify.alert('แก้ไข',`แก้ไขข้อมูลวิชาเปิดสอน "${this.state.subjectCodeName}" เรียบร้อย`,()=>{

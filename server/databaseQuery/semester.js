@@ -83,6 +83,8 @@ exports.selectSemesterInfoSemesterName = (req, res) => {
       res.send('1')
     } else if (rows[0]['COUNT(SEMESTER_NAME)'] === 0) {
       res.send('0')
+    }else if (rows[0]['COUNT(SEMESTER_NAME)'] > 1) {
+      res.send('2')
     }
   })
   mysqlConnection.end()

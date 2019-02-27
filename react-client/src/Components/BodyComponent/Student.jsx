@@ -29,7 +29,7 @@ class Student extends Component {
         };
     }
 
-    saveStudent=()=> {
+    saveStudent=async()=> {
         let log = new login()
         log.writeLogLogout('5')
         if ((this.state.studentCodeName.length === 10 && !isNaN(this.state.studentCodeName)) 
@@ -41,9 +41,7 @@ class Student extends Component {
                 || (this.state.studentStatus !== this.state.oldStudentStatus)
                 || (this.state.studentImage !== this.state.oldStudentImage)) {
                 if (this.state.studentCodeName !== this.state.oldStudentCodeName) {
-                    studentObj.checkStudentCodeName(this.state.studentCodeName)
-                    setTimeout(() => {
-                        if (studentObj.flagStudentCodeName === '0') {
+                        if (await studentObj.checkStudentCodeName(this.state.studentCodeName) === '0') {
                             if (this.state.flagEdit) {
                                     studentObj.editStudent(this.state, this.clear)
                                     alertify.alert('แก้ไข',`แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`,()=>{
@@ -55,17 +53,16 @@ class Student extends Component {
                                     alertify.alert(`เพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`)
                                     //window.location.reload()
                             }
-                        } else if (studentObj.flagStudentCodeName === '1' && this.state.flagEdit) {
+                        } else if (await studentObj.checkStudentCodeName(this.state.studentCodeName) === '1' && this.state.flagEdit) {
                             alertify.alert('แก้ไข',`ไม่สามารถเแก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`,()=>{
                                 alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()
                         }
-                        else if (studentObj.flagStudentCodeName === '1' && !this.state.flagEdit) {
+                        else if (await studentObj.checkStudentCodeName(this.state.studentCodeName) === '1' && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม',`ไม่สามารถเพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`,()=>{
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
-                    }, 2000);
                 } else if (this.state.flagEdit) {
                     studentObj.editStudent(this.state, this.clear)
                     alertify.alert('แก้ไข',`แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`,()=>{

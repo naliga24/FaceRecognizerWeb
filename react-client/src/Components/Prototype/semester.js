@@ -2,17 +2,18 @@ const request = require('superagent')
 
 export default class semester {
   checkSemesterName(semesterName) {
-    request.post('/selectSemesterInfoSemesterName')
+    return request.post('/selectSemesterInfoSemesterName')
       .send({ semesterName })
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        if (res.text === '1') {
-          console.log(res)
-          this.flagSemesterName = res.text
-        } else if (res.text == '0') {
-          this.flagSemesterName = res.text
-        }
+      .then((res) => {
+        if (res.text === '1' || res.text ==='0') { 
+          console.log(res); return res.text;
+         }else if(res.text === '2'){
+           console.log('มีชื่อภาคการศึกษาซำ้ในระบบ(เกิดข้อผิดพลาด)')
+         }
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+     });
   }
 
   editSemester(data, clear) {
@@ -47,24 +48,25 @@ export default class semester {
   }
 
   listSearchSemester(data) {
-    request.post('/selectSemesterInfoSearchSemester')
+    return request.post('/selectSemesterInfoSearchSemester')
       .send({
         semesterTerm: data.get('semesterTerm'),
         semesterYear: data.get('semesterYear'),
         semesterStatusNo: data.get('semesterStatusNo'),
       })
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.returnListSearchSemester = res.body
-      })
+      .then((res) => {
+        console.log(res); return res.body;})
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 
   listSemester() {
-    request.get('/selectSemesterInfo')
-      .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.listSemester = res.body
-      })
+    return request.get('/selectSemesterInfo')
+      .then((res) => {
+        console.log(res); return res.body;})
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 }

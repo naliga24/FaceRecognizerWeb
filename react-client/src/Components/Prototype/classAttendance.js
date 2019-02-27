@@ -6,16 +6,15 @@ const request = require('superagent')
 
 export default class classAttendance {
   updateClassAttendance(studentNo, confirmStatusNo, classAttendanceCode) { //
-    request.get(`/updateClassAttendanceInfo/${studentNo}/${confirmStatusNo}/${classAttendanceCode}`)
-      .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.updateClassAttendanceFlag = res.text
-      })
+    return request.get(`/updateClassAttendanceInfo/${studentNo}/${confirmStatusNo}/${classAttendanceCode}`)
+      .then((res) => { return res.text })
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 
   listSearchClassAttendance(data) {
-    request.post('/selectClassAttendanceInfoSearch')
+    return request.post('/selectClassAttendanceInfoSearch')
       .send({
         classAttendanceCode: data.get('classAttendanceCode'),
         startDateSTR: data.get('startDateSTR'),
@@ -25,20 +24,22 @@ export default class classAttendance {
         confirmStatusNo: data.get('confirmStatusNo'),
         semesterNo: data.get('semesterNo'),
       })
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.returnListSearchClassAttendance = res.body
+      .then((res) => {
+        console.log(res); return res.body;
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 
-  callListSubject() {
+  callListSubject = async () => {
     this.subject = new subject()
-    this.subject.listSubject()
+    return await this.subject.listSubject()
   }
 
-  callListSemester() {
+  callListSemester = async () => {
     this.semester = new semester()
-    this.semester.listSemester()
+    return await this.semester.listSemester()
   }
 
   callGetStudentNoByStudentCodeName(studentCodeName) {
@@ -46,26 +47,38 @@ export default class classAttendance {
     this.student.getStudentNoByStudentCodeName(studentCodeName)
   }
 
-  callListSearchStudent(data) {
+  callListSearchStudent = async (data) => {
     this.student = new student()
-    this.student.listSearchStudent(data)
+    return await this.student.listSearchStudent(data)
   }
 
-  callGetStudentNoByClassAttendanceStudentKeyCodeName(classAttendanceStudentKeyCodeName) {
+  callGetStudentNoByClassAttendanceStudentKeyCodeName = async (classAttendanceStudentKeyCodeName) => {
     this.student = new student()
-    this.student.getStudentNoByClassAttendanceStudentKeyCodeName(classAttendanceStudentKeyCodeName)
+    return await this.student.getStudentNoByClassAttendanceStudentKeyCodeName(classAttendanceStudentKeyCodeName)
   }
 
-  listReportAttendance(data) {//
-    request.post('/selectClassAttendanceInfoForReport')
+  listReportAttendance(data) {
+    return request.post('/selectClassAttendanceInfoForReport')
       .send({
         subjectNo: data.subjectNo, semesterNo: data.semesterNo,
       })
-      .end((err, res) => {
-        if (err) { return; }
-        if (res.body) {
-          this.dataReport = res.body
-        }
+      .then((res) => {
+        if (res.body) { console.log(res); return res.body; }
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
+  }
+
+  test() {
+    return request.get('/selectSubjectInfo')
+      .send()
+      .then((res) => {
+        if (res) { console.log(res.body); return res.body; }
+      })
+      .catch(err => {
+        // err.message, err.response
+        console.log(err.message, err.response)
+      });
   }
 }

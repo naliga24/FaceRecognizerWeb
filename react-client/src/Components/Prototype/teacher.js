@@ -2,12 +2,14 @@ const request = require('superagent')
 
 export default class teacher {
   listTeacher() {
-    request.get('/selectTeacherInfo')
+    return request.get('/selectTeacherInfo')
       .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.listTeacher = res.body
+      .then((res) => {
+        if (res) { console.log(res.body); return res.body; }
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+     });
   }
 
   addTeacher(teacherFirstName, teacherLastName, clear) {
@@ -37,30 +39,32 @@ export default class teacher {
   }
 
   checkTeacherFirstNameAndLastName(teacherFirstName, teacherLastName) {
-    request.get(`/selectTeacherFirstNameAndLastName/${teacherFirstName}/${teacherLastName}`)
+    return request.get(`/selectTeacherFirstNameAndLastName/${teacherFirstName}/${teacherLastName}`)
       .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        if (res.text === '1') {
-          console.log(res)
-          this.flagTeacherFirstAndLastName = res.text
-        } else if (res.text === '0') {
-          this.flagTeacherFirstAndLastName = res.text
-        }
+      .then((res) => {
+        if (res.text === '1' || res.text ==='0') { 
+          console.log(res); return res.text;
+         }else if(res.text === '2'){
+           console.log('มีชื่ออาจารย์ซำ้ในระบบ(*ชื่อและนามสกุลซำ้พร้อมกัน* เกิดข้อผิดพลาด)')
+         }
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+     });
   }
 
   listSearchTeacher(data) {
-    request.post('/selectTeacherInfoSearchTeacher')
+    return request.post('/selectTeacherInfoSearchTeacher')
       .send({
         teacherFirstName: data.get('teacherFirstName'),
         teacherLastName: data.get('teacherLastName'),
         teacherClassCount: data.get('teacherClassCount'),
         teacherStatus: data.get('teacherStatus'),
       })
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.returnListSearchTeacher = res.body
-      })
+      .then((res) => {
+        console.log(res); return res.body;})
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 }

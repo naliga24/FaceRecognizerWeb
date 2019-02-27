@@ -1,13 +1,13 @@
 import userType from './userType'
 
 export default class configuration {
-  editUserType(userTypePermission, userTypeNo) {
-    this.data = new userType()
-    this.data.editPermission(userTypePermission, userTypeNo)
+  editUserType = async (userTypePermission, userTypeNo) => {
+    let userTypeObj = new userType()
+    return await userTypeObj.editPermission(userTypePermission, userTypeNo)
   }
 
-  callListPermission() {
-    this.data1 = new userType()
-    this.data1.listPermission()
+  callListPermission = async () => {
+    let userTypeObj = new userType()
+    return await userTypeObj.listPermission()
   }
 }

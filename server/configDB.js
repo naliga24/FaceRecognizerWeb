@@ -25,5 +25,8 @@ exports.googleCloudConfig =
     {
         CLOUD_BUCKET_IMG: 'student_upload',
         CLOUD_BUCKET_PDF: 'report_facerecognizer',
+        CLOUD_BUCKET_KEY: 'key_facerecognizer',
         PROJECT_ID: '204186457948',
+        KEY_RING_ID: 'mykeyring', 
+        CRYPTO_KEY_ID:  'namekeyring'
     }

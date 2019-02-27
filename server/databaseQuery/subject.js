@@ -102,6 +102,9 @@ exports.selectSubjectInfoSubjectCodeName = (req, res) => {
     } else if (rows[0]['COUNT(SUBJECT_CODE_NAME)'] === 0) {
       res.send('0')
     }
+    else if (rows[0]['COUNT(SUBJECT_CODE_NAME)'] > 1) {
+      res.send('2')
+    }
   })
   mysqlConnection.end()
 }

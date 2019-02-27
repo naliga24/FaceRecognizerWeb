@@ -9,6 +9,7 @@
     "node": "8.11.1"
   },
   "dependencies": {
+    "@google-cloud/kms": "^0.3.0",
     "@google-cloud/storage": "^2.4.2",
     "alertifyjs": "^1.11.2",
     "body-parser": "^1.18.3",
@@ -47,12 +48,13 @@
     "webpack-cli": "^3.1.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.3.3",
     "@babel/core": "^7.3.3",
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
     "@google-cloud/nodejs-repo-tools": "^3.2.0",
     "babel-loader": "^8.0.5",
+    "babel-polyfill": "^6.26.0",
     "eslint": "^5.13.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
@@ -72,5 +74,5 @@
     "postinstall": "webpack",
     "heroku-postbuild": "webpack -p"
   },
-  "proxy": "https://facerecognizerweb.herokuapp.com"
+  "proxy": "https://localhost:9000"
 }

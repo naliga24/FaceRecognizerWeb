@@ -64,9 +64,9 @@ export default class login {
     }, 1000);
   }
 
-  callGetPermissionDetail(userLogin, userPassword) {
+  callGetPermissionDetail(userLogin, userPassword){
     this.data = new userType()
-    this.data.getPermissionDetail(userLogin, userPassword)
+     this.data.getPermissionDetail(userLogin, userPassword)
   }
 
   callSetPermission() {
@@ -74,19 +74,19 @@ export default class login {
     this.data2.setPermission()
   }
 
-  callCheckUserLogin(userLogin) {
+  callCheckUserLogin = async (userLogin) => {
     this.data3 = new user()
-    this.data3.checkUserLogin(userLogin)
+    return await this.data3.checkUserLogin(userLogin)
   }
 
-  callCheckUserPassword(userLogin, userPassword) {
+  callCheckUserPassword = async (userLogin, userPassword) => {
     this.data4 = new user()
-    this.data4.checkUserPassword(userLogin, userPassword)
+    return await this.data4.checkUserPassword(userLogin, userPassword)
   }
 
-  callCheckUserStatus(userLogin, userPassword) {
+  callCheckUserStatus = async (userLogin, userPassword) => {
     this.data5 = new user()
-    this.data5.checkUserStatus(userLogin, userPassword)
+    return await this.data5.checkUserStatus(userLogin, userPassword)
   }
 
   callGetLoginNo(userLogin) {
@@ -95,13 +95,13 @@ export default class login {
   }
 
   listReportTransaction(data) {
-    request.post('/selectUserTransactionForReport')
+   return request.post('/selectUserTransactionForReport')
       .send({ startDate: data.startDateSTR, endDate: data.endDateSTR, userTypeNo: data.userTypeNo })
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        if (res.body) {
-          this.dataReport = res.body
-        }
+      .then((res) => {
+        if (res.body) { console.log(res); return res.body; }
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 }

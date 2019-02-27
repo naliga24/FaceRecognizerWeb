@@ -5,8 +5,8 @@ import ReactTable from 'react-table'
 
 import 'react-table/react-table.css'
 
-import  login  from './../Prototype/login'
-import  subject  from './../Prototype/subject'
+import login from './../Prototype/login'
+import subject from './../Prototype/subject'
 
 class SubjectSearch extends Component {
     constructor() {
@@ -24,54 +24,45 @@ class SubjectSearch extends Component {
             tmpTeacherFirstName: '',
             tmpTeacherLastName: '',
             tmpSubjectStatus: '',
-            dataListSubject: '',
+            listSearchSubject: '',
         };
     }
 
-    componentWillMount=()=> {
+    componentWillMount = () => {
         this.searchSubject1()
     }
 
-    searchSubject=()=> {
-        let search = this.state.search.set('subjectCodeName', this.state.tmpSubjectCodeName)
+    searchSubject = async () => {
+        let search = await this.state.search.set('subjectCodeName', this.state.tmpSubjectCodeName)
             .set('subjectName', this.state.tmpSubjectName)
             .set('teacherFirstName', this.state.tmpTeacherFirstName)
             .set('teacherLastName', this.state.tmpTeacherLastName)
             .set('subjectStatus', this.state.tmpSubjectStatus)
-            this.setState({ search });
-            setTimeout(() => {
+        this.setState({ search });
         let subjectObj = new subject()
-        subjectObj.listSearchSubject(this.state.search)
-        window.setTimeout(() => {
-            this.setState({ dataListSubject: subjectObj.returnListSearchSubject })
-            subjectObj.returnListSearchSubject.length === 0 && alertify.alert('ค้นหา','ไม่พบข้อมูลที่ค้นหา',()=>{
-                alertify.error('ไม่พบข้อมูลที่ค้นหา')
-            }).show()
-            localStorage.setItem('stateSubjectSearch', JSON.stringify(this.state.search));
-        }, 1000);
-    }, 1000);
+        let listSearchSubject = await subjectObj.listSearchSubject(this.state.search)
+        this.setState({ listSearchSubject })
+        this.state.listSearchSubject.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+            alertify.error('ไม่พบข้อมูลที่ค้นหา')
+        }).show()
+        localStorage.setItem('stateSubjectSearch', JSON.stringify(this.state.search));
         let log = new login()
         log.writeLogLogout('2')
-        
     }
 
 
-    searchSubject1=()=> {
+    searchSubject1 = async () => {
         let stateLocal = localStorage.getItem('stateSubjectSearch')
-        let search = Map(JSON.parse(stateLocal))
+        let search = await Map(JSON.parse(stateLocal))
         this.setState({ search })
-        setTimeout(() => {
-            let subjectObj = new subject()
-            subjectObj.listSearchSubject(this.state.search)
-            window.setTimeout(() => {
-                this.setState({ dataListSubject: subjectObj.returnListSearchSubject })
-            }, 1000);
-        }, 1000);
+        let subjectObj = new subject()
+        let listSearchSubject = await subjectObj.listSearchSubject(this.state.search)
+        this.setState({ listSearchSubject })
         let log = new login()
         log.writeLogLogout('2')
     }
 
-    onChange=(e)=> {
+    onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
         console.log(this.state)
     }
@@ -174,7 +165,7 @@ class SubjectSearch extends Component {
                                 }
                             },
                             ]}
-                            data={this.state.dataListSubject ? this.state.dataListSubject : []}
+                            data={this.state.listSearchSubject ? this.state.listSearchSubject : []}
                             defaultPageSize={8}
                             noDataText={'ไม่พบข้อมูล'}
                             previousText={'ก่อนหน้า'}

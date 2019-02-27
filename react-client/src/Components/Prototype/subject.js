@@ -4,14 +4,13 @@ import semester from './semester.js'
 const request = require('superagent')
 
 export default class subject {
-  callListTeacher() {
+  callListTeacher=async()=> {
     this.teacher = new teacher()
-    this.teacher.listTeacher()
+    return await this.teacher.listTeacher()
   }
 
   addSubject(subjectCodeName, subjectName, subjectDescription, teacherNo, clear) {
     request.get(`/insertSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}`)
-      .send()
       .end((err, res) => {
         if (err) { console.log(err); return }
         if (res.text === '1') {
@@ -27,7 +26,6 @@ export default class subject {
 
   editSubject(subjectCodeName, subjectName, subjectDescription, teacherNo, subjectStatus, subjectNo, clear) {
     request.get(`/updateSubjectInfo/${subjectCodeName}/${subjectName}/${subjectDescription}/${teacherNo}/${subjectStatus}/${subjectNo}`)
-      .send()
       .end((err, res) => {
         if (err) { console.log(err); return }
         if (res.text === '1') {
@@ -42,7 +40,7 @@ export default class subject {
   }
 
   listSearchSubject(data) {
-    request.post('/selectSubjectInfoSearchSubject')
+    return request.post('/selectSubjectInfoSearchSubject')
       .send({
         subjectCodeName: data.get('subjectCodeName'),
         subjectName: data.get('subjectName'),
@@ -50,33 +48,34 @@ export default class subject {
         teacherLastName: data.get('teacherLastName'),
         subjectStatus: data.get('subjectStatus'),
       })
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        console.log(res.body)
-        this.returnListSearchSubject = res.body
-      })
-  }
-
-  checkSubjectId(subjectCodeName) {
-    request.get(`/selectSubjectInfoSubjectCodeName/${subjectCodeName}`)
-      .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return }
-        if (res.text === '1') {
-          console.log(res)
-          this.flagSubjectId = res.text
-        } else if (res.text === '0') {
-          this.flagSubjectId = res.text
-        }
+      .then((res) => {
+        console.log(res); return res.body;})
+      .catch(err => {
+        console.log(err.message, err.response)
       });
   }
 
-  listSubject() {
-    request.get('/selectSubjectInfo')
+  checkSubjectId(subjectCodeName) {
+    return request.get(`/selectSubjectInfoSubjectCodeName/${subjectCodeName}`)
       .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.listSubject = res.body
+      .then((res) => {
+        if (res.text === '1' || res.text ==='0') { 
+          console.log(res); return res.text;
+         }else if(res.text === '2'){
+           console.log('มีรหัสวิชาซำ้ในระบบ(เกิดข้อผิดพลาด)')
+         }
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+     });
+  }
+
+  listSubject() {
+    return request.get('/selectSubjectInfo')
+    .then((res) => {
+      console.log(res); return res.body;})
+    .catch(err => {
+      console.log(err.message, err.response)
+    });
   }
 }

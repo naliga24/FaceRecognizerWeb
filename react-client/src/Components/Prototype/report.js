@@ -7,29 +7,29 @@ import userType from './userType'
 const request = require('superagent')
 
 export default class report {
-  callListSubject() {
+  callListSubject=async()=> {
     this.subject = new subject()
-    this.subject.listSubject()
+    return await this.subject.listSubject()
   }
 
-  callListSemester() {
+  callListSemester=async()=> {
     this.semester = new semester()
-    this.semester.listSemester()
+    return await this.semester.listSemester()
   }
 
-  callListPermissionAll() {
+  callListPermissionAll=async()=> {
     this.userType = new userType()
-    this.userType.listPermissionAll()
+    return await this.userType.listPermissionAll()
   }
 
-  callListReportAttendance(data) {
+  callListReportAttendance=async(data)=> {
     this.classAttendance = new classAttendance()
-    this.classAttendance.listReportAttendance(data)
+    return await this.classAttendance.listReportAttendance(data)
   }
 
-  callListReportTransaction(data) {
+  callListReportTransaction=async(data)=> {
     this.login = new login()
-    this.login.listReportTransaction(data)
+    return await this.login.listReportTransaction(data)
   }
 
   displayReportAttendance(dataReport, subjectCodeName, semesterName) {

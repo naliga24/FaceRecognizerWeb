@@ -45,54 +45,47 @@ class ClassAttendance extends Component {
         };
     }
 
-    componentWillMount=()=> {
+    componentWillMount = () => {
         this.getStudentNoByClassAttendanceStudentKeyCodeName()
     }
 
-    searchStudent = () => {
+    searchStudent = async () => {
         let classAttendanceObj = new classAttendance()
-        classAttendanceObj.callListSearchStudent(this.state.search)
-        window.setTimeout(() => {
-            this.setState({ dataListStudent: classAttendanceObj.student.returnListSearchStudent })
-            classAttendanceObj.student.returnListSearchStudent.length === 0 && alertify.alert('ไม่พบข้อมูลนักศึกษาที่ค้นหา')
-        }, 2000);
+        let dataListStudent = await classAttendanceObj.callListSearchStudent(this.state.search)
+        this.setState({ dataListStudent })
+        this.state.dataListStudent.length === 0 && alertify.alert('ไม่พบข้อมูลนักศึกษาที่ค้นหา')
         let log = new login()
         log.writeLogLogout('10')
     }
 
-    getStudentNoByClassAttendanceStudentKeyCodeName = () => {
+    getStudentNoByClassAttendanceStudentKeyCodeName = async () => {
         let classAttendanceObj = new classAttendance()
-        classAttendanceObj.callGetStudentNoByClassAttendanceStudentKeyCodeName(this.state.showClassAttendanceStudentKeyCodeName)
-        setTimeout(() => {
-            classAttendanceObj.student.returnStudentNo && this.setState({ studentNoFromClassAttendanceStudentKeyCodeName: classAttendanceObj.student.returnStudentNo })
-        }, 2000)
+        let studentNoFromClassAttendanceStudentKeyCodeName = await classAttendanceObj.callGetStudentNoByClassAttendanceStudentKeyCodeName(this.state.showClassAttendanceStudentKeyCodeName)
+        studentNoFromClassAttendanceStudentKeyCodeName && this.setState({ studentNoFromClassAttendanceStudentKeyCodeName })
     }
 
-    saveClassAttendance = (studentNo, confirmStatusNo) => {
+    saveClassAttendance = async (studentNo, confirmStatusNo) => {
         let log = new login()
         log.writeLogLogout('10')
         this.setState({ confirmStatusNo })
         let classAttendanceObj = new classAttendance()
-        classAttendanceObj.updateClassAttendance(studentNo, confirmStatusNo, this.state.showClassAttendanceCode)
-        setTimeout(() => {
-            if (this.state.flagConfirm) {
-                if (classAttendanceObj.updateClassAttendanceFlag === '1') {
-                    alertify.alert('ยืนยันการเข้าชั้นเรียนเรียบร้อย')
-                }
-                else if (classAttendanceObj.updateClassAttendanceFlag === '0') {
-                    alertify.alert('ไม่สามารถยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
-                }
-
-            } else if (this.state.flagEdit) {
-                if (classAttendanceObj.updateClassAttendanceFlag === '1') {
-                    alertify.alert('แก้ไขการยืนยันการเข้าชั้นเรียนเรียบร้อย')
-                }
-                else if (classAttendanceObj.updateClassAttendanceFlag === '0') {
-                    alertify.alert('ไม่สามารถแก้ไขการยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
-                }
+        let updateClassAttendanceFlag = await classAttendanceObj.updateClassAttendance(studentNo, confirmStatusNo, this.state.showClassAttendanceCode)
+        if (this.state.flagConfirm) {
+            if (updateClassAttendanceFlag === '1') {
+                alertify.alert('ยืนยันการเข้าชั้นเรียนเรียบร้อย')
             }
-            this.gotoClassAttendanceSearch()
-        }, 2000)
+            else if (updateClassAttendanceFlag === '0') {
+                alertify.alert('ไม่สามารถยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
+            }
+        } else if (this.state.flagEdit) {
+            if (updateClassAttendanceFlag === '1') {
+                alertify.alert('แก้ไขการยืนยันการเข้าชั้นเรียนเรียบร้อย')
+            }
+            else if (updateClassAttendanceFlag === '0') {
+                alertify.alert('ไม่สามารถแก้ไขการยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
+            }
+        }
+        this.gotoClassAttendanceSearch()
     }
 
     clear = () => {

@@ -4,13 +4,13 @@ const request = require('superagent')
 
 export default class user {
   searchUser(data) {
-    request.post('/selectUserInfo')
+    return request.post('/selectUserInfo')
       .send({ data })
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.data1 = res.body
-        console.log(res.body)
-      })
+      .then((res) => {
+        console.log(res); return res.body;})
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 
   addUser(data, clear) {
@@ -48,56 +48,43 @@ export default class user {
   }
 
   getInactiveInfo(userNo) {
-    request.get(`/selectUserInactiveInfo/${userNo}`)
-      .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        if (res.body) {
-          this.data2 = res.body[0]
-          console.log(res.body[0])
-        }
-      })
+    return request.get(`/selectUserInactiveInfo/${userNo}`)
+      .then((res) => { if (res.body) return res.body[0] })
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 
   checkUserLogin(userLogin) {
-    request.post('/selectUserInfoUserLogin')
+    return request.post('/selectUserInfoUserLogin')
       .send({ userLogin })
-      .end((err, res) => {
-        if (err) { console.log(err); return }
-        if (res.text === '1') {
-          console.log(res)
-          this.data3 = res.text
-        } else if (res.text === '0') {
-          this.data3 = res.text
-        }
+      .then((res) => {
+        if (res.text) { console.log(res); return res.text; }
+      })
+      .catch(err => {
+        console.log(err.message, err.response)
       });
   }
 
   checkUserPassword(userLogin, userPassword) {
-    request.post('/selectUserInfoUserPassword')
+    return request.post('/selectUserInfoUserPassword')
       .send({ userLogin, userPassword })
-      .end((err, res) => {
-        if (err) { console.log(err); return }
-        if (res.text === '1') {
-          console.log(res)
-          this.data4 = res.text
-        } else if (res.text === '0') {
-          this.data4 = res.text
-        }
+      .then((res) => {
+        if (res.text) { console.log(res); return res.text; }
+      })
+      .catch(err => {
+        console.log(err.message, err.response)
       });
   }
 
   checkUserStatus(userLogin, userPassword) {
-    request.post('/selectUserInfoUserStatus')
+    return request.post('/selectUserInfoUserStatus')
       .send({ userLogin, userPassword })
-      .end((err, res) => {
-        if (err) { console.log(err); return }
-        if (res.text === '1') {
-          console.log(res)
-          this.data5 = res.text
-        } else if (res.text === '0') {
-          this.data5 = res.text
-        }
+      .then((res) => {
+        if (res.text) { console.log(res); return res.text; }
+      })
+      .catch(err => {
+        console.log(err.message, err.response)
       });
   }
 

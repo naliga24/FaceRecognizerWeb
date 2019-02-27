@@ -19,42 +19,37 @@ class Login extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    login=() =>{
+    login=async() =>{
         if(this.state.userLogin && this.state.userPassword){
             let tmp = new login()
-            tmp.callCheckUserLogin(this.state.userLogin)
-            setTimeout(() => {
-                if (tmp.data3.data3 === '1') {
-                    tmp.callCheckUserPassword(this.state.userLogin,this.state.userPassword)
-                    setTimeout(() => {
-                        if (tmp.data4.data4 === '1') {
-                            tmp.callCheckUserStatus(this.state.userLogin,this.state.userPassword)
-                            setTimeout(() => {
-                                if(tmp.data5.data5 === '1'){
+            
+           
+                if (await tmp.callCheckUserLogin(this.state.userLogin) === '1') {
+                        if (await tmp.callCheckUserPassword(this.state.userLogin,this.state.userPassword) === '1') {
+                                if(await tmp.callCheckUserStatus(this.state.userLogin,this.state.userPassword) === '1'){
                                     tmp.callGetPermissionDetail(this.state.userLogin,this.state.userPassword)
                                     setTimeout(() => {
                                         tmp.writeLogLogin('1')
                                         window.location.reload()
-                                    }, 2000);
-                                }else if(tmp.data5.data5 === '0'){
+                                    }, 2000)
+                                }else if(await tmp.callCheckUserStatus(this.state.userLogin,this.state.userPassword) === '0'){
                                     alertify.alert('เข้าระบบ',`สถานะผู้ใช้ระบบเท่ากับ “ไม่ใช้งาน”`,()=>{
                                         alertify.error('ไม่สามารถเข้าระบบ')
                                     }).show()
                                 }
-                            }, 2000);
-                        } else if(tmp.data4.data4 === '0'){
+                        } else if(await tmp.callCheckUserPassword(this.state.userLogin,this.state.userPassword) === '0'){
                             alertify.alert('เข้าระบบ',`ชื่อ password ไม่ถูกต้อง`,()=>{
                                 alertify.error('ไม่สามารถเข้าระบบ')
                             }).show()
                             tmp.writeLogLoginError('11',this.state.userLogin)
                         }
-                    }, 2000);
-                } else if(tmp.data3.data3 === '0') {
+                
+                } else if(await tmp.callCheckUserLogin(this.state.userLogin) === '0') {
                     alertify.alert('เข้าระบบ',`ชื่อ username ไม่ถูกต้อง`,()=>{
                         alertify.error('ไม่สามารถเข้าระบบ')
                     }).show()
                 }
-            }, 2000);
+      
         }else{
             alertify.alert('เข้าระบบ',`กรอกข้อมูลไม่ครบ`,()=>{
                 alertify.error('ไม่สามารถเข้าระบบ')

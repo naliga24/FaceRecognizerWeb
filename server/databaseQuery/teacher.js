@@ -93,6 +93,9 @@ exports.selectTeacherFirstNameAndLastName = (req, res) => {
     } else if (rows[0]['COUNT(TEACHER_FIRST_NAME AND TEACHER_LAST_NAME)'] === 0) {
       res.send('0')
     }
+    else if (rows[0]['COUNT(TEACHER_FIRST_NAME AND TEACHER_LAST_NAME)'] > 1) {
+      res.send('2')
+    }
   })
   mysqlConnection.end()
 }
@@ -107,7 +110,7 @@ exports.selectTeacherInfoSearchTeacher = (req, res) => {
   sql += ' WHERE a.TEACHER_STATUS = b.USE_STATUS_NO'
   sql += ` AND a.TEACHER_FIRST_NAME LIKE '%${req.body.teacherFirstName}%'`
   sql += ` AND a.TEACHER_LAST_NAME LIKE '%${req.body.teacherLastName}%'`
-  sql += ` AND a.TEACHER_CLASS_COUNT LIKE '%${req.body.teacherClassCount}%'`
+  sql += req.body.teacherClassCount?` AND a.TEACHER_CLASS_COUNT = '${req.body.teacherClassCount}'`:''
   sql += ` AND a.TEACHER_STATUS LIKE '%${req.body.teacherStatus}%'`
 
   console.log(sql)

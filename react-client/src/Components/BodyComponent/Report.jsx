@@ -1,5 +1,5 @@
 import { Redirect } from 'react-router-dom';
-import { BrowserRouter as Router, Route, Link ,Provider } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Provider } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import React, { Component } from 'react';
 let dateFormat = require('dateformat')
@@ -28,37 +28,31 @@ class Report extends Component {
         }
     }
 
-    componentDidMount=() =>{
+    componentDidMount = () => {
         this.selectSemesterInfo()
         this.selectSubjectInfo()
         this.selectUserTypeInfo()
     }
 
-    selectSemesterInfo=()=> {
+    selectSemesterInfo = async () => {
         let reportObj = new report()
-        reportObj.callListSemester()
-        setTimeout(() => {
-            reportObj.semester.listSemester.length > 0 && this.setState({ listSemester: reportObj.semester.listSemester })
-        }, 2000)
+        let listSemester = await reportObj.callListSemester()
+        listSemester.length > 0 && this.setState({ listSemester })
     }
 
-    selectSubjectInfo=()=> {
+    selectSubjectInfo = async () => {
         let reportObj = new report()
-        reportObj.callListSubject()
-        setTimeout(() => {
-            reportObj.subject.listSubject.length > 0 && this.setState({ listSubject: reportObj.subject.listSubject })
-        }, 2000)
+        let listSubject = await reportObj.callListSubject()
+        listSubject.length > 0 && this.setState({ listSubject })
     }
 
-    selectUserTypeInfo=()=> {
+    selectUserTypeInfo = async () => {
         let tmp = new report()
-        tmp.callListPermissionAll()
-        window.setTimeout(() => {
-            this.setState({ listUserType: tmp.userType.data })
-        }, 2000);
+        let listUserType = await tmp.callListPermissionAll()
+        this.setState({ listUserType })
     }
 
-    onChange=(e) =>{
+    onChange = (e) => {
         let tmp = e.target.value.split(',')
         if (e.target.name === "subjectNo") {
             this.setState({ [e.target.name]: tmp[0], subjectCodeName: tmp[1] })
@@ -69,23 +63,20 @@ class Report extends Component {
         }
     }
 
-    getDataReportAttendance=()=> {
+    getDataReportAttendance =async () => {
         if (this.state.subjectNo && this.state.semesterNo) {
             let reportObj = new report()
-            reportObj.callListReportAttendance(this.state)
-            setTimeout(() => {
-                console.log(reportObj.classAttendance.dataReport)
-                if (reportObj.classAttendance.dataReport) {
-                    reportObj.displayReportAttendance(reportObj.classAttendance.dataReport, this.state.subjectCodeName, this.state.semesterName)
+           let dataReport = await reportObj.callListReportAttendance(this.state)
+                if (dataReport) {
+                    reportObj.displayReportAttendance(dataReport, this.state.subjectCodeName, this.state.semesterName)
                     setTimeout(() => {
                         window.open("/ShowPdfAttendance");
-                       }, 3000);
+                    }, 3000);
                 } else {
                     alertify.alert('รายงาน', 'ไม่พบรายการการเข้าชั้นเรียน', () => {
                         alertify.error('ไม่พบข้อมูล')
                     })
                 }
-            }, 2000);
         } else if (!this.state.subjectNo) {
             alertify.alert('โปรดระบุรหัสวิชา')
         } else if (!this.state.semesterNo) {
@@ -95,29 +86,26 @@ class Report extends Component {
         log.writeLogLogout('7')
     }
 
-    getDataReportTransaction=()=> {
+    getDataReportTransaction = async() => {
         if (this.state.startDateSTR && this.state.endDateSTR) {
             let reportObj = new report()
-            reportObj.callListReportTransaction(this.state)
-            setTimeout(() => {
-                console.log(reportObj.login.dataReport)
-                if (reportObj.login.dataReport) {
-                    reportObj.displayReportTransaction(reportObj.login.dataReport, this.state.startDateSTR, this.state.endDateSTR,this.state.userTypeName)
-                   setTimeout(() => {
-                    window.open("/ShowPdfTransaction");
-                   }, 3000);
+            let dataReport = await reportObj.callListReportTransaction(this.state)
+                if (dataReport) {
+                    reportObj.displayReportTransaction(dataReport, this.state.startDateSTR, this.state.endDateSTR, this.state.userTypeName)
+                    setTimeout(() => {
+                        window.open("/ShowPdfTransaction");
+                    }, 3000);
                 } else {
                     alertify.alert('รายงาน', 'ไม่พบรายการการเข้าใช้ระบบ', () => {
                         alertify.error('ไม่พบข้อมูล')
                     })
                 }
-            }, 2000);
         }
         let log = new login()
         log.writeLogLogout('7')
     }
 
-    handleChange=(name, date)=> {
+    handleChange = (name, date) => {
         let change1 = {}
         change1[name] = date
         this.setState(change1);
@@ -127,7 +115,7 @@ class Report extends Component {
         this.setState(change2);
     }
 
-    setDateString=() =>{
+    setDateString = () => {
         this.setState({ startDateSTR: dateFormat(this.state.startDate, "yyyy-mm-dd") });
         this.setState({ endDateSTR: dateFormat(this.state.endDate, "yyyy-mm-dd") });
     }

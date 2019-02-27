@@ -5,15 +5,15 @@ import ReactTable from 'react-table'
 
 import 'react-table/react-table.css'
 
-import  login  from './../Prototype/login'
-import  semester  from './../Prototype/semester'
+import login from './../Prototype/login'
+import semester from './../Prototype/semester'
 
 class SemesterSearch extends Component {
     constructor() {
         super()
 
         this.state = {
-            search:Map({
+            search: Map({
                 semesterStatusNo: '',
                 semesterTerm: '',
                 semesterYear: '',
@@ -21,50 +21,42 @@ class SemesterSearch extends Component {
             tmpSemesterStatusNo: '',
             tmpSemesterTerm: '',
             tmpSemesterYear: '',
-            dataListSemester:'',
+            listSearchSemester: '',
         };
     }
-    
-    componentDidMount=()=> {
+
+    componentDidMount = () => {
         this.searchSemester1()
     }
 
-    searchSemester=()=> {
-        let search = this.state.search.set('semesterStatusNo', this.state.tmpSemesterStatusNo)
-        .set('semesterTerm', this.state.tmpSemesterTerm)
-        .set('semesterYear', this.state.tmpSemesterYear)
+    searchSemester = async () => {
+        let search = await this.state.search.set('semesterStatusNo', this.state.tmpSemesterStatusNo)
+            .set('semesterTerm', this.state.tmpSemesterTerm)
+            .set('semesterYear', this.state.tmpSemesterYear)
         this.setState({ search });
-        setTimeout(() => {
         let semesterObj = new semester()
-        semesterObj.listSearchSemester(this.state.search) 
-        window.setTimeout(() => {
-            this.setState({dataListSemester:semesterObj.returnListSearchSemester})
-            semesterObj.returnListSearchSemester.length === 0 && alertify.alert('ค้นหา','ไม่พบข้อมูลที่ค้นหา',()=>{
-                            alertify.error('ไม่พบข้อมูล')
-                        }).show()
-            localStorage.setItem( 'stateSemesterSearch', JSON.stringify(this.state.search));
-        }, 1000);
-    }, 1000);
+        let listSearchSemester = await semesterObj.listSearchSemester(this.state.search)
+        this.setState({ listSearchSemester })
+        this.state.listSearchSemester.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+            alertify.error('ไม่พบข้อมูล')
+        }).show()
+        localStorage.setItem('stateSemesterSearch', JSON.stringify(this.state.search));
         let log = new login()
         log.writeLogLogout('3')
     }
 
-    searchSemester1=()=> {
+    searchSemester1 = async () => {
         let stateLocal = localStorage.getItem('stateSemesterSearch')
-        let search = Map(JSON.parse(stateLocal))
+        let search = await Map(JSON.parse(stateLocal))
         this.setState({ search })
-        setTimeout(() => {
         let semesterObj = new semester()
-        semesterObj.listSearchSemester(this.state.search) 
-        window.setTimeout(() => {
-            this.setState({dataListSemester:semesterObj.returnListSearchSemester})
-        }, 1000);
-    }, 1000);
+        let listSearchSemester = await semesterObj.listSearchSemester(this.state.search)
+        this.setState({ listSearchSemester })
         let log = new login()
         log.writeLogLogout('3')
     }
 
-    onChange=(e)=> {
+    onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })
     }
 
@@ -91,55 +83,55 @@ class SemesterSearch extends Component {
                         </div>
                     </div>
                     <div class='table'>
-                    <ReactTable
-                        columns={[{
-                            Header: 'ชื่อภาคการศึกษา',
-                            accessor: 'SEMESTER_NAME',
-                            filterable:true,
-                            style:{
-                                textAlign:'center'
+                        <ReactTable
+                            columns={[{
+                                Header: 'ชื่อภาคการศึกษา',
+                                accessor: 'SEMESTER_NAME',
+                                filterable: true,
+                                style: {
+                                    textAlign: 'center'
+                                },
+
                             },
-            
-                        },
-                        {
-                            Header: 'สถานะภาคการศึกษา',
-                            accessor: 'SEMESTER_STATUS_DESCRIPTION',
-                            filterable:true,
-                            style:{
-                                textAlign:'center'
-                            }
-                        },
-                        {
-                            Header: 'แก้ไข',
-                            style:{
-                                textAlign:'center'
+                            {
+                                Header: 'สถานะภาคการศึกษา',
+                                accessor: 'SEMESTER_STATUS_DESCRIPTION',
+                                filterable: true,
+                                style: {
+                                    textAlign: 'center'
+                                }
                             },
-                            width:50,
-                            maxWidth:50,
-                            minWidth:50,
-                            Cell:props=>{
-                                return(
-                                    <Link to={{
-                                        pathname: "/Semester",
-                                        semesterNo: props.original.SEMESTER_NO,
-                                        semesterName: props.original.SEMESTER_NAME,
-                                        semesterStatusNo: props.original.SEMESTER_STATUS_NO,
-                                        tmpSemesterTerm: props.original.SEMESTER_NAME.substring(0,1),
-                                        tmpSemesterYear: props.original.SEMESTER_NAME.substring(2,4),
-                                        flagEdit: true,
-                                    }} ><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button></p>
-                                    </Link>
-                                )
-                            }
-                        },
-                        ]}
-                        data={this.state.dataListSemester ? this.state.dataListSemester : []}
-                        defaultPageSize={8}
-                        noDataText={'ไม่พบข้อมูล'}
-                        previousText={'ก่อนหน้า'}
-                        nextText={'ถัดไป'}
-                    >
-                    </ReactTable>
+                            {
+                                Header: 'แก้ไข',
+                                style: {
+                                    textAlign: 'center'
+                                },
+                                width: 50,
+                                maxWidth: 50,
+                                minWidth: 50,
+                                Cell: props => {
+                                    return (
+                                        <Link to={{
+                                            pathname: "/Semester",
+                                            semesterNo: props.original.SEMESTER_NO,
+                                            semesterName: props.original.SEMESTER_NAME,
+                                            semesterStatusNo: props.original.SEMESTER_STATUS_NO,
+                                            tmpSemesterTerm: props.original.SEMESTER_NAME.substring(0, 1),
+                                            tmpSemesterYear: props.original.SEMESTER_NAME.substring(2, 4),
+                                            flagEdit: true,
+                                        }} ><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button></p>
+                                        </Link>
+                                    )
+                                }
+                            },
+                            ]}
+                            data={this.state.listSearchSemester ? this.state.listSearchSemester : []}
+                            defaultPageSize={8}
+                            noDataText={'ไม่พบข้อมูล'}
+                            previousText={'ก่อนหน้า'}
+                            nextText={'ถัดไป'}
+                        >
+                        </ReactTable>
                     </div>
                 </div >
             </div>

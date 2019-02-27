@@ -1,8 +1,8 @@
-import { Redirect, Link,withRouter } from 'react-router-dom'
+import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
 
-import  login  from './../Prototype/login'
-import  user  from './../Prototype/user'
+import login from './../Prototype/login'
+import user from './../Prototype/user'
 
 let dateFormat = require('dateformat')
 
@@ -22,7 +22,7 @@ class User extends Component {
             inactiveDate: new Date().toISOString().split('T')[0],
             inactiveTime: new Date().toISOString().split('T')[1].slice(0, 8),
             inactiveDetail: '',
-            oldInactiveDetail:'',
+            oldInactiveDetail: '',
             userStatus: this.props.location.userStatus ? this.props.location.userStatus : '1',
             oldUserStatus: this.props.location.userStatus,
             flagEdit: this.props.location.flagEdit,
@@ -31,22 +31,24 @@ class User extends Component {
         };
     }
 
-    componentDidMount=() =>{
+    componentDidMount = () => {
         if (this.state.flagEdit && this.state.userStatus == '2') {
             this.userInactiveInfo()
         }
         this.getCurrentDate()
     }
 
-    userInactiveInfo=()=> {
+    userInactiveInfo = async () => {
         let tmp = new user()
-        tmp.getInactiveInfo(this.state.userNo)
-        window.setTimeout(() => {
-            tmp.data2 && this.setState({ inactiveDate: tmp.data2.INACTIVE_DATE, inactiveTime: tmp.data2.INACTIVE_TIME, inactiveDetail: tmp.data2.INACTIVE_DETAIL })
-        }, 1000);
+        let inactive = await tmp.getInactiveInfo(this.state.userNo)
+            inactive && this.setState({
+                inactiveDate: inactive.INACTIVE_DATE,
+                inactiveTime: inactive.INACTIVE_TIME,
+                inactiveDetail: inactive.INACTIVE_DETAIL
+            })
     }
 
-    saveUser=()=> {
+    saveUser =async () => {
         if (this.state.userLogin && this.state.userPassword && this.state.userName && this.state.userType && this.state.userStatus) {
             let tmp = new user()
             if ((this.state.userLogin !== this.state.oldUserLogin)
@@ -55,57 +57,54 @@ class User extends Component {
                 || (this.state.userType !== this.state.oldUserType)
                 || (this.state.inactiveDetail !== this.state.oldInactiveDetail)
                 || (this.state.userStatus !== this.state.oldUserStatus)) {
-            if (this.state.userLogin !== this.state.oldUserLogin) {
-                tmp.checkUserLogin(this.state.userLogin)
-                setTimeout(() => {
-                    if (tmp.data3 === '0') {
-                        if (this.state.flagEdit) {
-                            tmp.editUser(this.state, this.clear)
-                            alertify.alert('แก้ไข',`แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`,()=>{
-                                this.gotoUserSearch()
-                            }).show()
-                        } else {
-                            tmp.addUser(this.state, this.clear)
-                            alertify.alert('เพิ่ม',`เพิ่มข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`,()=>{
-                                alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
+                if (this.state.userLogin !== this.state.oldUserLogin) {
+                        if (await tmp.checkUserLogin(this.state.userLogin) === '0') {
+                            if (this.state.flagEdit) {
+                                tmp.editUser(this.state, this.clear)
+                                alertify.alert('แก้ไข', `แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {
+                                    this.gotoUserSearch()
+                                }).show()
+                            } else {
+                                tmp.addUser(this.state, this.clear)
+                                alertify.alert('เพิ่ม', `เพิ่มข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {
+                                    alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
+                                }).show()
+                            }
+                        } else if (await tmp.checkUserLogin(this.state.userLogin) === '1' && this.state.flagEdit) {
+                            alertify.alert('แก้ไข', `ไม่สามารถเแก้ไขข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`, () => {
+                                alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()
                         }
-                    } else if (tmp.data3 === '1' && this.state.flagEdit) {
-                        alertify.alert('แก้ไข',`ไม่สามารถเแก้ไขข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`,()=>{
-                            alertify.error('ไม่สามารถเแก้ไขข้อมูล')
-                        }).show()  
-                    }
-                    else if (tmp.data3 === '1' && !this.state.flagEdit) {
-                        alertify.alert('เพิ่ม',`ไม่สามารถเพิ่มข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`,()=>{
-                            alertify.error('ไม่สามารถเพิ่มข้อมูล')
-                        }).show() 
-                    }
-                }, 1000);
+                        else if (await tmp.checkUserLogin(this.state.userLogin) === '1' && !this.state.flagEdit) {
+                            alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`, () => {
+                                alertify.error('ไม่สามารถเพิ่มข้อมูล')
+                            }).show()
+                        }
+                } else if (this.state.flagEdit) {
+                    tmp.editUser(this.state, this.clear)
+                    alertify.alert('แก้ไข', `แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {
+                        this.gotoUserSearch()
+                    }).show()
+                }
             } else if (this.state.flagEdit) {
-                tmp.editUser(this.state, this.clear)
-                alertify.alert('แก้ไข',`แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`,()=>{
-                    this.gotoUserSearch()
+                alertify.alert('แก้ไข', `ข้อมูลไม่มีการเปลี่ยนแปลง`, () => {
+                    alertify.success(`ข้อมูลไม่มีการเปลี่ยนแปลง`)
                 }).show()
             }
-        } else if (this.state.flagEdit) {
-            alertify.alert('แก้ไข',`ข้อมูลไม่มีการเปลี่ยนแปลง`,()=>{
-                alertify.success(`ข้อมูลไม่มีการเปลี่ยนแปลง`)
-            }).show()
-        }
         } else if (!this.state.userLogin) {
-            alertify.alert('เพิ่ม/แก้ไข','โปรดระบุชื่อในการเข้าระบบ',()=>{
+            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุชื่อในการเข้าระบบ', () => {
                 alertify.error('โปรดระบุชื่อในการเข้าระบบ')
             }).show()
         } else if (!this.state.userPassword) {
-            alertify.alert('เพิ่ม/แก้ไข','โปรดระบุรหัสผ่าน',()=>{
+            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุรหัสผ่าน', () => {
                 alertify.error('โปรดระบุรหัสผ่าน')
             }).show()
         } else if (!this.state.userName) {
-            alertify.alert('เพิ่ม/แก้ไข','โปรดระบุชื่อผู้ใช้งาน',()=>{
+            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุชื่อผู้ใช้งาน', () => {
                 alertify.error('โปรดระบุชื่อผู้ใช้งาน')
             }).show()
         } else if (!this.state.userType) {
-            alertify.alert('เพิ่ม/แก้ไข','โปรดระบุประเภทผู้ใช้งาน',()=>{
+            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุประเภทผู้ใช้งาน', () => {
                 alertify.error('โปรดระบุประเภทผู้ใช้งาน')
             }).show()
         }
@@ -113,23 +112,23 @@ class User extends Component {
         log.writeLogLogout('6')
     }
 
-    add=() =>{
+    add = () => {
         this.setState({ buttonDisble: !this.state.buttonDisble })
     }
 
-    clear=()=> {
+    clear = () => {
         this.setState({ buttonDisble: !this.state.buttonDisble, flagEdit: false, userLogin: '', userPassword: '', userName: '', userType: '', userStatus: '1' })
     }
 
-    onChange=(e)=> {
+    onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    gotoUserSearch=()=> {
+    gotoUserSearch = () => {
         this.props.history.push('/UserSearch');
     }
 
-    getCurrentDate=()=> {
+    getCurrentDate = () => {
         setInterval(() => {
             this.state.tmpDate.setSeconds(this.state.tmpDate.getSeconds() + 1);
             this.setState({ tmpDate: this.state.tmpDate })
@@ -164,10 +163,10 @@ class User extends Component {
                                 </select>
                             </label>
                             <label id='status'>สถานะ
-                            <select  id='second'  class="selectpicker" name="userStatus" onChange={this.onChange} disabled={!this.state.flagEdit}>
-                                <option value='1' selected={this.state.userStatus == '1' ? true : false}>ใช้งาน</option>
-                                <option value='2' selected={this.state.userStatus == '2' ? true : false}>ไม่ใช้งาน</option>
-                            </select></label>
+                            <select id='second' class="selectpicker" name="userStatus" onChange={this.onChange} disabled={!this.state.flagEdit}>
+                                    <option value='1' selected={this.state.userStatus == '1' ? true : false}>ใช้งาน</option>
+                                    <option value='2' selected={this.state.userStatus == '2' ? true : false}>ไม่ใช้งาน</option>
+                                </select></label>
                         </div>
                     </div>
                     <div class='status1'>

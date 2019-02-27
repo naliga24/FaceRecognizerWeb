@@ -57,7 +57,7 @@ exports.updateClassAttendanceInfo = (req, res) => {
       res.send('1').status(200)
     } else if (rows.affectedRows === 0) {
       console.log("can't update!")
-      res.send('2').status(200)
+      res.send('0').status(200)
     }
   })
   mysqlConnection.end()

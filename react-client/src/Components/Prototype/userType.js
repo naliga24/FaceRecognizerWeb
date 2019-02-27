@@ -2,22 +2,27 @@ const request = require('superagent')
 
 export default class userType {
   listPermission() {
-    request.get('/selectUserTypeInfo')
-      .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.data = res.body
+    return request.get('/selectUserTypeInfo')
+      .then((res) => { 
+        console.log(res); return res.body; 
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 
   editPermission(userTypePermission, userTypeNo) {
-    request.put(`/updateUserTypeInfo/${userTypePermission}/${userTypeNo}`)
-      .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        if (res) {
-          console.log(res)
-        }
+    return request.put(`/updateUserTypeInfo/${userTypePermission}/${userTypeNo}`)
+      .then((res) => {
+        if (res.text === '1') { 
+          console.log(res); return res.text;
+         }
+         else if (res.text ==='0') { 
+          console.log('ไม่สามารถแก้ไขสิทธ์การใช้งาน(เกิดข้อผิดพลาด)');
+         }
+      })
+      .catch(err => {
+        console.log(err.message, err.response)
       });
   }
 
@@ -33,11 +38,10 @@ export default class userType {
   }
 
   listPermissionAll() {
-    request.get('/selectUserTypeInfoAll')
-      .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.data = res.body
-      })
+    return request.get('/selectUserTypeInfoAll')
+      .then((res) => { console.log(res); return res.body; })
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 }

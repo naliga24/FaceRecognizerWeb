@@ -2,17 +2,18 @@ const request = require('superagent')
 
 export default class student {
   checkStudentCodeName(studentCodeName) {
-    request.get(`/selectStudentInfoStudentCodeName/${studentCodeName}`)
+    return request.get(`/selectStudentInfoStudentCodeName/${studentCodeName}`)
       .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        if (res.text === '1') {
-          console.log(res)
-          this.flagStudentCodeName = res.text
-        } else if (res.text === '0') {
-          this.flagStudentCodeName = res.text
-        }
+      .then((res) => {
+        if (res.text === '1' || res.text ==='0') { 
+          console.log(res); return res.text;
+         }else if(res.text === '2'){
+           console.log('มีรหัสนักศึกษาซำ้ในระบบ(เกิดข้อผิดพลาด)')
+         }
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+     });
   }
 
   editStudent(data, clear) {
@@ -85,17 +86,19 @@ export default class student {
   }
 
   listSearchStudent(data) {
-    request.post('/selectStudentInfoSearchStudent')
+    return request.post('/selectStudentInfoSearchStudent')
       .send({
         studentCodeName: data.get('studentCodeName'),
         studentFirstName: data.get('studentFirstName'),
         studentLastName: data.get('studentLastName'),
         studentStatus: data.get('studentStatus'),
       })
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        this.returnListSearchStudent = res.body
+      .then((res) => {
+          console.log(res.body); return res.body;
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+     });
   }
 
   getStudentNoByStudentCodeName(data) {
@@ -114,14 +117,15 @@ export default class student {
   getStudentNoByClassAttendanceStudentKeyCodeName(classAttendanceStudentKeyCodeName) {
     request.get(`/selectStudenNoByClassAttendanceStudentKeyCodeName/${classAttendanceStudentKeyCodeName}`)
       .send()
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
-        console.log(res.body.length)
-        if (res.body.length === 1) {
-          this.returnStudentNo = res.body[0].STUDENT_NO
-        } else if (res.body.length > 1) {
+      .then((res) => {
+        if (res.body.length === 1) { 
+          console.log(res); return res.body[0].STUDENT_NO;
+         }else if(res.body.length > 1){
           console.log('มีข้อมูลรหัสนักศึกษาซำ้ในระบบ(เกิดข้อผิดพลาด)')
-        }
+         }
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+     });
   }
 }

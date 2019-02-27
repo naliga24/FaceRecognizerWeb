@@ -20,15 +20,13 @@ class Semester extends Component {
         };
     }
 
-    saveSemester=()=> {
+    saveSemester=async()=> {
         if (this.state.tmpSemesterTerm && this.state.tmpSemesterYear) {
             let semesterObj = new semester()
             if ((this.state.semesterName !== this.state.oldSemesterName)
                 || (this.state.semesterStatusNo !== this.state.oldSemesterStatusNo)) {
                 if (this.state.semesterName !== this.state.oldSemesterName) {
-                    semesterObj.checkSemesterName(this.state.semesterName)
-                    setTimeout(() => {
-                        if (semesterObj.flagSemesterName === '0') {
+                        if (await semesterObj.checkSemesterName(this.state.semesterName) === '0') {
                             if (this.state.flagEdit) {
                                 semesterObj.editSemester(this.state, this.clear)
                                 alertify.alert('แก้ไข', `แก้ไขข้อมูลภาคศึกษา "${this.state.semesterName}" เรียบร้อย`, () => {
@@ -40,17 +38,16 @@ class Semester extends Component {
                                     alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
                                 }).show()
                             }
-                        } else if (semesterObj.flagSemesterName === '1' && this.state.flagEdit) {
+                        } else if (await semesterObj.checkSemesterName(this.state.semesterName) === '1' && this.state.flagEdit) {
                             alertify.alert('แก้ไข', `ไม่สามารถแก้ไขข้อมูลภาคศึกษา "${this.state.semesterName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถแก้ไขข้อมูล')
                             }).show()
                         }
-                        else if (semesterObj.flagSemesterName === '1' && !this.state.flagEdit) {
+                        else if (await semesterObj.checkSemesterName(this.state.semesterName) === '1' && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลภาคศึกษา "${this.state.semesterName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
-                    }, 1000);
                 } else if (this.state.flagEdit) {
                     semesterObj.editSemester(this.state, this.clear)
                     alertify.alert('แก้ไข', `แก้ไขข้อมูลภาคศึกษา "${this.state.semesterName}" เรียบร้อย`, () => {

@@ -37,52 +37,46 @@ class ClassAttendanceSearch extends Component {
             tmpStudentNo: '',
             tmpTeacherNo: '',
             tmpSemesterNo: '',
-            dataListClassAttendance: '',
+            listSearchClassAttendance: '',
             listSemester: '',
             listSubject: '',
         };
     }
 
-    componentDidMount=()=> {
+    componentDidMount = () => {
         this.searchClassAttendance1()
         this.getListSemester()
         this.getListSubject()
     }
 
-    getStudentNo=()=> {
+    getStudentNo = async () => {
         let classAttendanceObj = new classAttendance()
-        classAttendanceObj.callGetStudentNoByStudentCodeName(this.state.search)
-        window.setTimeout(() => {
-            if (classAttendanceObj.student.returnStudentNo) {
-                let search = this.state.search.set('studentNo', classAttendanceObj.student.returnStudentNo)
-                this.setState({ search });
-            }
-        }, 1000);
+        let returnStudentNo = await classAttendanceObj.callGetStudentNoByStudentCodeName(this.state.search)
+        if (returnStudentNo) {
+            let search = this.state.search.set('studentNo', returnStudentNo)
+            this.setState({ search });
+        }
     }
 
-    getListSemester=() =>{
+    getListSemester = async () => {
         let classAttendancetObj1 = new classAttendance()
-        classAttendancetObj1.callListSemester()
-        setTimeout(() => {
-            classAttendancetObj1.semester.listSemester.length > 0 && this.setState({ listSemester: classAttendancetObj1.semester.listSemester })
-        }, 1000)
+        let listSemester = await classAttendancetObj1.callListSemester()
+        listSemester.length > 0 && this.setState({ listSemester })
     }
 
-    getListSubject=()=> {
+    getListSubject = async () => {
         let classAttendancetObj2 = new classAttendance()
-        classAttendancetObj2.callListSubject()
-        setTimeout(() => {
-            classAttendancetObj2.subject.listSubject.length > 0 && this.setState({ listSubject: classAttendancetObj2.subject.listSubject })
-        }, 1000)
-
+        let listSubject = await classAttendancetObj2.callListSubject()
+        listSubject.length > 0 && this.setState({ listSubject })
     }
 
-    clear=()=> {
+    clear = () => {
         this.setState({ tmpStartDate: new Date(), tmpEndDate: new Date() })
     }
 
-    searchClassAttendance=()=> {
-        let search = this.state.search.set('classAttendanceCode', this.state.tmpClassAttendanceCode)
+    searchClassAttendance = async () => {
+        if(this.state.tmpStartDate <= this.state.tmpEndDate){
+            let search = await this.state.search.set('classAttendanceCode', this.state.tmpClassAttendanceCode)
             .set('studentCodeName', this.state.tmpStudentCodeName)
             .set('confirmStatusNo', this.state.tmpConfirmStatusNo)
             .set('subjectNo', this.state.tmpSubjectNo)
@@ -91,50 +85,44 @@ class ClassAttendanceSearch extends Component {
             .set('semesterNo', this.state.tmpSemesterNo)
             .set('startDateSTR', dateFormat(this.state.tmpStartDate, "yyyy-mm-dd"))
             .set('endDateSTR', dateFormat(this.state.tmpEndDate, "yyyy-mm-dd"));
-            this.setState({ search });
-            this.getStudentNo()
-            setTimeout(() => {
-                let classAttendanceObj = new classAttendance()
-                console.log(this.state.search)
-                classAttendanceObj.listSearchClassAttendance(this.state.search)
-                window.setTimeout(() => {
-                    this.setState({ dataListClassAttendance: classAttendanceObj.returnListSearchClassAttendance })
-                    if (classAttendanceObj.returnListSearchClassAttendance.length === 0) {
-                       alertify.alert('ค้นหา','ไม่พบข้อมูลที่ค้นหา',()=>{
-                            //alertify.success('ไม่พบข้อมูล')
-                            this.clear()
-                            alertify.error('ไม่พบข้อมูล')
-                        }).show()
-                    }
-                    localStorage.setItem('stateClassAttendanceSearch', JSON.stringify(this.state.search));
-                }, 1000)
-            }, 1000);
-   
-
+        this.setState({ search });
+        this.getStudentNo()
+        let classAttendanceObj = new classAttendance()
+        let listSearchClassAttendance = await classAttendanceObj.listSearchClassAttendance(this.state.search)
+        this.setState({ listSearchClassAttendance })
+        if (this.state.listSearchClassAttendance.length === 0) {
+            alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+                this.clear()
+                alertify.error('ไม่พบข้อมูล')
+            }).show()
+        }
+        localStorage.setItem('stateClassAttendanceSearch', JSON.stringify(this.state.search));
+        }else{
+            alertify.alert('ค้นหา', 'วันที่ค้นหาเริ่มต้นต้องน้อยกว่าหรือเท่ากับวันที่ค้นหาสิ้นสุด', () => {
+                this.clear()
+                alertify.error('ไม่พบข้อมูล')
+            }).show()
+        }
         let log = new login()
         log.writeLogLogout('10')
     }
 
-    searchClassAttendance1=()=> {
+    searchClassAttendance1 = async () => {
         let stateLocal = localStorage.getItem('stateClassAttendanceSearch')
-        let search = Map(JSON.parse(stateLocal))
+        let search = await Map(JSON.parse(stateLocal))
         this.setState({ search })
-        setTimeout(() => {
-            let classAttendanceObj = new classAttendance()
-            classAttendanceObj.listSearchClassAttendance(this.state.search)
-            window.setTimeout(() => {
-                this.setState({ dataListClassAttendance: classAttendanceObj.returnListSearchClassAttendance })
-            }, 1000);
-        }, 1000);
+        let classAttendanceObj = new classAttendance()
+        let listSearchClassAttendance = await classAttendanceObj.listSearchClassAttendance(this.state.search)
+        this.setState({ listSearchClassAttendance })
         let log = new login()
         log.writeLogLogout('10')
     }
 
-    onChange=(e)=> {
+    onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    handleChange=(name, date) =>{
+    handleChange = (name, date) => {
         let change1 = {}
         change1[name] = date
         this.setState(change1);
@@ -397,7 +385,7 @@ class ClassAttendanceSearch extends Component {
                                 }
                             },
                             ]}
-                            data={this.state.dataListClassAttendance ? this.state.dataListClassAttendance : []}
+                            data={this.state.listSearchClassAttendance ? this.state.listSearchClassAttendance : []}
                             defaultPageSize={8}
                             noDataText={'ไม่พบข้อมูล'}
                             previousText={'ก่อนหน้า'}

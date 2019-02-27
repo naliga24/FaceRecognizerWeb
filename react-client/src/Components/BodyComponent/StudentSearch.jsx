@@ -5,15 +5,15 @@ import ReactTable from 'react-table'
 
 import 'react-table/react-table.css'
 
-import  login  from './../Prototype/login'
-import  student  from './../Prototype/student'
+import login from './../Prototype/login'
+import student from './../Prototype/student'
 
 class StudentSearch extends Component {
     constructor() {
         super()
 
         this.state = {
-            search:Map({
+            search: Map({
                 studentCodeName: '',
                 studentFirstName: '',
                 studentLastName: '',
@@ -23,51 +23,43 @@ class StudentSearch extends Component {
             tmpStudentFirstName: '',
             tmpStudentLastName: '',
             tmpStudentStatus: '',
-            dataListStudent: '',
+            listSearchStudent: '',
         };
     }
 
-    componentWillMount=()=> {
+    componentWillMount = () => {
         this.searchStudent1()
     }
 
-    searchStudent=()=> {
-        let search = this.state.search.set('studentCodeName', this.state.tmpStudentCodeName)
-        .set('studentFirstName', this.state.tmpStudentFirstName)
-        .set('studentLastName', this.state.tmpStudentLastName)
-        .set('studentStatus', this.state.tmpStudentStatus)
+    searchStudent = async () => {
+        let search = await this.state.search.set('studentCodeName', this.state.tmpStudentCodeName)
+            .set('studentFirstName', this.state.tmpStudentFirstName)
+            .set('studentLastName', this.state.tmpStudentLastName)
+            .set('studentStatus', this.state.tmpStudentStatus)
         this.setState({ search });
-        setTimeout(() => {
         let studentObj = new student()
-        studentObj.listSearchStudent(this.state.search)
-        window.setTimeout(() => {
-            this.setState({ dataListStudent: studentObj.returnListSearchStudent })
-            studentObj.returnListSearchStudent.length === 0 && alertify.alert('ค้นหา','ไม่พบข้อมูลที่ค้นหา',()=>{
-                alertify.error('ไม่พบข้อมูลที่ค้นหา')
-            }).show()
-            localStorage.setItem( 'stateStudentSearch', JSON.stringify(this.state.search));
-        }, 2000);
-    }, 1000);
+        let listSearchStudent = await studentObj.listSearchStudent(this.state.search)
+        this.setState({ listSearchStudent })
+        this.state.listSearchStudent.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+            alertify.error('ไม่พบข้อมูลที่ค้นหา')
+        }).show()
+        localStorage.setItem('stateStudentSearch', JSON.stringify(this.state.search));
         let log = new login()
         log.writeLogLogout('4')
     }
 
-    searchStudent1=()=> {
+    searchStudent1 = async () => {
         let stateLocal = localStorage.getItem('stateStudentSearch')
-        let search = Map(JSON.parse(stateLocal))
+        let search = await Map(JSON.parse(stateLocal))
         this.setState({ search })
-        setTimeout(() => {
         let studentObj = new student()
-        studentObj.listSearchStudent(this.state.search)
-        window.setTimeout(() => {
-            this.setState({ dataListStudent: studentObj.returnListSearchStudent })
-        }, 1000);
-    }, 1000);
+        let listSearchStudent = await studentObj.listSearchStudent(this.state.search)
+        this.setState({ listSearchStudent })
         let log = new login()
         log.writeLogLogout('4')
     }
 
-    onChange=(e)=> {
+    onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
@@ -95,66 +87,66 @@ class StudentSearch extends Component {
                         </div>
                     </div>
                     <div class='table'>
-                    <ReactTable
-                        columns={[{
-                            Header: 'รหัสนักศึกษา',
-                            accessor: 'STUDENT_CODE_NAME',
-                            filterable:true,
-                            style:{
-                                textAlign:'center'
+                        <ReactTable
+                            columns={[{
+                                Header: 'รหัสนักศึกษา',
+                                accessor: 'STUDENT_CODE_NAME',
+                                filterable: true,
+                                style: {
+                                    textAlign: 'center'
+                                },
+
                             },
-               
-                        },
-                        {
-                            Header: 'ชื่อ',
-                            accessor: 'STUDENT_FIRST_NAME',
-                            filterable:true,
-                       
-                        },
-                        {
-                            Header: 'นามสกุล',
-                            accessor: 'STUDENT_LAST_NAME',
-                            filterable:true,
-                        
-                        },
-                        {
-                            Header: 'สถานะ',
-                            accessor: 'USE_STATUS_DESCRIPTION',
-                            style:{
-                                textAlign:'center'
+                            {
+                                Header: 'ชื่อ',
+                                accessor: 'STUDENT_FIRST_NAME',
+                                filterable: true,
+
                             },
-                
-                        },
-                        {
-                            Header: 'แก้ไข',
-                            style:{
-                                textAlign:'center'
+                            {
+                                Header: 'นามสกุล',
+                                accessor: 'STUDENT_LAST_NAME',
+                                filterable: true,
+
                             },
-                            width:50,
-                            maxWidth:50,
-                            minWidth:50,
-                            Cell:props=>{
-                                return(
-                                    <Link to={{
-                                        pathname: "/Student",
-                                        studentNo: props.original.STUDENT_NO,
-                                        studentCodeName: props.original.STUDENT_CODE_NAME,
-                                        studentFirstName: props.original.STUDENT_FIRST_NAME,
-                                        studentLastName: props.original.STUDENT_LAST_NAME,
-                                        studentStatus: props.original.STUDENT_STATUS,
-                                        studentImage: props.original.STUDENT_IMAGE,
-                                        flagEdit: true,                               
-                                    }} ><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button></p>
-                                    </Link>
-                                )
-                            }
-                        },
-                        ]}
-                        data={this.state.dataListStudent ? this.state.dataListStudent : []}
-                        defaultPageSize={8}
-                        noDataText={'ไม่พบข้อมูล'}
-                    >
-                    </ReactTable>
+                            {
+                                Header: 'สถานะ',
+                                accessor: 'USE_STATUS_DESCRIPTION',
+                                style: {
+                                    textAlign: 'center'
+                                },
+
+                            },
+                            {
+                                Header: 'แก้ไข',
+                                style: {
+                                    textAlign: 'center'
+                                },
+                                width: 50,
+                                maxWidth: 50,
+                                minWidth: 50,
+                                Cell: props => {
+                                    return (
+                                        <Link to={{
+                                            pathname: "/Student",
+                                            studentNo: props.original.STUDENT_NO,
+                                            studentCodeName: props.original.STUDENT_CODE_NAME,
+                                            studentFirstName: props.original.STUDENT_FIRST_NAME,
+                                            studentLastName: props.original.STUDENT_LAST_NAME,
+                                            studentStatus: props.original.STUDENT_STATUS,
+                                            studentImage: props.original.STUDENT_IMAGE,
+                                            flagEdit: true,
+                                        }} ><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button></p>
+                                        </Link>
+                                    )
+                                }
+                            },
+                            ]}
+                            data={this.state.listSearchStudent ? this.state.listSearchStudent : []}
+                            defaultPageSize={8}
+                            noDataText={'ไม่พบข้อมูล'}
+                        >
+                        </ReactTable>
                     </div>
                 </div >
             </div>
