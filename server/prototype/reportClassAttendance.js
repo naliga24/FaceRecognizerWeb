@@ -87,7 +87,7 @@ exports.displayReport = (reportData, subjectCodeName, semesterName, res) => {
     //displayReport(err, name, res);
     var gcs = new Storage({
       projectId: googleCloudConfig['PROJECT_ID'],
-      keyFilename: 'my-project-1528106461323-04e18a9b4635.json'
+      keyFilename: googleCloudConfig['SERVICE_ACCOUNT_KEY']
     });
 
     // Create a new bucket.

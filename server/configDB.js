@@ -28,5 +28,6 @@ exports.googleCloudConfig =
         CLOUD_BUCKET_KEY: 'key_facerecognizer', //not use.
         PROJECT_ID: '204186457948',
         KEY_RING_ID: 'mykeyring',  //not use.
-        CRYPTO_KEY_ID:  'namekeyring' //not use.
+        CRYPTO_KEY_ID:  'namekeyring', //not use.
+        SERVICE_ACCOUNT_KEY:'my-project-1528106461323-83266a384e32.json'
     }

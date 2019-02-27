@@ -40,7 +40,7 @@ exports.updateStudentInfo = (req, res) => {
   if (req.files.studentImage.mimetype === 'image/jpeg' || req.files.studentImage.mimetype === 'image/png' || req.files.studentImage.mimetype === 'image/gif') {
       var gcs = new Storage({
         projectId: googleCloudConfig['PROJECT_ID'],
-        keyFilename: 'my-project-1528106461323-04e18a9b4635.json'
+        keyFilename: googleCloudConfig['SERVICE_ACCOUNT_KEY'] 
       });
   
       // Reference an existing bucket.
@@ -150,7 +150,7 @@ exports.insertStudentInfo = (req, res, next) => {
 
     var gcs = new Storage({
       projectId: googleCloudConfig['PROJECT_ID'],
-      keyFilename: 'my-project-1528106461323-04e18a9b4635.json'
+      keyFilename: googleCloudConfig['SERVICE_ACCOUNT_KEY']
     });
 
     // Create a new bucket.
