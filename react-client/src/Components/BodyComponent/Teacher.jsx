@@ -29,27 +29,34 @@ class Teacher extends Component {
                 || (this.state.teacherStatus !== this.state.oldTeaherStatus)) {
                 if ((this.state.teacherFirstName !== this.state.oldTeaherFirstName)
                     || (this.state.teacherLastName !== this.state.oldTeaherLastName)) {
-                        if (await teacherObj.checkTeacherFirstNameAndLastName(this.state.teacherFirstName, this.state.teacherLastName) === '0') {
-                            if (this.state.flagEdit) {
-                                teacherObj.editTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.state.teacherStatus, this.state.teacherNo, this.clear)
-                                     alertify.alert('แก้ไข',`แก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`,()=>{
-                                this.gotoTeacherSearch()
-                                }).show()
-                            } else {
-                                teacherObj.addTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.clear)
-                                alertify.alert('เพิ่ม',`เพิ่มข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`,()=>{
-                                    alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
-                                }).show()
+                        try{
+                            let TeacherFirstNameAndLastNameFlag = await teacherObj.checkTeacherFirstNameAndLastName(this.state.teacherFirstName, this.state.teacherLastName)
+                            if (TeacherFirstNameAndLastNameFlag === '0') {
+                                if (this.state.flagEdit) {
+                                    teacherObj.editTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.state.teacherStatus, this.state.teacherNo, this.clear)
+                                         alertify.alert('แก้ไข',`แก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`,()=>{
+                                    this.gotoTeacherSearch()
+                                    }).show()
+                                } else {
+                                    teacherObj.addTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.clear)
+                                    alertify.alert('เพิ่ม',`เพิ่มข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`,()=>{
+                                        alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
+                                    }).show()
+                                }
+                            } else if (TeacherFirstNameAndLastNameFlag === '1' && this.state.flagEdit) {
+                                alertify.alert('แก้ไข',`ไม่สามารถเแก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" ชื่อมีในระบบแล้ว`,()=>{
+                                    alertify.error('ไม่สามารถเแก้ไขข้อมูล')
+                                }).show()   
                             }
-                        } else if (await teacherObj.checkTeacherFirstNameAndLastName(this.state.teacherFirstName, this.state.teacherLastName) === '1' && this.state.flagEdit) {
-                            alertify.alert('แก้ไข',`ไม่สามารถเแก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" ชื่อมีในระบบแล้ว`,()=>{
-                                alertify.error('ไม่สามารถเแก้ไขข้อมูล')
-                            }).show()   
-                        }
-                        else if (await teacherObj.checkTeacherFirstNameAndLastName(this.state.teacherFirstName, this.state.teacherLastName) === '1' && !this.state.flagEdit) {
-                            alertify.alert('เพิ่ม',`ไม่สามารถเพิ่มข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" ชื่อมีในระบบแล้ว`,()=>{
-                                alertify.error('ไม่สามารถเพิ่มข้อมูล')
-                            }).show() 
+                            else if (TeacherFirstNameAndLastNameFlag === '1' && !this.state.flagEdit) {
+                                alertify.alert('เพิ่ม',`ไม่สามารถเพิ่มข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" ชื่อมีในระบบแล้ว`,()=>{
+                                    alertify.error('ไม่สามารถเพิ่มข้อมูล')
+                                }).show() 
+                            }
+                        }catch(err){
+                            alertify.alert('อาจารย์', err, () => {
+                                alertify.error('เกิดข้อผิดพลาด')
+                            }).show()
                         }
                 } else if (this.state.flagEdit) {
                     teacherObj.editTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.state.teacherStatus, this.state.teacherNo, this.clear)

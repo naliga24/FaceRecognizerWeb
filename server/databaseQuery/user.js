@@ -14,6 +14,7 @@ exports.selectUserPermission = (req, res) => {
   sql += ` AND a.USER_LOGIN = '${req.body.userLogin}'`
   sql += ` AND a.USER_PASSWORD = '${req.body.userPassword}'`
   sql += ' AND a.USER_STATUS = \'1\''
+  console.log(sql)
   mysqlConnection.query(sql, (err, rows) => {
     if (err) throw err
     if (rows.length === 1) {

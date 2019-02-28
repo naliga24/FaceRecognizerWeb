@@ -52,6 +52,7 @@ export default class user {
       .then((res) => { if (res.body) return res.body[0] })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 
@@ -63,6 +64,7 @@ export default class user {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 
@@ -74,6 +76,7 @@ export default class user {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 
@@ -85,19 +88,23 @@ export default class user {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 
   getUserNo(userLogin) {
-    request.post('/selectUserInfoUserLoginValue')
+    return request.post('/selectUserInfoUserLoginValue')
       .send({ userLogin })
-      .end((err, res) => {
-        if (err) { console.log(err); return }
+      .then((res) => {
         if (res.body) {
-          this.data6 = res.body[0].USER_NO
-        } else {
-          console.log('มี USER_LOGIN มากกว่า 1 หรือหา USER_LOGIN ไม่พบ(เกิดข้อผิดพลาด)')
-        }
+        return res.body[0].USER_NO 
+      } else {
+        console.log('มี USER_LOGIN มากกว่า 1 หรือหา USER_LOGIN ไม่พบ(เกิดข้อผิดพลาด)')
+      }
+      })
+      .catch(err => {
+        console.log(err.message, err.response)
+        throw err.message
       });
   }
 }

@@ -252,7 +252,7 @@ exports.selectStudenNoByClassAttendanceStudentKeyCodeName = (req, res) => {
   mysqlConnection.connect((err) => {
     if (err) throw err
   });
-  let sql = 'SELECT STUDENT_NO'
+  let sql = 'SELECT STUDENT_NO , STUDENT_IMAGE'
   sql += ' FROM student_info'
   sql += ` WHERE STUDENT_CODE_NAME = '${req.params.classAttendanceStudentKeyCodeName}'`
 

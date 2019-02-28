@@ -94,7 +94,7 @@ exports.selectSubjectInfoSubjectCodeName = (req, res) => {
   sql += ` WHERE SUBJECT_CODE_NAME = '${req.params.subjectCodeName}'`
 
   console.log(sql)
-  mysqlConnection.query(sql, (err, rows) => {
+  mysqlConnection.query(sqli, (err, rows) => {
     console.log(`COUNT(SUBJECT_CODE_NAME) = ${rows[0]['COUNT(SUBJECT_CODE_NAME)']}`)
     if (err) throw err
     if (rows[0]['COUNT(SUBJECT_CODE_NAME)'] === 1) {

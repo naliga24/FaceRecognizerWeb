@@ -13,6 +13,7 @@ export default class student {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
      });
   }
 
@@ -98,6 +99,7 @@ export default class student {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
      });
   }
 
@@ -115,17 +117,17 @@ export default class student {
   }
 
   getStudentNoByClassAttendanceStudentKeyCodeName(classAttendanceStudentKeyCodeName) {
-    request.get(`/selectStudenNoByClassAttendanceStudentKeyCodeName/${classAttendanceStudentKeyCodeName}`)
-      .send()
+    return request.get(`/selectStudenNoByClassAttendanceStudentKeyCodeName/${classAttendanceStudentKeyCodeName}`)
       .then((res) => {
         if (res.body.length === 1) { 
-          console.log(res); return res.body[0].STUDENT_NO;
+          console.log(res); return res.body[0];
          }else if(res.body.length > 1){
           console.log('มีข้อมูลรหัสนักศึกษาซำ้ในระบบ(เกิดข้อผิดพลาด)')
          }
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
      });
   }
 }

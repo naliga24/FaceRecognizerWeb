@@ -4,7 +4,7 @@ import semester from './semester'
 const request = require('superagent')
 
 export default class subject {
-  callListTeacher=async()=> {
+  callListTeacher = async () => {
     this.teacher = new teacher()
     return await this.teacher.listTeacher()
   }
@@ -49,7 +49,8 @@ export default class subject {
         subjectStatus: data.get('subjectStatus'),
       })
       .then((res) => {
-        console.log(res); return res.body;})
+        console.log(res); return res.body;
+      })
       .catch(err => {
         console.log(err.message, err.response)
       });
@@ -59,23 +60,25 @@ export default class subject {
     return request.get(`/selectSubjectInfoSubjectCodeName/${subjectCodeName}`)
       .send()
       .then((res) => {
-        if (res.text === '1' || res.text ==='0') { 
+        if (res.text === '1' || res.text === '0') {
           console.log(res); return res.text;
-         }else if(res.text === '2'){
-           console.log('มีรหัสวิชาซำ้ในระบบ(เกิดข้อผิดพลาด)')
-         }
+        } else if (res.text === '2') {
+          console.log('มีรหัสวิชาซำ้ในระบบ(เกิดข้อผิดพลาด)')
+        }
       })
       .catch(err => {
         console.log(err.message, err.response)
-     });
+        throw err.message
+      });
   }
 
   listSubject() {
     return request.get('/selectSubjectInfo')
-    .then((res) => {
-      console.log(res); return res.body;})
-    .catch(err => {
-      console.log(err.message, err.response)
-    });
+      .then((res) => {
+        console.log(res); return res.body;
+      })
+      .catch(err => {
+        console.log(err.message, err.response)
+      });
   }
 }

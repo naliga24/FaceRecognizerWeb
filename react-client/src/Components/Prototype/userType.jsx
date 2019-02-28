@@ -27,13 +27,17 @@ export default class userType {
   }
 
   getPermissionDetail(userLogin, userPassword) {
-    request.post('/selectUserPermission')
+    return request.post('/selectUserPermission')
       .send({ userLogin, userPassword })
-      .end((err, res) => {
-        if (err) { return; }
+      .then((res) => { 
         if (res.body.token.length > 30) {
-          sessionStorage.setItem('token', res.body.token)
+          sessionStorage.setItem('token', res.body.token) 
+          return true
         }
+      })
+      .catch(err => {
+        console.log(err.message, err.response)
+        throw err.message;
       });
   }
 

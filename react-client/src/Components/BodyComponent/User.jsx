@@ -39,16 +39,22 @@ class User extends Component {
     }
 
     userInactiveInfo = async () => {
-        let tmp = new user()
-        let inactive = await tmp.getInactiveInfo(this.state.userNo)
+        try {
+            let tmp = new user()
+            let inactive = await tmp.getInactiveInfo(this.state.userNo)
             inactive && this.setState({
                 inactiveDate: inactive.INACTIVE_DATE,
                 inactiveTime: inactive.INACTIVE_TIME,
                 inactiveDetail: inactive.INACTIVE_DETAIL
             })
+        } catch (err) {
+            alertify.alert('ผู้ใช้ระบบ', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
+            }).show()
+        }
     }
 
-    saveUser =async () => {
+    saveUser = async () => {
         if (this.state.userLogin && this.state.userPassword && this.state.userName && this.state.userType && this.state.userStatus) {
             let tmp = new user()
             if ((this.state.userLogin !== this.state.oldUserLogin)
@@ -58,7 +64,9 @@ class User extends Component {
                 || (this.state.inactiveDetail !== this.state.oldInactiveDetail)
                 || (this.state.userStatus !== this.state.oldUserStatus)) {
                 if (this.state.userLogin !== this.state.oldUserLogin) {
-                        if (await tmp.checkUserLogin(this.state.userLogin) === '0') {
+                    try{
+                        let userLoginFlag = await tmp.checkUserLogin(this.state.userLogin)
+                        if (userLoginFlag === '0') {
                             if (this.state.flagEdit) {
                                 tmp.editUser(this.state, this.clear)
                                 alertify.alert('แก้ไข', `แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {
@@ -70,16 +78,21 @@ class User extends Component {
                                     alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
                                 }).show()
                             }
-                        } else if (await tmp.checkUserLogin(this.state.userLogin) === '1' && this.state.flagEdit) {
+                        } else if (userLoginFlag === '1' && this.state.flagEdit) {
                             alertify.alert('แก้ไข', `ไม่สามารถเแก้ไขข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()
                         }
-                        else if (await tmp.checkUserLogin(this.state.userLogin) === '1' && !this.state.flagEdit) {
+                        else if (userLoginFlag === '1' && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
+                    }catch(err){
+                        alertify.alert('ผู้ใช้ระบบ', err, () => {
+                            alertify.error('เกิดข้อผิดพลาด')
+                        }).show()
+                    }
                 } else if (this.state.flagEdit) {
                     tmp.editUser(this.state, this.clear)
                     alertify.alert('แก้ไข', `แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {

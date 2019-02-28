@@ -15,43 +15,48 @@ class Login extends Component {
 
     }
 
-    onChange=(e)=> {
+    onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    login=async() =>{
-        if(this.state.userLogin && this.state.userPassword){
+    login = async () => {
+        if (this.state.userLogin && this.state.userPassword) {
             let tmp = new login()
-            
-           
-                if (await tmp.callCheckUserLogin(this.state.userLogin) === '1') {
-                        if (await tmp.callCheckUserPassword(this.state.userLogin,this.state.userPassword) === '1') {
-                                if(await tmp.callCheckUserStatus(this.state.userLogin,this.state.userPassword) === '1'){
-                                    tmp.callGetPermissionDetail(this.state.userLogin,this.state.userPassword)
-                                    setTimeout(() => {
-                                        tmp.writeLogLogin('1')
-                                        window.location.reload()
-                                    }, 2000)
-                                }else if(await tmp.callCheckUserStatus(this.state.userLogin,this.state.userPassword) === '0'){
-                                    alertify.alert('เข้าระบบ',`สถานะผู้ใช้ระบบเท่ากับ “ไม่ใช้งาน”`,()=>{
-                                        alertify.error('ไม่สามารถเข้าระบบ')
-                                    }).show()
-                                }
-                        } else if(await tmp.callCheckUserPassword(this.state.userLogin,this.state.userPassword) === '0'){
-                            alertify.alert('เข้าระบบ',`ชื่อ password ไม่ถูกต้อง`,()=>{
+            try {
+                let userLoginFlag = await tmp.callCheckUserLogin(this.state.userLogin)
+                if (userLoginFlag === '1') {
+                    let userPasswordFlag = await tmp.callCheckUserPassword(this.state.userLogin, this.state.userPassword)
+                    if (userPasswordFlag === '1') {
+                        let userStatusFlag = await tmp.callCheckUserStatus(this.state.userLogin, this.state.userPassword)
+                        if (userStatusFlag === '1') {
+                            if(await tmp.callGetPermissionDetail(this.state.userLogin, this.state.userPassword)===true){
+                                tmp.writeLogLogin('1')
+                                window.location.reload()
+                            }
+                        } else if (userStatusFlag === '0') {
+                            alertify.alert('เข้าระบบ', `สถานะผู้ใช้ระบบเท่ากับ “ไม่ใช้งาน”`, () => {
                                 alertify.error('ไม่สามารถเข้าระบบ')
                             }).show()
-                            tmp.writeLogLoginError('11',this.state.userLogin)
                         }
-                
-                } else if(await tmp.callCheckUserLogin(this.state.userLogin) === '0') {
-                    alertify.alert('เข้าระบบ',`ชื่อ username ไม่ถูกต้อง`,()=>{
+                    } else if (userPasswordFlag === '0') {
+                        alertify.alert('เข้าระบบ', `ชื่อ password ไม่ถูกต้อง`, () => {
+                            alertify.error('ไม่สามารถเข้าระบบ')
+                        }).show()
+                        tmp.writeLogLoginError('11', this.state.userLogin)
+                    }
+                } else if (userLoginFlag === '0') {
+                    alertify.alert('เข้าระบบ', `ชื่อ username ไม่ถูกต้อง`, () => {
                         alertify.error('ไม่สามารถเข้าระบบ')
                     }).show()
                 }
-      
-        }else{
-            alertify.alert('เข้าระบบ',`กรอกข้อมูลไม่ครบ`,()=>{
+            }
+            catch (err) {
+                alertify.alert('เข้าระบบ', err, () => {
+                    alertify.error('ไม่สามารถเข้าระบบ')
+                }).show()
+            }
+        } else {
+            alertify.alert('เข้าระบบ', `กรอกข้อมูลไม่ครบ`, () => {
                 alertify.error('ไม่สามารถเข้าระบบ')
             }).show()
         }

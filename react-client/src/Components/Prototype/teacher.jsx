@@ -9,7 +9,8 @@ export default class teacher {
       })
       .catch(err => {
         console.log(err.message, err.response)
-     });
+        throw err.message
+      });
   }
 
   addTeacher(teacherFirstName, teacherLastName, clear) {
@@ -42,15 +43,16 @@ export default class teacher {
     return request.get(`/selectTeacherFirstNameAndLastName/${teacherFirstName}/${teacherLastName}`)
       .send()
       .then((res) => {
-        if (res.text === '1' || res.text ==='0') { 
+        if (res.text === '1' || res.text === '0') {
           console.log(res); return res.text;
-         }else if(res.text === '2'){
-           console.log('มีชื่ออาจารย์ซำ้ในระบบ(*ชื่อและนามสกุลซำ้พร้อมกัน* เกิดข้อผิดพลาด)')
-         }
+        } else if (res.text === '2') {
+          console.log('มีชื่ออาจารย์ซำ้ในระบบ(*ชื่อและนามสกุลซำ้พร้อมกัน* เกิดข้อผิดพลาด)')
+        }
       })
       .catch(err => {
         console.log(err.message, err.response)
-     });
+        throw err.message
+      });
   }
 
   listSearchTeacher(data) {
@@ -62,7 +64,8 @@ export default class teacher {
         teacherStatus: data.get('teacherStatus'),
       })
       .then((res) => {
-        console.log(res); return res.body;})
+        console.log(res); return res.body;
+      })
       .catch(err => {
         console.log(err.message, err.response)
       });

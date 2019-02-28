@@ -48,10 +48,9 @@ export default class login {
       })
   }
 
-  writeLogLoginError(loginStatus, userLogin) {
-    this.callGetLoginNo(userLogin)
-    setTimeout(() => {
-      request.get(`/insertUserTransaction/${this.data6.data6}/${loginStatus}`)
+  writeLogLoginError=async(loginStatus, userLogin) =>{
+    let loginNo = await this.callGetLoginNo(userLogin)
+      request.get(`/insertUserTransaction/${loginNo}/${loginStatus}`)
         .send()
         .end((err, res) => {
           if (err) { console.log(err); return; }
@@ -61,12 +60,11 @@ export default class login {
             console.log('ไม่สามารถเพิ่มข้อมูล log login ได้')
           }
         })
-    }, 1000);
   }
 
-  callGetPermissionDetail(userLogin, userPassword){
+  callGetPermissionDetail=async(userLogin, userPassword)=>{
     this.data = new userType()
-     this.data.getPermissionDetail(userLogin, userPassword)
+    return await this.data.getPermissionDetail(userLogin, userPassword)
   }
 
   callSetPermission() {
@@ -89,9 +87,9 @@ export default class login {
     return await this.data5.checkUserStatus(userLogin, userPassword)
   }
 
-  callGetLoginNo(userLogin) {
+  callGetLoginNo=async(userLogin)=> {
     this.data6 = new user()
-    this.data6.getUserNo(userLogin)
+    return await this.data6.getUserNo(userLogin)
   }
 
   listReportTransaction(data) {

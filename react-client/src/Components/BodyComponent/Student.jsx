@@ -9,7 +9,6 @@ const imagenotfound = require('./../../../../server/image_assets/notfound(450&45
 class Student extends Component {
     constructor(props) {
         super(props)
-
         this.state = {
             studentNo: this.props.location.studentNo,
             studentCodeName: this.props.location.studentCodeName?this.props.location.studentCodeName:'',
@@ -41,32 +40,36 @@ class Student extends Component {
                 || (this.state.studentStatus !== this.state.oldStudentStatus)
                 || (this.state.studentImage !== this.state.oldStudentImage)) {
                 if (this.state.studentCodeName !== this.state.oldStudentCodeName) {
-                        if (await studentObj.checkStudentCodeName(this.state.studentCodeName) === '0') {
+                    try{
+                        let studentCodeNameFlag = await studentObj.checkStudentCodeName(this.state.studentCodeName)
+                        if (studentCodeNameFlag === '0') {
                             if (this.state.flagEdit) {
                                     studentObj.editStudent(this.state, this.clear)
                                     alertify.alert('แก้ไข',`แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`,()=>{
-                                        //window.location.reload()
                                         this.gotoStudentSearch()
                                     }).show()
                             } else {
                                     studentObj.addStudent(this.state, this.clear)
                                     alertify.alert(`เพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`)
-                                    //window.location.reload()
                             }
-                        } else if (await studentObj.checkStudentCodeName(this.state.studentCodeName) === '1' && this.state.flagEdit) {
+                        } else if (studentCodeNameFlag === '1' && this.state.flagEdit) {
                             alertify.alert('แก้ไข',`ไม่สามารถเแก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`,()=>{
                                 alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()
                         }
-                        else if (await studentObj.checkStudentCodeName(this.state.studentCodeName) === '1' && !this.state.flagEdit) {
+                        else if (studentCodeNameFlag === '1' && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม',`ไม่สามารถเพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`,()=>{
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
+                    }catch(err){
+                        alertify.alert('วิชาเปิดสอน', err, () => {
+                            alertify.error('เกิดข้อผิดพลาด')
+                        }).show()
+                    }
                 } else if (this.state.flagEdit) {
                     studentObj.editStudent(this.state, this.clear)
                     alertify.alert('แก้ไข',`แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`,()=>{
-                       // window.location.reload()
                         this.gotoStudentSearch()
                     }).show()
                 }

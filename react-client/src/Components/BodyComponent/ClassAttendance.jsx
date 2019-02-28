@@ -30,6 +30,7 @@ class ClassAttendance extends Component {
             showSemesterName: this.props.location.semesterName,
             showSemesterStatusDescription: this.props.location.semesterStatusDescription,
             showConfirmStatusDescription: this.props.location.confirmStatusDescription,
+            studentImageFromKeyCodeName: '',
             studentNo: this.props.location.studentNo, //update
             studentNoFromClassAttendanceStudentKeyCodeName: '',//update
             studentNoFromSearch: '',//update
@@ -50,42 +51,61 @@ class ClassAttendance extends Component {
     }
 
     searchStudent = async () => {
-        let classAttendanceObj = new classAttendance()
-        let dataListStudent = await classAttendanceObj.callListSearchStudent(this.state.search)
-        this.setState({ dataListStudent })
-        this.state.dataListStudent.length === 0 && alertify.alert('ไม่พบข้อมูลนักศึกษาที่ค้นหา')
+        try {
+            let classAttendanceObj = new classAttendance()
+            let dataListStudent = await classAttendanceObj.callListSearchStudent(this.state.search)
+            this.setState({ dataListStudent })
+            this.state.dataListStudent.length === 0 && alertify.alert('ไม่พบข้อมูลนักศึกษาที่ค้นหา')
+        } catch (err) {
+            alertify.alert('ค้นหาการเข้าชั้นเรียน', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
+            }).show()
+        }
         let log = new login()
         log.writeLogLogout('10')
     }
 
     getStudentNoByClassAttendanceStudentKeyCodeName = async () => {
-        let classAttendanceObj = new classAttendance()
-        let studentNoFromClassAttendanceStudentKeyCodeName = await classAttendanceObj.callGetStudentNoByClassAttendanceStudentKeyCodeName(this.state.showClassAttendanceStudentKeyCodeName)
-        studentNoFromClassAttendanceStudentKeyCodeName && this.setState({ studentNoFromClassAttendanceStudentKeyCodeName })
+        try {
+            let classAttendanceObj = new classAttendance()
+            let studentNoFromClassAttendanceStudentKeyCodeName = await classAttendanceObj.callGetStudentNoByClassAttendanceStudentKeyCodeName(this.state.showClassAttendanceStudentKeyCodeName)
+            studentNoFromClassAttendanceStudentKeyCodeName && this.setState({
+                studentNoFromClassAttendanceStudentKeyCodeName: studentNoFromClassAttendanceStudentKeyCodeName.STUDENT_NO,
+                studentImageFromKeyCodeName: studentNoFromClassAttendanceStudentKeyCodeName.STUDENT_IMAGE
+            })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     saveClassAttendance = async (studentNo, confirmStatusNo) => {
+        try {
+            this.setState({ confirmStatusNo })
+            let classAttendanceObj = new classAttendance()
+            let updateClassAttendanceFlag = await classAttendanceObj.updateClassAttendance(studentNo, confirmStatusNo, this.state.showClassAttendanceCode)
+            if (this.state.flagConfirm) {
+                if (updateClassAttendanceFlag === '1') {
+                    alertify.alert('ยืนยันการเข้าชั้นเรียนเรียบร้อย')
+                }
+                else if (updateClassAttendanceFlag === '0') {
+                    alertify.alert('ไม่สามารถยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
+                }
+            } else if (this.state.flagEdit) {
+                if (updateClassAttendanceFlag === '1') {
+                    alertify.alert('แก้ไขการยืนยันการเข้าชั้นเรียนเรียบร้อย')
+                }
+                else if (updateClassAttendanceFlag === '0') {
+                    alertify.alert('ไม่สามารถแก้ไขการยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
+                }
+            }
+            this.gotoClassAttendanceSearch()
+        } catch (err) {
+            alertify.alert('การเข้าชั้นเรียน', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
+            }).show()
+        }
         let log = new login()
         log.writeLogLogout('10')
-        this.setState({ confirmStatusNo })
-        let classAttendanceObj = new classAttendance()
-        let updateClassAttendanceFlag = await classAttendanceObj.updateClassAttendance(studentNo, confirmStatusNo, this.state.showClassAttendanceCode)
-        if (this.state.flagConfirm) {
-            if (updateClassAttendanceFlag === '1') {
-                alertify.alert('ยืนยันการเข้าชั้นเรียนเรียบร้อย')
-            }
-            else if (updateClassAttendanceFlag === '0') {
-                alertify.alert('ไม่สามารถยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
-            }
-        } else if (this.state.flagEdit) {
-            if (updateClassAttendanceFlag === '1') {
-                alertify.alert('แก้ไขการยืนยันการเข้าชั้นเรียนเรียบร้อย')
-            }
-            else if (updateClassAttendanceFlag === '0') {
-                alertify.alert('ไม่สามารถแก้ไขการยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
-            }
-        }
-        this.gotoClassAttendanceSearch()
     }
 
     clear = () => {
@@ -142,7 +162,7 @@ class ClassAttendance extends Component {
                             <div class="alert alert-secondary" role="alert">
                                 <h3>รูปจากการกรอกรหัสนักศึกษา</h3>
                                 <img
-                                    src={(this.state.flagConfirm || this.state.flagEdit) && this.state.showClassAttendanceStudentKeyCodeName ? `https://storage.cloud.google.com/student_upload/${this.state.showClassAttendanceStudentKeyCodeName}.jpeg` : imagenotfound}>
+                                    src={(this.state.flagConfirm || this.state.flagEdit) && this.state.showClassAttendanceStudentKeyCodeName ? this.state.studentImageFromKeyCodeName : imagenotfound}>
                                 </img>
                                 <button id='button2' type="button" class="btn btn-default navbar-btn" onClick={() => this.saveClassAttendance(this.state.studentNoFromClassAttendanceStudentKeyCodeName, '2')} disabled={!this.state.studentNoFromClassAttendanceStudentKeyCodeName || (this.state.studentNo === this.state.studentNoFromClassAttendanceStudentKeyCodeName)}>ยืนยันตัวต้นจากการกรอกรหัสของนักศึกษา</button>
                                 {!this.state.studentNoFromClassAttendanceStudentKeyCodeName ? <span class="badge badge-pill badge-danger">ไม่พบข้อมูลรหัสที่นักศึกษากรอก</span> : ''}

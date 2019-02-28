@@ -10,6 +10,7 @@ export default class classAttendance {
       .then((res) => { return res.text })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 

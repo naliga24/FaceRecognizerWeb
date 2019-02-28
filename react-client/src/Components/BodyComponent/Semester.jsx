@@ -20,13 +20,15 @@ class Semester extends Component {
         };
     }
 
-    saveSemester=async()=> {
+    saveSemester = async () => {
         if (this.state.tmpSemesterTerm && this.state.tmpSemesterYear) {
             let semesterObj = new semester()
             if ((this.state.semesterName !== this.state.oldSemesterName)
                 || (this.state.semesterStatusNo !== this.state.oldSemesterStatusNo)) {
                 if (this.state.semesterName !== this.state.oldSemesterName) {
-                        if (await semesterObj.checkSemesterName(this.state.semesterName) === '0') {
+                    try{
+                        let semesterNameFlag = await semesterObj.checkSemesterName(this.state.semesterName)
+                        if (semesterNameFlag === '0') {
                             if (this.state.flagEdit) {
                                 semesterObj.editSemester(this.state, this.clear)
                                 alertify.alert('แก้ไข', `แก้ไขข้อมูลภาคศึกษา "${this.state.semesterName}" เรียบร้อย`, () => {
@@ -38,16 +40,22 @@ class Semester extends Component {
                                     alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
                                 }).show()
                             }
-                        } else if (await semesterObj.checkSemesterName(this.state.semesterName) === '1' && this.state.flagEdit) {
+                        } else if (semesterNameFlag === '1' && this.state.flagEdit) {
                             alertify.alert('แก้ไข', `ไม่สามารถแก้ไขข้อมูลภาคศึกษา "${this.state.semesterName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถแก้ไขข้อมูล')
                             }).show()
                         }
-                        else if (await semesterObj.checkSemesterName(this.state.semesterName) === '1' && !this.state.flagEdit) {
+                        else if (semesterNameFlag === '1' && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลภาคศึกษา "${this.state.semesterName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
+                    }catch(err){
+                        alertify.alert('ภาคการศึกษา', err, () => {
+                            alertify.error('เกิดข้อผิดพลาด')
+                        }).show()
+                    }
+                    
                 } else if (this.state.flagEdit) {
                     semesterObj.editSemester(this.state, this.clear)
                     alertify.alert('แก้ไข', `แก้ไขข้อมูลภาคศึกษา "${this.state.semesterName}" เรียบร้อย`, () => {
@@ -73,19 +81,19 @@ class Semester extends Component {
         log.writeLogLogout('3')
     }
 
-    add=()=> {
+    add = () => {
         this.setState({ buttonDisble: !this.state.buttonDisble });
     }
 
-    clear=()=> {
+    clear = () => {
         this.setState({ buttonDisble: !this.state.buttonDisble, flagEdit: false, semesterName: '', tmpSemesterTerm: '', tmpSemesterYear: '', semesterStatusNo: '' })
     }
 
-    onChange=(e)=> {
+    onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value }, () => { this.setState({ semesterName: this.state.tmpSemesterTerm + '/' + this.state.tmpSemesterYear }) })
     }
 
-    gotoSemesterSearch=()=> {
+    gotoSemesterSearch = () => {
         this.props.history.push('/semesterSearch');
     }
 
