@@ -100,6 +100,7 @@ export default class login {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 }

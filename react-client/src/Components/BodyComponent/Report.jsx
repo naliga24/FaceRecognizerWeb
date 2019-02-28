@@ -35,21 +35,33 @@ class Report extends Component {
     }
 
     selectSemesterInfo = async () => {
-        let reportObj = new report()
-        let listSemester = await reportObj.callListSemester()
-        listSemester.length > 0 && this.setState({ listSemester })
+        try {
+            let reportObj = new report()
+            let listSemester = await reportObj.callListSemester()
+            listSemester.length > 0 && this.setState({ listSemester })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     selectSubjectInfo = async () => {
-        let reportObj = new report()
-        let listSubject = await reportObj.callListSubject()
-        listSubject.length > 0 && this.setState({ listSubject })
+        try{
+            let reportObj = new report()
+            let listSubject = await reportObj.callListSubject()
+            listSubject.length > 0 && this.setState({ listSubject })
+        }catch(err){
+            console.log(err)
+        }
     }
 
     selectUserTypeInfo = async () => {
-        let tmp = new report()
-        let listUserType = await tmp.callListPermissionAll()
-        this.setState({ listUserType })
+        try{
+            let tmp = new report()
+            let listUserType = await tmp.callListPermissionAll()
+            this.setState({ listUserType })
+        }catch(err){
+            console.log(err)
+        }
     }
 
     onChange = (e) => {
@@ -63,20 +75,30 @@ class Report extends Component {
         }
     }
 
-    getDataReportAttendance =async () => {
+    getDataReportAttendance = async () => {
         if (this.state.subjectNo && this.state.semesterNo) {
-            let reportObj = new report()
-           let dataReport = await reportObj.callListReportAttendance(this.state)
+            try{
+                let reportObj = new report()
+                let dataReport = await reportObj.callListReportAttendance(this.state)
                 if (dataReport) {
-                    reportObj.displayReportAttendance(dataReport, this.state.subjectCodeName, this.state.semesterName)
-                    setTimeout(() => {
+                    let reportFlag = await reportObj.displayReportAttendance(dataReport, this.state.subjectCodeName, this.state.semesterName)
+                       if(reportFlag === '1'){
                         window.open("/ShowPdfAttendance");
-                    }, 3000);
+                       }else{
+                        alertify.alert('รายงาน', 'โปรดลองใหม่อีกครั้ง', () => {
+                            alertify.error('เกิดข้อผิดพลาด')
+                        }) 
+                       }
                 } else {
                     alertify.alert('รายงาน', 'ไม่พบรายการการเข้าชั้นเรียน', () => {
                         alertify.error('ไม่พบข้อมูล')
                     })
                 }
+            }catch(err){
+                alertify.alert('รายงาน', err, () => {
+                    alertify.error('เกิดข้อผิดพลาด')
+                }).show()
+            }
         } else if (!this.state.subjectNo) {
             alertify.alert('โปรดระบุรหัสวิชา')
         } else if (!this.state.semesterNo) {
@@ -86,20 +108,30 @@ class Report extends Component {
         log.writeLogLogout('7')
     }
 
-    getDataReportTransaction = async() => {
+    getDataReportTransaction = async () => {
         if (this.state.startDateSTR && this.state.endDateSTR) {
-            let reportObj = new report()
-            let dataReport = await reportObj.callListReportTransaction(this.state)
+            try{
+                let reportObj = new report()
+                let dataReport = await reportObj.callListReportTransaction(this.state)
                 if (dataReport) {
-                    reportObj.displayReportTransaction(dataReport, this.state.startDateSTR, this.state.endDateSTR, this.state.userTypeName)
-                    setTimeout(() => {
+                    let reportFlag = await reportObj.displayReportTransaction(dataReport, this.state.startDateSTR, this.state.endDateSTR, this.state.userTypeName)
+                    if(reportFlag === '1'){
                         window.open("/ShowPdfTransaction");
-                    }, 3000);
+                       }else{
+                        alertify.alert('รายงาน', 'โปรดลองใหม่อีกครั้ง', () => {
+                            alertify.error('เกิดข้อผิดพลาด')
+                        }) 
+                       }
                 } else {
                     alertify.alert('รายงาน', 'ไม่พบรายการการเข้าใช้ระบบ', () => {
                         alertify.error('ไม่พบข้อมูล')
                     })
                 }
+            }catch(err){
+                alertify.alert('รายงาน', err, () => {
+                    alertify.error('เกิดข้อผิดพลาด')
+                }).show()
+            }
         }
         let log = new login()
         log.writeLogLogout('7')

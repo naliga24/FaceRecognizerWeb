@@ -68,18 +68,8 @@ export default class classAttendance {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 
-  test() {
-    return request.get('/selectSubjectInfo')
-      .send()
-      .then((res) => {
-        if (res) { console.log(res.body); return res.body; }
-      })
-      .catch(err => {
-        // err.message, err.response
-        console.log(err.message, err.response)
-      });
-  }
 }

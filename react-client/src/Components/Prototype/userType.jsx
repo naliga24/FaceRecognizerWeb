@@ -8,6 +8,7 @@ export default class userType {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 
@@ -23,6 +24,7 @@ export default class userType {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 
@@ -46,6 +48,7 @@ export default class userType {
       .then((res) => { console.log(res); return res.body; })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message;
       });
   }
 }

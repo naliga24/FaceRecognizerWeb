@@ -25,14 +25,18 @@ class Configuration extends Component {
         };
     }
 
-    componentWillMount = () => {
+    componentDidMount = () => {
         this.selectUserTypeInfo()
     }
 
     selectUserTypeInfo = async () => {
-        let configObj = new configuration()
-        let listPermission = await configObj.callListPermission()
-        this.setState({ listPermission })
+        try{
+            let configObj = new configuration()
+            let listPermission = await configObj.callListPermission()
+            this.setState({ listPermission })
+        }catch(err){
+           console.log(err)
+        }
     }
 
     saveConfiguration = async() => {
@@ -54,23 +58,29 @@ class Configuration extends Component {
             }
         }
         if (userTypePermission[0] === '1' || userTypePermission[1] === '1' || userTypePermission[2] === '1' || userTypePermission[3] === '1' || userTypePermission[4] === '1' || userTypePermission[5] === '1' || userTypePermission[6] === '1') {
-            let configObj = new configuration()
-            let editFlag = await configObj.editUserType(userTypePermission, this.state.userTypeNo)
-            if(editFlag === '1'){
-                alertify.alert('แก้ไข', `แก้ไขสิทธิ์ในการเข้าใช้งานของ "${this.state.userTypeName}" เรียบร้อย`, () => {
-                    alertify.success(`แก้ไขสิทธิ์เรียบร้อย`)
+            try{
+                let configObj = new configuration()
+                let editFlag = await configObj.editUserType(userTypePermission, this.state.userTypeNo)
+                if(editFlag === '1'){
+                    alertify.alert('แก้ไข', `แก้ไขสิทธิ์ในการเข้าใช้งานของ "${this.state.userTypeName}" เรียบร้อย`, () => {
+                        alertify.success(`แก้ไขสิทธิ์เรียบร้อย`)
+                    }).show()
+                    this.selectUserTypeInfo()
+                    this.setState({
+                        subject: null,
+                        semester: null,
+                        student: null,
+                        teacher: null,
+                        classAttendance: null,
+                        user: null,
+                        report: null,
+                        inputDisable: true
+                })
+                }
+            }catch(err){
+                alertify.alert('ตั่งค่าระบบ', err, () => {
+                    alertify.error('เกิดข้อผิดพลาด')
                 }).show()
-                this.selectUserTypeInfo()
-                this.setState({
-                    subject: null,
-                    semester: null,
-                    student: null,
-                    teacher: null,
-                    classAttendance: null,
-                    user: null,
-                    report: null,
-                    inputDisable: true
-            })
             }
         } else {
             alertify.alert('แก้ไข', `ต้องกำหนดสิทธิ์ในการเข้าใช้งานอย่างน้อย 1 เมนู`, () => {

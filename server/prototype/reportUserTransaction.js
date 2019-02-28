@@ -104,12 +104,14 @@ exports.displayReport = (rows, startDate, endDate, userTypeName, res) => {
     })
 
     // localReadStream.pipe(remoteWriteStream)
-    remoteWriteStream.on('error', function (err) { console.log('err', err) })
+    remoteWriteStream.on('error', function (err) {
+      console.log('err', err)
+    })
     remoteWriteStream.on('finish', function () {
       console.log('finish')
+      res.status(200).send('1')
     })
     remoteWriteStream.end(Buffer);
-    res.status(200).send('Save report complete!')
     //displayReport(err, name, res)
   });
 }
