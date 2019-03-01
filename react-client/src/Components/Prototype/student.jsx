@@ -5,16 +5,16 @@ export default class student {
     return request.get(`/selectStudentInfoStudentCodeName/${studentCodeName}`)
       .send()
       .then((res) => {
-        if (res.text === '1' || res.text ==='0') { 
+        if (res.text === '1' || res.text === '0') {
           console.log(res); return res.text;
-         }else if(res.text === '2'){
-           console.log('มีรหัสนักศึกษาซำ้ในระบบ(เกิดข้อผิดพลาด)')
-         }
+        } else if (res.text === '2') {
+          console.log('มีรหัสนักศึกษาซำ้ในระบบ(เกิดข้อผิดพลาด)')
+        }
       })
       .catch(err => {
         console.log(err.message, err.response)
         throw err.message
-     });
+      });
   }
 
   editStudent(data, clear) {
@@ -95,39 +95,42 @@ export default class student {
         studentStatus: data.get('studentStatus'),
       })
       .then((res) => {
-          console.log(res.body); return res.body;
+        console.log(res.body); return res.body;
       })
       .catch(err => {
         console.log(err.message, err.response)
         throw err.message
-     });
+      });
   }
 
   getStudentNoByStudentCodeName(data) {
     request.post('/selectStudentNoByStudentCodeName')
       .send({ studentCodeName: data.get('studentCodeName') })
-      .end((err, res) => {
-        if (err) { console.log(err); return; }
+      .then((res) => {
         if (res.body.length === 1) {
           this.returnStudentNo = res.body[0].STUDENT_NO
         } else if (res.body.length > 1) {
           console.log('มีข้อมูลรหัสนักศึกษาซำ้ในระบบ(เกิดข้อผิดพลาด)')
         }
       })
+      .catch(err => {
+        console.log(err.message, err.response)
+        throw err.message
+      });
   }
 
   getStudentNoByClassAttendanceStudentKeyCodeName(classAttendanceStudentKeyCodeName) {
     return request.get(`/selectStudenNoByClassAttendanceStudentKeyCodeName/${classAttendanceStudentKeyCodeName}`)
       .then((res) => {
-        if (res.body.length === 1) { 
+        if (res.body.length === 1) {
           console.log(res); return res.body[0];
-         }else if(res.body.length > 1){
+        } else if (res.body.length > 1) {
           console.log('มีข้อมูลรหัสนักศึกษาซำ้ในระบบ(เกิดข้อผิดพลาด)')
-         }
+        }
       })
       .catch(err => {
         console.log(err.message, err.response)
         throw err.message
-     });
+      });
   }
 }

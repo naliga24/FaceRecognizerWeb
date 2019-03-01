@@ -53,6 +53,7 @@ export default class subject {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 

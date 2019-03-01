@@ -27,29 +27,41 @@ class UserSearch extends Component {
     }
 
     searchUser = async () => {
-        let search = await this.state.search.set('userLogin', this.state.tmpUserLogin)
-            .set('userName', this.state.tmpUserName)
-        this.setState({ search });
-        let userObj = new user()
-        let listSearchUser = await userObj.searchUser(this.state.search)
-        this.setState({ listSearchUser })
-        this.state.listSearchUser.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
-            alertify.error('ไม่พบข้อมูลที่ค้นหา')
-        }).show()
-        localStorage.setItem('stateUserSearch', JSON.stringify(this.state.search));
-        let log = new login()
-        log.writeLogLogout('9')
-    }
-
-    searchUser1 = async() => {
-        let stateLocal = localStorage.getItem('stateUserSearch')
-        let search = await Map(JSON.parse(stateLocal))
-        this.setState({ search })
+        try {
+            let search = await this.state.search.set('userLogin', this.state.tmpUserLogin)
+                .set('userName', this.state.tmpUserName)
+            this.setState({ search });
             let userObj = new user()
             let listSearchUser = await userObj.searchUser(this.state.search)
-                this.setState({ listSearchUser })
-        let log = new login()
-        log.writeLogLogout('9')
+            this.setState({ listSearchUser })
+            this.state.listSearchUser.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+                alertify.error('ไม่พบข้อมูลที่ค้นหา')
+            }).show()
+            localStorage.setItem('stateUserSearch', JSON.stringify(this.state.search));
+        } catch (err) {
+            alertify.alert('ผู้ใช้ระบบ', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
+            }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('9')
+        }
+    }
+
+    searchUser1 = async () => {
+        try {
+            let stateLocal = localStorage.getItem('stateUserSearch')
+            let search = await Map(JSON.parse(stateLocal))
+            this.setState({ search })
+            let userObj = new user()
+            let listSearchUser = await userObj.searchUser(this.state.search)
+            this.setState({ listSearchUser })
+        } catch (err) {
+            console.log(err)
+        } finally {
+            let log = new login()
+            log.writeLogLogout('9')
+        }
     }
 
     onChange = (e) => {

@@ -59,6 +59,7 @@ export default class semester {
         console.log(res); return res.body;})
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 

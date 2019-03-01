@@ -33,33 +33,45 @@ class SubjectSearch extends Component {
     }
 
     searchSubject = async () => {
-        let search = await this.state.search.set('subjectCodeName', this.state.tmpSubjectCodeName)
-            .set('subjectName', this.state.tmpSubjectName)
-            .set('teacherFirstName', this.state.tmpTeacherFirstName)
-            .set('teacherLastName', this.state.tmpTeacherLastName)
-            .set('subjectStatus', this.state.tmpSubjectStatus)
-        this.setState({ search });
-        let subjectObj = new subject()
-        let listSearchSubject = await subjectObj.listSearchSubject(this.state.search)
-        this.setState({ listSearchSubject })
-        this.state.listSearchSubject.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
-            alertify.error('ไม่พบข้อมูลที่ค้นหา')
-        }).show()
-        localStorage.setItem('stateSubjectSearch', JSON.stringify(this.state.search));
-        let log = new login()
-        log.writeLogLogout('2')
+        try {
+            let search = await this.state.search.set('subjectCodeName', this.state.tmpSubjectCodeName)
+                .set('subjectName', this.state.tmpSubjectName)
+                .set('teacherFirstName', this.state.tmpTeacherFirstName)
+                .set('teacherLastName', this.state.tmpTeacherLastName)
+                .set('subjectStatus', this.state.tmpSubjectStatus)
+            this.setState({ search });
+            let subjectObj = new subject()
+            let listSearchSubject = await subjectObj.listSearchSubject(this.state.search)
+            this.setState({ listSearchSubject })
+            this.state.listSearchSubject.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+                alertify.error('ไม่พบข้อมูลที่ค้นหา')
+            }).show()
+            localStorage.setItem('stateSubjectSearch', JSON.stringify(this.state.search));
+        } catch (err) {
+            alertify.alert('วิชาเปิดสอน', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
+            }).show()
+        }finally{
+            let log = new login()
+            log.writeLogLogout('2')
+        }
     }
 
 
     searchSubject1 = async () => {
-        let stateLocal = localStorage.getItem('stateSubjectSearch')
-        let search = await Map(JSON.parse(stateLocal))
-        this.setState({ search })
-        let subjectObj = new subject()
-        let listSearchSubject = await subjectObj.listSearchSubject(this.state.search)
-        this.setState({ listSearchSubject })
-        let log = new login()
-        log.writeLogLogout('2')
+        try {
+            let stateLocal = localStorage.getItem('stateSubjectSearch')
+            let search = await Map(JSON.parse(stateLocal))
+            this.setState({ search })
+            let subjectObj = new subject()
+            let listSearchSubject = await subjectObj.listSearchSubject(this.state.search)
+            this.setState({ listSearchSubject })
+        } catch (err) {
+            console.log(err)
+        }finally{
+            let log = new login()
+            log.writeLogLogout('2')
+        }
     }
 
     onChange = (e) => {

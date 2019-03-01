@@ -50,24 +50,36 @@ class ClassAttendanceSearch extends Component {
     }
 
     getStudentNo = async () => {
-        let classAttendanceObj = new classAttendance()
-        let returnStudentNo = await classAttendanceObj.callGetStudentNoByStudentCodeName(this.state.search)
-        if (returnStudentNo) {
-            let search = this.state.search.set('studentNo', returnStudentNo)
-            this.setState({ search });
+        try {
+            let classAttendanceObj = new classAttendance()
+            let returnStudentNo = await classAttendanceObj.callGetStudentNoByStudentCodeName(this.state.search)
+            if (returnStudentNo) {
+                let search = this.state.search.set('studentNo', returnStudentNo)
+                this.setState({ search });
+            }
+        } catch (err) {
+            console.log(err)
         }
     }
 
     getListSemester = async () => {
-        let classAttendancetObj1 = new classAttendance()
-        let listSemester = await classAttendancetObj1.callListSemester()
-        listSemester.length > 0 && this.setState({ listSemester })
+        try {
+            let classAttendancetObj1 = new classAttendance()
+            let listSemester = await classAttendancetObj1.callListSemester()
+            listSemester.length > 0 && this.setState({ listSemester })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     getListSubject = async () => {
-        let classAttendancetObj2 = new classAttendance()
-        let listSubject = await classAttendancetObj2.callListSubject()
-        listSubject.length > 0 && this.setState({ listSubject })
+        try {
+            let classAttendancetObj2 = new classAttendance()
+            let listSubject = await classAttendancetObj2.callListSubject()
+            listSubject.length > 0 && this.setState({ listSubject })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     clear = () => {
@@ -75,47 +87,59 @@ class ClassAttendanceSearch extends Component {
     }
 
     searchClassAttendance = async () => {
-        if(this.state.tmpStartDate <= this.state.tmpEndDate){
-            let search = await this.state.search.set('classAttendanceCode', this.state.tmpClassAttendanceCode)
-            .set('studentCodeName', this.state.tmpStudentCodeName)
-            .set('confirmStatusNo', this.state.tmpConfirmStatusNo)
-            .set('subjectNo', this.state.tmpSubjectNo)
-            .set('studentNo', this.state.tmpStudentNo)
-            .set('teacherNo', this.state.tmpTeacherNo)
-            .set('semesterNo', this.state.tmpSemesterNo)
-            .set('startDateSTR', dateFormat(this.state.tmpStartDate, "yyyy-mm-dd"))
-            .set('endDateSTR', dateFormat(this.state.tmpEndDate, "yyyy-mm-dd"));
-        this.setState({ search });
-        this.getStudentNo()
-        let classAttendanceObj = new classAttendance()
-        let listSearchClassAttendance = await classAttendanceObj.listSearchClassAttendance(this.state.search)
-        this.setState({ listSearchClassAttendance })
-        if (this.state.listSearchClassAttendance.length === 0) {
-            alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
-                this.clear()
-                alertify.error('ไม่พบข้อมูล')
+        try {
+            if (this.state.tmpStartDate <= this.state.tmpEndDate) {
+                let search = await this.state.search.set('classAttendanceCode', this.state.tmpClassAttendanceCode)
+                    .set('studentCodeName', this.state.tmpStudentCodeName)
+                    .set('confirmStatusNo', this.state.tmpConfirmStatusNo)
+                    .set('subjectNo', this.state.tmpSubjectNo)
+                    .set('studentNo', this.state.tmpStudentNo)
+                    .set('teacherNo', this.state.tmpTeacherNo)
+                    .set('semesterNo', this.state.tmpSemesterNo)
+                    .set('startDateSTR', dateFormat(this.state.tmpStartDate, "yyyy-mm-dd"))
+                    .set('endDateSTR', dateFormat(this.state.tmpEndDate, "yyyy-mm-dd"));
+                this.setState({ search });
+                this.getStudentNo()
+                let classAttendanceObj = new classAttendance()
+                let listSearchClassAttendance = await classAttendanceObj.listSearchClassAttendance(this.state.search)
+                this.setState({ listSearchClassAttendance })
+                if (this.state.listSearchClassAttendance.length === 0) {
+                    alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+                        this.clear()
+                        alertify.error('ไม่พบข้อมูล')
+                    }).show()
+                }
+                localStorage.setItem('stateClassAttendanceSearch', JSON.stringify(this.state.search));
+            } else {
+                alertify.alert('ค้นหา', 'วันที่ค้นหาเริ่มต้นต้องน้อยกว่าหรือเท่ากับวันที่ค้นหาสิ้นสุด', () => {
+                    this.clear()
+                    alertify.error('ไม่พบข้อมูล')
+                }).show()
+            }
+        } catch (err) {
+            alertify.alert('การเข้าชั้นเรียน', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
             }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('10')
         }
-        localStorage.setItem('stateClassAttendanceSearch', JSON.stringify(this.state.search));
-        }else{
-            alertify.alert('ค้นหา', 'วันที่ค้นหาเริ่มต้นต้องน้อยกว่าหรือเท่ากับวันที่ค้นหาสิ้นสุด', () => {
-                this.clear()
-                alertify.error('ไม่พบข้อมูล')
-            }).show()
-        }
-        let log = new login()
-        log.writeLogLogout('10')
     }
 
     searchClassAttendance1 = async () => {
-        let stateLocal = localStorage.getItem('stateClassAttendanceSearch')
-        let search = await Map(JSON.parse(stateLocal))
-        this.setState({ search })
-        let classAttendanceObj = new classAttendance()
-        let listSearchClassAttendance = await classAttendanceObj.listSearchClassAttendance(this.state.search)
-        this.setState({ listSearchClassAttendance })
-        let log = new login()
-        log.writeLogLogout('10')
+        try {
+            let stateLocal = localStorage.getItem('stateClassAttendanceSearch')
+            let search = await Map(JSON.parse(stateLocal))
+            this.setState({ search })
+            let classAttendanceObj = new classAttendance()
+            let listSearchClassAttendance = await classAttendanceObj.listSearchClassAttendance(this.state.search)
+            this.setState({ listSearchClassAttendance })
+        } catch (err) {
+            console.log(err)
+        } finally {
+            let log = new login()
+            log.writeLogLogout('10')
+        }
     }
 
     onChange = (e) => {

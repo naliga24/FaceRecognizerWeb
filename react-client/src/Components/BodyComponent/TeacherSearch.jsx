@@ -32,31 +32,43 @@ class TeacherSearch extends Component {
     }
 
     searchTeacher = async () => {
-        let search = await this.state.search.set('teacherFirstName', this.state.tmpTeacherFirstName)
-            .set('teacherLastName', this.state.tmpTeacherLastName)
-            .set('teacherClassCount', this.state.tmpTeacherClassCount)
-            .set('teacherStatus', this.state.tmpTeacherStatus)
-        this.setState({ search });
-        let teacherObj = new teacher()
-        let listSearchTeacher = await teacherObj.listSearchTeacher(this.state.search)
-        this.setState({ listSearchTeacher })
-        this.state.listSearchTeacher.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
-            alertify.error('ไม่พบข้อมูลที่ค้นหา')
-        }).show()
-        localStorage.setItem('stateTeacherSearch', JSON.stringify(this.state.search));
-        let log = new login()
-        log.writeLogLogout('5')
+        try {
+            let search = await this.state.search.set('teacherFirstName', this.state.tmpTeacherFirstName)
+                .set('teacherLastName', this.state.tmpTeacherLastName)
+                .set('teacherClassCount', this.state.tmpTeacherClassCount)
+                .set('teacherStatus', this.state.tmpTeacherStatus)
+            this.setState({ search });
+            let teacherObj = new teacher()
+            let listSearchTeacher = await teacherObj.listSearchTeacher(this.state.search)
+            this.setState({ listSearchTeacher })
+            this.state.listSearchTeacher.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+                alertify.error('ไม่พบข้อมูลที่ค้นหา')
+            }).show()
+            localStorage.setItem('stateTeacherSearch', JSON.stringify(this.state.search));
+        } catch (err) {
+            alertify.alert('อาจารย์', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
+            }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('5')
+        }
     }
 
     searchTeacher1 = async () => {
-        let stateLocal = localStorage.getItem('stateTeacherSearch')
-        let search = await Map(JSON.parse(stateLocal))
-        this.setState({ search })
-        let teacherObj = new teacher()
-        let listSearchTeacher = await teacherObj.listSearchTeacher(this.state.search)
-        this.setState({ listSearchTeacher})
-        let log = new login()
-        log.writeLogLogout('5')
+        try {
+            let stateLocal = localStorage.getItem('stateTeacherSearch')
+            let search = await Map(JSON.parse(stateLocal))
+            this.setState({ search })
+            let teacherObj = new teacher()
+            let listSearchTeacher = await teacherObj.listSearchTeacher(this.state.search)
+            this.setState({ listSearchTeacher })
+        } catch (err) {
+            console.log(err)
+        } finally {
+            let log = new login()
+            log.writeLogLogout('5')
+        }
     }
 
     onChange = (e) => {

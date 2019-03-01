@@ -30,38 +30,38 @@ class Configuration extends Component {
     }
 
     selectUserTypeInfo = async () => {
-        try{
+        try {
             let configObj = new configuration()
             let listPermission = await configObj.callListPermission()
             this.setState({ listPermission })
-        }catch(err){
-           console.log(err)
+        } catch (err) {
+            console.log(err)
         }
     }
 
-    saveConfiguration = async() => {
-        let userTypePermission = '';
-        let tmp = [this.state.subject,
-        this.state.semester,
-        this.state.student,
-        this.state.teacher,
-        this.state.classAttendance,
-        this.state.user,
-        this.state.report,
-        this.state.admin,
-        this.state.userTypeNo]
-        for (let i = 0; i <= 7; i++) {
-            if (tmp[i]) {
-                userTypePermission += '1'
-            } else {
-                userTypePermission += '0'
+    saveConfiguration = async () => {
+        try {
+            let userTypePermission = '';
+            let tmp = [this.state.subject,
+            this.state.semester,
+            this.state.student,
+            this.state.teacher,
+            this.state.classAttendance,
+            this.state.user,
+            this.state.report,
+            this.state.admin,
+            this.state.userTypeNo]
+            for (let i = 0; i <= 7; i++) {
+                if (tmp[i]) {
+                    userTypePermission += '1'
+                } else {
+                    userTypePermission += '0'
+                }
             }
-        }
-        if (userTypePermission[0] === '1' || userTypePermission[1] === '1' || userTypePermission[2] === '1' || userTypePermission[3] === '1' || userTypePermission[4] === '1' || userTypePermission[5] === '1' || userTypePermission[6] === '1') {
-            try{
+            if (userTypePermission[0] === '1' || userTypePermission[1] === '1' || userTypePermission[2] === '1' || userTypePermission[3] === '1' || userTypePermission[4] === '1' || userTypePermission[5] === '1' || userTypePermission[6] === '1') {
                 let configObj = new configuration()
                 let editFlag = await configObj.editUserType(userTypePermission, this.state.userTypeNo)
-                if(editFlag === '1'){
+                if (editFlag === '1') {
                     alertify.alert('แก้ไข', `แก้ไขสิทธิ์ในการเข้าใช้งานของ "${this.state.userTypeName}" เรียบร้อย`, () => {
                         alertify.success(`แก้ไขสิทธิ์เรียบร้อย`)
                     }).show()
@@ -75,20 +75,21 @@ class Configuration extends Component {
                         user: null,
                         report: null,
                         inputDisable: true
-                })
+                    })
                 }
-            }catch(err){
-                alertify.alert('ตั่งค่าระบบ', err, () => {
-                    alertify.error('เกิดข้อผิดพลาด')
+            } else {
+                alertify.alert('แก้ไข', `ต้องกำหนดสิทธิ์ในการเข้าใช้งานอย่างน้อย 1 เมนู`, () => {
+                    alertify.error('ไม่สามารถแก้ไขสิทธิ์')
                 }).show()
             }
-        } else {
-            alertify.alert('แก้ไข', `ต้องกำหนดสิทธิ์ในการเข้าใช้งานอย่างน้อย 1 เมนู`, () => {
-                alertify.error('ไม่สามารถแก้ไขสิทธิ์')
+        } catch (err) {
+            alertify.alert('ตั่งค่าระบบ', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
             }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('8')
         }
-        let log = new login()
-        log.writeLogLogout('8')
     }
 
     edit = (index) => {
@@ -105,8 +106,8 @@ class Configuration extends Component {
         let htmlElement = document.getElementById("userTypeName")
         htmlElement.value = this.state.listPermission[index].USER_TYPE_NAME
         this.setState({
-            userTypeNo: this.state.listPermission[index].USER_TYPE_NO, 
-            userTypeName:this.state.listPermission[index].USER_TYPE_NAME, 
+            userTypeNo: this.state.listPermission[index].USER_TYPE_NO,
+            userTypeName: this.state.listPermission[index].USER_TYPE_NAME,
             inputDisable: false
         })
     }

@@ -60,9 +60,10 @@ class ClassAttendance extends Component {
             alertify.alert('ค้นหาการเข้าชั้นเรียน', err, () => {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('10')
         }
-        let log = new login()
-        log.writeLogLogout('10')
     }
 
     getStudentNoByClassAttendanceStudentKeyCodeName = async () => {
@@ -103,9 +104,10 @@ class ClassAttendance extends Component {
             alertify.alert('การเข้าชั้นเรียน', err, () => {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('10')
         }
-        let log = new login()
-        log.writeLogLogout('10')
     }
 
     clear = () => {

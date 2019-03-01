@@ -30,30 +30,42 @@ class SemesterSearch extends Component {
     }
 
     searchSemester = async () => {
-        let search = await this.state.search.set('semesterStatusNo', this.state.tmpSemesterStatusNo)
-            .set('semesterTerm', this.state.tmpSemesterTerm)
-            .set('semesterYear', this.state.tmpSemesterYear)
-        this.setState({ search });
-        let semesterObj = new semester()
-        let listSearchSemester = await semesterObj.listSearchSemester(this.state.search)
-        this.setState({ listSearchSemester })
-        this.state.listSearchSemester.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
-            alertify.error('ไม่พบข้อมูล')
-        }).show()
-        localStorage.setItem('stateSemesterSearch', JSON.stringify(this.state.search));
-        let log = new login()
-        log.writeLogLogout('3')
+        try {
+            let search = await this.state.search.set('semesterStatusNo', this.state.tmpSemesterStatusNo)
+                .set('semesterTerm', this.state.tmpSemesterTerm)
+                .set('semesterYear', this.state.tmpSemesterYear)
+            this.setState({ search });
+            let semesterObj = new semester()
+            let listSearchSemester = await semesterObj.listSearchSemester(this.state.search)
+            this.setState({ listSearchSemester })
+            this.state.listSearchSemester.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+                alertify.error('ไม่พบข้อมูล')
+            }).show()
+            localStorage.setItem('stateSemesterSearch', JSON.stringify(this.state.search));
+        } catch (err) {
+            alertify.alert('ภาคการศึกษา', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
+            }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('3')
+        }
     }
 
     searchSemester1 = async () => {
-        let stateLocal = localStorage.getItem('stateSemesterSearch')
-        let search = await Map(JSON.parse(stateLocal))
-        this.setState({ search })
-        let semesterObj = new semester()
-        let listSearchSemester = await semesterObj.listSearchSemester(this.state.search)
-        this.setState({ listSearchSemester })
-        let log = new login()
-        log.writeLogLogout('3')
+        try {
+            let stateLocal = localStorage.getItem('stateSemesterSearch')
+            let search = await Map(JSON.parse(stateLocal))
+            this.setState({ search })
+            let semesterObj = new semester()
+            let listSearchSemester = await semesterObj.listSearchSemester(this.state.search)
+            this.setState({ listSearchSemester })
+        } catch (err) {
+            console.log(err)
+        } finally {
+            let log = new login()
+            log.writeLogLogout('3')
+        }
     }
 
     onChange = (e) => {

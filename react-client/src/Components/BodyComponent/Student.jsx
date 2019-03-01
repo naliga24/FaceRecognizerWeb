@@ -1,8 +1,8 @@
 import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
 
-import  login  from './../Prototype/login'
-import  student  from './../Prototype/student'
+import login from './../Prototype/login'
+import student from './../Prototype/student'
 
 const imagenotfound = require('./../../../../server/image_assets/notfound(450&450).gif')
 
@@ -11,7 +11,7 @@ class Student extends Component {
         super(props)
         this.state = {
             studentNo: this.props.location.studentNo,
-            studentCodeName: this.props.location.studentCodeName?this.props.location.studentCodeName:'',
+            studentCodeName: this.props.location.studentCodeName ? this.props.location.studentCodeName : '',
             studentFirstName: this.props.location.studentFirstName,
             studentLastName: this.props.location.studentLastName,
             studentStatus: this.props.location.studentStatus,
@@ -28,92 +28,90 @@ class Student extends Component {
         };
     }
 
-    saveStudent=async()=> {
-        let log = new login()
-        log.writeLogLogout('5')
-        if ((this.state.studentCodeName.length === 10 && !isNaN(this.state.studentCodeName)) 
-        && this.state.studentFirstName && this.state.studentLastName && this.state.studentImage) {
-            let studentObj = new student()
-            if ((this.state.studentCodeName !== this.state.oldStudentCodeName)
-                || (this.state.studentFirstName !== this.state.oldStudentFirstName)
-                || (this.state.studentLastName !== this.state.oldStudentLastName)
-                || (this.state.studentStatus !== this.state.oldStudentStatus)
-                || (this.state.studentImage !== this.state.oldStudentImage)) {
-                if (this.state.studentCodeName !== this.state.oldStudentCodeName) {
-                    try{
+    saveStudent = async () => {
+        try {
+            if ((this.state.studentCodeName.length === 10 && !isNaN(this.state.studentCodeName))
+                && this.state.studentFirstName && this.state.studentLastName && this.state.studentImage) {
+                let studentObj = new student()
+                if ((this.state.studentCodeName !== this.state.oldStudentCodeName)
+                    || (this.state.studentFirstName !== this.state.oldStudentFirstName)
+                    || (this.state.studentLastName !== this.state.oldStudentLastName)
+                    || (this.state.studentStatus !== this.state.oldStudentStatus)
+                    || (this.state.studentImage !== this.state.oldStudentImage)) {
+                    if (this.state.studentCodeName !== this.state.oldStudentCodeName) {
                         let studentCodeNameFlag = await studentObj.checkStudentCodeName(this.state.studentCodeName)
                         if (studentCodeNameFlag === '0') {
                             if (this.state.flagEdit) {
-                                    studentObj.editStudent(this.state, this.clear)
-                                    alertify.alert('แก้ไข',`แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`,()=>{
-                                        this.gotoStudentSearch()
-                                    }).show()
+                                studentObj.editStudent(this.state, this.clear)
+                                alertify.alert('แก้ไข', `แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`, () => {
+                                    this.gotoStudentSearch()
+                                }).show()
                             } else {
-                                    studentObj.addStudent(this.state, this.clear)
-                                    alertify.alert(`เพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`)
+                                studentObj.addStudent(this.state, this.clear)
+                                alertify.alert(`เพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`)
                             }
                         } else if (studentCodeNameFlag === '1' && this.state.flagEdit) {
-                            alertify.alert('แก้ไข',`ไม่สามารถเแก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`,()=>{
+                            alertify.alert('แก้ไข', `ไม่สามารถเแก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()
-                        }
-                        else if (studentCodeNameFlag === '1' && !this.state.flagEdit) {
-                            alertify.alert('เพิ่ม',`ไม่สามารถเพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`,()=>{
+                        }else if (studentCodeNameFlag === '1' && !this.state.flagEdit) {
+                            alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
-                    }catch(err){
-                        alertify.alert('วิชาเปิดสอน', err, () => {
-                            alertify.error('เกิดข้อผิดพลาด')
+                    } else if (this.state.flagEdit) {
+                        studentObj.editStudent(this.state, this.clear)
+                        alertify.alert('แก้ไข', `แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`, () => {
+                            this.gotoStudentSearch()
                         }).show()
                     }
                 } else if (this.state.flagEdit) {
-                    studentObj.editStudent(this.state, this.clear)
-                    alertify.alert('แก้ไข',`แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`,()=>{
-                        this.gotoStudentSearch()
+                    alertify.alert('แก้ไข', `ข้อมูลไม่มีการเปลี่ยนแปลง`, () => {
+                        alertify.success(`ข้อมูลไม่มีการเปลี่ยนแปลง`)
                     }).show()
                 }
-            } else if (this.state.flagEdit) {
-                alertify.alert('แก้ไข',`ข้อมูลไม่มีการเปลี่ยนแปลง`,()=>{
-                    alertify.success(`ข้อมูลไม่มีการเปลี่ยนแปลง`)
+            } else if (!(this.state.studentCodeName.length === 10)) {
+                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุรหัสนักศึกษาจำนวน 10 หลัก', () => {
+                    alertify.error('โปรดระบุรหัสนักศึกษาจำนวน 10 หลัก')
+                }).show()
+            } else if (isNaN(this.state.studentCodeName)) {
+                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุรหัสนักศึกษาเป็นรูปแบบตัวเลข', () => {
+                    alertify.error('โปรดระบุรหัสนักศึกษาเป็นรูปแบบตัวเลข')
+                }).show()
+            } else if (!this.state.studentFirstName) {
+                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุชื่อนักศึกษา', () => {
+                    alertify.error('โปรดระบุชื่อนักศึกษา')
+                }).show()
+
+            } else if (!this.state.studentLastName) {
+                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุนามสกุลนักศึกษา', () => {
+                    alertify.error('โปรดระบุนามสกุลนักศึกษา')
+                }).show()
+
+            } else if (!this.state.studentImage) {
+                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุรูปภาพนักศึกษา', () => {
+                    alertify.error('โปรดระบุรูปภาพนักศึกษา')
                 }).show()
             }
-        }else if(!(this.state.studentCodeName.length === 10) ){
-            alertify.alert('เพิ่ม/แก้ไข','โปรดระบุรหัสนักศึกษาจำนวน 10 หลัก',()=>{
-                alertify.error('โปรดระบุรหัสนักศึกษาจำนวน 10 หลัก')
+        } catch (err) {
+            alertify.alert('วิชาเปิดสอน', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
             }).show()
-        }
-        else if(isNaN(this.state.studentCodeName)){
-            alertify.alert('เพิ่ม/แก้ไข','โปรดระบุรหัสนักศึกษาเป็นรูปแบบตัวเลข',()=>{
-                alertify.error('โปรดระบุรหัสนักศึกษาเป็นรูปแบบตัวเลข')
-            }).show()
-
-        }else if(!this.state.studentFirstName){
-            alertify.alert('เพิ่ม/แก้ไข','โปรดระบุชื่อนักศึกษา',()=>{
-                alertify.error('โปรดระบุชื่อนักศึกษา')
-            }).show()
-
-        }else if(!this.state.studentLastName){
-            alertify.alert('เพิ่ม/แก้ไข','โปรดระบุนามสกุลนักศึกษา',()=>{
-                alertify.error('โปรดระบุนามสกุลนักศึกษา')
-            }).show()
-
-        }else if(!this.state.studentImage){
-            alertify.alert('เพิ่ม/แก้ไข','โปรดระบุรูปภาพนักศึกษา',()=>{
-                alertify.error('โปรดระบุรูปภาพนักศึกษา')
-            }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('5')
         }
     }
 
-    add=()=> {
+    add = () => {
         this.setState({ buttonDisble: !this.state.buttonDisble });
     }
 
-    clear=()=> {
+    clear = () => {
         this.setState({ buttonDisble: !this.state.buttonDisble, flagEdit: false, studentCodeName: '', studentFirstName: '', studentLastName: '', studentStatus: '1', studentImage: null, studentImagePreview: null })
     }
 
-    onChange=(e)=> {
+    onChange = (e) => {
         if (e.target.name === "studentImage") {
             this.setState({ [e.target.name]: e.target.files[0], studentImagePreview: URL.createObjectURL(e.target.files[0]) })
             console.log(e.target.files[0])
@@ -122,7 +120,7 @@ class Student extends Component {
         }
     }
 
-    gotoStudentSearch=()=> {
+    gotoStudentSearch = () => {
         this.props.history.push('/StudentSearch');
     }
 
@@ -153,8 +151,8 @@ class Student extends Component {
                             </label>
                         </div>
                         <div class='bottom'>
-                            <img id='img' alt={this.flagEdit?'ไม่พบรูปนักศึกษา':''} 
-                            src={this.state.flagEdit ? (this.state.studentImagePreview ? this.state.studentImagePreview : (this.state.studentImage ? this.state.studentImage : imagenotfound)) : (this.state.studentImage ? this.state.studentImagePreview : imagenotfound)}  />
+                            <img id='img' alt={this.flagEdit ? 'ไม่พบรูปนักศึกษา' : ''}
+                                src={this.state.flagEdit ? (this.state.studentImagePreview ? this.state.studentImagePreview : (this.state.studentImage ? this.state.studentImage : imagenotfound)) : (this.state.studentImage ? this.state.studentImagePreview : imagenotfound)} />
                         </div>
                     </div>
                 </div>

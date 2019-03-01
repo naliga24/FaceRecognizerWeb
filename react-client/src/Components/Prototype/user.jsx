@@ -10,6 +10,7 @@ export default class user {
         console.log(res); return res.body;})
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 

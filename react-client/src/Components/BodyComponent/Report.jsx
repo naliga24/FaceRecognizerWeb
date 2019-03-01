@@ -45,21 +45,21 @@ class Report extends Component {
     }
 
     selectSubjectInfo = async () => {
-        try{
+        try {
             let reportObj = new report()
             let listSubject = await reportObj.callListSubject()
             listSubject.length > 0 && this.setState({ listSubject })
-        }catch(err){
+        } catch (err) {
             console.log(err)
         }
     }
 
     selectUserTypeInfo = async () => {
-        try{
+        try {
             let tmp = new report()
             let listUserType = await tmp.callListPermissionAll()
             this.setState({ listUserType })
-        }catch(err){
+        } catch (err) {
             console.log(err)
         }
     }
@@ -76,66 +76,68 @@ class Report extends Component {
     }
 
     getDataReportAttendance = async () => {
-        if (this.state.subjectNo && this.state.semesterNo) {
-            try{
+        try {
+            if (this.state.subjectNo && this.state.semesterNo) {
                 let reportObj = new report()
                 let dataReport = await reportObj.callListReportAttendance(this.state)
                 if (dataReport) {
                     let reportFlag = await reportObj.displayReportAttendance(dataReport, this.state.subjectCodeName, this.state.semesterName)
-                       if(reportFlag === '1'){
+                    if (reportFlag === '1') {
                         window.open("/ShowPdfAttendance");
-                       }else{
+                    } else {
                         alertify.alert('รายงาน', 'โปรดลองใหม่อีกครั้ง', () => {
                             alertify.error('เกิดข้อผิดพลาด')
-                        }) 
-                       }
+                        })
+                    }
                 } else {
                     alertify.alert('รายงาน', 'ไม่พบรายการการเข้าชั้นเรียน', () => {
                         alertify.error('ไม่พบข้อมูล')
                     })
                 }
-            }catch(err){
-                alertify.alert('รายงาน', err, () => {
-                    alertify.error('เกิดข้อผิดพลาด')
-                }).show()
+            } else if (!this.state.subjectNo) {
+                alertify.alert('โปรดระบุรหัสวิชา')
+            } else if (!this.state.semesterNo) {
+                alertify.alert('โปรดระบุภาคการศึกษา')
             }
-        } else if (!this.state.subjectNo) {
-            alertify.alert('โปรดระบุรหัสวิชา')
-        } else if (!this.state.semesterNo) {
-            alertify.alert('โปรดระบุภาคการศึกษา')
+        } catch (err) {
+            alertify.alert('รายงาน', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
+            }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('7')
         }
-        let log = new login()
-        log.writeLogLogout('7')
     }
 
     getDataReportTransaction = async () => {
-        if (this.state.startDateSTR && this.state.endDateSTR) {
-            try{
+            try {
+                if (this.state.startDateSTR && this.state.endDateSTR) {
                 let reportObj = new report()
                 let dataReport = await reportObj.callListReportTransaction(this.state)
                 if (dataReport) {
                     let reportFlag = await reportObj.displayReportTransaction(dataReport, this.state.startDateSTR, this.state.endDateSTR, this.state.userTypeName)
-                    if(reportFlag === '1'){
+                    if (reportFlag === '1') {
                         window.open("/ShowPdfTransaction");
-                       }else{
+                    } else {
                         alertify.alert('รายงาน', 'โปรดลองใหม่อีกครั้ง', () => {
                             alertify.error('เกิดข้อผิดพลาด')
-                        }) 
-                       }
+                        })
+                    }
                 } else {
                     alertify.alert('รายงาน', 'ไม่พบรายการการเข้าใช้ระบบ', () => {
                         alertify.error('ไม่พบข้อมูล')
                     })
                 }
-            }catch(err){
+            }
+            } catch (err) {
                 alertify.alert('รายงาน', err, () => {
                     alertify.error('เกิดข้อผิดพลาด')
                 }).show()
+            }finally{
+                let log = new login()
+                log.writeLogLogout('7')
             }
         }
-        let log = new login()
-        log.writeLogLogout('7')
-    }
 
     handleChange = (name, date) => {
         let change1 = {}

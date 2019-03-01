@@ -55,16 +55,16 @@ class User extends Component {
     }
 
     saveUser = async () => {
-        if (this.state.userLogin && this.state.userPassword && this.state.userName && this.state.userType && this.state.userStatus) {
-            let tmp = new user()
-            if ((this.state.userLogin !== this.state.oldUserLogin)
-                || (this.state.userPassword !== this.state.oldUserPassword)
-                || (this.state.userName !== this.state.oldUserName)
-                || (this.state.userType !== this.state.oldUserType)
-                || (this.state.inactiveDetail !== this.state.oldInactiveDetail)
-                || (this.state.userStatus !== this.state.oldUserStatus)) {
-                if (this.state.userLogin !== this.state.oldUserLogin) {
-                    try{
+        try {
+            if (this.state.userLogin && this.state.userPassword && this.state.userName && this.state.userType && this.state.userStatus) {
+                let tmp = new user()
+                if ((this.state.userLogin !== this.state.oldUserLogin)
+                    || (this.state.userPassword !== this.state.oldUserPassword)
+                    || (this.state.userName !== this.state.oldUserName)
+                    || (this.state.userType !== this.state.oldUserType)
+                    || (this.state.inactiveDetail !== this.state.oldInactiveDetail)
+                    || (this.state.userStatus !== this.state.oldUserStatus)) {
+                    if (this.state.userLogin !== this.state.oldUserLogin) {
                         let userLoginFlag = await tmp.checkUserLogin(this.state.userLogin)
                         if (userLoginFlag === '0') {
                             if (this.state.flagEdit) {
@@ -82,47 +82,47 @@ class User extends Component {
                             alertify.alert('แก้ไข', `ไม่สามารถเแก้ไขข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()
-                        }
-                        else if (userLoginFlag === '1' && !this.state.flagEdit) {
+                        } else if (userLoginFlag === '1' && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
-                    }catch(err){
-                        alertify.alert('ผู้ใช้ระบบ', err, () => {
-                            alertify.error('เกิดข้อผิดพลาด')
+                    } else if (this.state.flagEdit) {
+                        tmp.editUser(this.state, this.clear)
+                        alertify.alert('แก้ไข', `แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {
+                            this.gotoUserSearch()
                         }).show()
                     }
                 } else if (this.state.flagEdit) {
-                    tmp.editUser(this.state, this.clear)
-                    alertify.alert('แก้ไข', `แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {
-                        this.gotoUserSearch()
+                    alertify.alert('แก้ไข', `ข้อมูลไม่มีการเปลี่ยนแปลง`, () => {
+                        alertify.success(`ข้อมูลไม่มีการเปลี่ยนแปลง`)
                     }).show()
                 }
-            } else if (this.state.flagEdit) {
-                alertify.alert('แก้ไข', `ข้อมูลไม่มีการเปลี่ยนแปลง`, () => {
-                    alertify.success(`ข้อมูลไม่มีการเปลี่ยนแปลง`)
+            } else if (!this.state.userLogin) {
+                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุชื่อในการเข้าระบบ', () => {
+                    alertify.error('โปรดระบุชื่อในการเข้าระบบ')
+                }).show()
+            } else if (!this.state.userPassword) {
+                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุรหัสผ่าน', () => {
+                    alertify.error('โปรดระบุรหัสผ่าน')
+                }).show()
+            } else if (!this.state.userName) {
+                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุชื่อผู้ใช้งาน', () => {
+                    alertify.error('โปรดระบุชื่อผู้ใช้งาน')
+                }).show()
+            } else if (!this.state.userType) {
+                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุประเภทผู้ใช้งาน', () => {
+                    alertify.error('โปรดระบุประเภทผู้ใช้งาน')
                 }).show()
             }
-        } else if (!this.state.userLogin) {
-            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุชื่อในการเข้าระบบ', () => {
-                alertify.error('โปรดระบุชื่อในการเข้าระบบ')
+        } catch (err) {
+            alertify.alert('ผู้ใช้ระบบ', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
             }).show()
-        } else if (!this.state.userPassword) {
-            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุรหัสผ่าน', () => {
-                alertify.error('โปรดระบุรหัสผ่าน')
-            }).show()
-        } else if (!this.state.userName) {
-            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุชื่อผู้ใช้งาน', () => {
-                alertify.error('โปรดระบุชื่อผู้ใช้งาน')
-            }).show()
-        } else if (!this.state.userType) {
-            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุประเภทผู้ใช้งาน', () => {
-                alertify.error('โปรดระบุประเภทผู้ใช้งาน')
-            }).show()
+        } finally {
+            let log = new login()
+            log.writeLogLogout('6')
         }
-        let log = new login()
-        log.writeLogLogout('6')
     }
 
     add = () => {

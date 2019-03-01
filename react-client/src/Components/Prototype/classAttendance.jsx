@@ -30,6 +30,7 @@ export default class classAttendance {
       })
       .catch(err => {
         console.log(err.message, err.response)
+        throw err.message
       });
   }
 
