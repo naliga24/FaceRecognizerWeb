@@ -89,10 +89,10 @@ export default class student {
   listSearchStudent(data) {
     return request.post('/selectStudentInfoSearchStudent')
       .send({
-        studentCodeName: data.get('studentCodeName'),
-        studentFirstName: data.get('studentFirstName'),
-        studentLastName: data.get('studentLastName'),
-        studentStatus: data.get('studentStatus'),
+        studentCodeName: data.studentCodeName,
+        studentFirstName: data.studentFirstName,
+        studentLastName: data.studentLastName,
+        studentStatus: data.studentStatus,
       })
       .then((res) => {
         console.log(res.body); return res.body;

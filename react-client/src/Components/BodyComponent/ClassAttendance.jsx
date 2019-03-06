@@ -35,12 +35,10 @@ class ClassAttendance extends Component {
             studentNoFromClassAttendanceStudentKeyCodeName: '',//update
             studentNoFromSearch: '',//update
             confirmStatusNo: '',//update
-            search: Map({
                 studentCodeName: '',//search
                 studentFirstName: '',//search
                 studentLastName: '',//search
                 studentStatus: '',//search    
-            }),
             flagEdit: this.props.location.flagEdit,
             flagConfirm: this.props.location.flagConfirm,
         };
@@ -53,7 +51,7 @@ class ClassAttendance extends Component {
     searchStudent = async () => {
         try {
             let classAttendanceObj = new classAttendance()
-            let dataListStudent = await classAttendanceObj.callListSearchStudent(this.state.search)
+            let dataListStudent = await classAttendanceObj.callListSearchStudent(this.state)
             this.setState({ dataListStudent })
             this.state.dataListStudent.length === 0 && alertify.alert('ไม่พบข้อมูลนักศึกษาที่ค้นหา')
         } catch (err) {

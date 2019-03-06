@@ -34,7 +34,7 @@ class StudentSearch extends Component {
     searchStudent = async () => {
         try {
             let search = await this.state.search.set('studentCodeName', this.state.tmpStudentCodeName)
-                .set('studentFirstNam e', this.state.tmpStudentFirstName)
+                .set('studentFirstName', this.state.tmpStudentFirstName)
                 .set('studentLastName', this.state.tmpStudentLastName)
                 .set('studentStatus', this.state.tmpStudentStatus)
             this.setState({ search });
