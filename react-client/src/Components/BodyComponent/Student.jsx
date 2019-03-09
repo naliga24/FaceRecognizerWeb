@@ -1,8 +1,17 @@
 import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 
 import login from './../Prototype/login'
-import student from './../Prototype/student'
+import {
+    checkStudentCodeName,
+    editStudent,
+    editStudentNoImgEdit,
+    addStudent
+} from './../Actions/Student'
+import {
+    writeLogLogout
+} from './../Actions/Login' 
 
 const imagenotfound = require('./../../../../server/image_assets/notfound(450&450).gif')
 
@@ -32,38 +41,54 @@ class Student extends Component {
         try {
             if ((this.state.studentCodeName.length === 10 && !isNaN(this.state.studentCodeName))
                 && this.state.studentFirstName && this.state.studentLastName && this.state.studentImage) {
-                let studentObj = new student()
                 if ((this.state.studentCodeName !== this.state.oldStudentCodeName)
                     || (this.state.studentFirstName !== this.state.oldStudentFirstName)
                     || (this.state.studentLastName !== this.state.oldStudentLastName)
                     || (this.state.studentStatus !== this.state.oldStudentStatus)
                     || (this.state.studentImage !== this.state.oldStudentImage)) {
                     if (this.state.studentCodeName !== this.state.oldStudentCodeName) {
-                        let studentCodeNameFlag = await studentObj.checkStudentCodeName(this.state.studentCodeName)
-                        if (studentCodeNameFlag === '0') {
+                        await this.props.checkStudentCodeName(this.state.studentCodeName)
+                        if (this.props.student.studentCodeNameFlag === 0) {
                             if (this.state.flagEdit) {
-                                studentObj.editStudent(this.state, this.clear)
-                                alertify.alert('แก้ไข', `แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`, () => {
-                                    this.gotoStudentSearch()
-                                }).show()
+                                if (typeof (this.state.studentImage) === 'string') {
+                                    console.log('string')
+                                    await this.props.editStudentNoImgEdit(this.state)
+                                    alertify.alert('แก้ไข', `แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`, () => {
+                                        this.gotoStudentSearch()
+                                    }).show()
+                                } else if (typeof (this.state.studentImage) === 'object') {
+                                    await this.props.editStudent(this.state)
+                                    alertify.alert('แก้ไข', `แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`, () => {
+                                        this.gotoStudentSearch()
+                                    }).show()
+                                }
                             } else {
-                                studentObj.addStudent(this.state, this.clear)
+                                this.props.addStudent(this.state)
                                 alertify.alert(`เพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`)
+                                this.clear()
                             }
-                        } else if (studentCodeNameFlag === '1' && this.state.flagEdit) {
+                        } else if (this.props.student.studentCodeNameFlag === 1 && this.state.flagEdit) {
                             alertify.alert('แก้ไข', `ไม่สามารถเแก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()
-                        }else if (studentCodeNameFlag === '1' && !this.state.flagEdit) {
+                        } else if (this.props.student.studentCodeNameFlag === 1 && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลนักศึกษา "${this.state.studentCodeName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
                     } else if (this.state.flagEdit) {
-                        studentObj.editStudent(this.state, this.clear)
-                        alertify.alert('แก้ไข', `แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`, () => {
-                            this.gotoStudentSearch()
-                        }).show()
+                        if (typeof (this.state.studentImage) === 'string') {
+                            console.log('string')
+                            await this.props.editStudentNoImgEdit(this.state)
+                            alertify.alert('แก้ไข', `แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`, () => {
+                                this.gotoStudentSearch()
+                            }).show()
+                        } else if (typeof (this.state.studentImage) === 'object') {
+                            await this.props.editStudent(this.state)
+                            alertify.alert('แก้ไข', `แก้ไขข้อมูลนักศึกษา "${this.state.studentCodeName}" เรียบร้อย`, () => {
+                                this.gotoStudentSearch()
+                            }).show()
+                        }
                     }
                 } else if (this.state.flagEdit) {
                     alertify.alert('แก้ไข', `ข้อมูลไม่มีการเปลี่ยนแปลง`, () => {
@@ -98,8 +123,7 @@ class Student extends Component {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('5')
+            this.props.writeLogLogout('4')
         }
     }
 
@@ -161,4 +185,17 @@ class Student extends Component {
     }
 }
 
-export default withRouter(Student);
+
+const mapStateToProps = state => ({
+    student: state.student
+});
+
+export default connect(mapStateToProps,
+    {
+        checkStudentCodeName,
+        editStudent,
+        editStudentNoImgEdit,
+        addStudent,
+        writeLogLogout
+    })
+    (withRouter(Student))

@@ -32,6 +32,9 @@ exports.selectStudentInfoStudentCodeName = (req, res) => {
 }
 
 exports.updateStudentInfo = (req, res) => {
+  console.log('req.files',req.files)
+  console.log('req.body',req.body)
+  console.log('req.body.mydata',req.body.mydata)
   const mysqlConnection = mysql.createConnection(connectConfig)
   mysqlConnection.connect((err) => {
     if (err) throw err
@@ -57,13 +60,14 @@ exports.updateStudentInfo = (req, res) => {
       remoteWriteStream.on('error', function (err) { console.log('err', err) })
       remoteWriteStream.on('finish', function () {
         console.log('finish')
+        let data = JSON.parse(req.body.data)
         let sql = 'UPDATE student_info'
-        sql += ` SET STUDENT_CODE_NAME = '${req.query.studentCodeName}',`
-        sql += ` STUDENT_FIRST_NAME = '${req.query.studentFirstName}',`
-        sql += ` STUDENT_LAST_NAME = '${req.query.studentLastName}',`
-        sql += ` STUDENT_STATUS = '${req.query.studentStatus}',`
+        sql += ` SET STUDENT_CODE_NAME = '${data.studentCodeName}',`
+        sql += ` STUDENT_FIRST_NAME = '${data.studentFirstName}',`
+        sql += ` STUDENT_LAST_NAME = '${data.studentLastName}',`
+        sql += ` STUDENT_STATUS = '${data.studentStatus}',`
         sql += ` STUDENT_IMAGE = \'${getPublicUrl(req.files.studentImage.name)}\'`
-        sql += ` WHERE STUDENT_NO = ${req.query.studentNo}`
+        sql += ` WHERE STUDENT_NO = ${data.studentNo}`
   
         console.log(sql)
         mysqlConnection.query(sql, (err, rows) => {
@@ -140,6 +144,9 @@ exports.updateStudentInfoNoImg = (req, res) => {
 // }
 
 exports.insertStudentInfo = (req, res, next) => {
+  console.log('req.files',req.files)
+  console.log('req.body',req.body)
+  console.log('req.body.data',req.body.data)
   const mysqlConnection = mysql.createConnection(connectConfig)
   mysqlConnection.connect((err) => {
     if (err) throw err
@@ -175,12 +182,13 @@ exports.insertStudentInfo = (req, res, next) => {
     remoteWriteStream.on('error', function (err) { console.log('err', err) })
     remoteWriteStream.on('finish', function () {
       console.log('finish')
+      let data = JSON.parse(req.body.data)
           let sql = 'INSERT INTO student_info (STUDENT_NO , STUDENT_CODE_NAME , STUDENT_FIRST_NAME , STUDENT_LAST_NAME , STUDENT_STATUS , STUDENT_IMAGE)'
           sql += ' VALUES('
           sql += ' (SELECT COUNT(STUDENT_NO) + 1 FROM  (SELECT STUDENT_NO FROM student_info)AS X),'
-          sql += ` '${req.query.studentCodeName}',`
-          sql += ` '${req.query.studentFirstName}',`
-          sql += ` '${req.query.studentLastName}',`
+          sql += ` '${data.studentCodeName}',`
+          sql += ` '${data.studentFirstName}',`
+          sql += ` '${data.studentLastName}',`
           sql += ' \'1\','
           sql += `\'${getPublicUrl(req.files.studentImage.name)}\')`
     

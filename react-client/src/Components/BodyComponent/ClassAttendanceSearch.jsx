@@ -1,15 +1,22 @@
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Map } from 'immutable';
 import DatePicker from 'react-datepicker';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 let dateFormat = require('dateformat')
 
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-table/react-table.css';
-
-import classAttendance from './../Prototype/classAttendance';
-import login from './../Prototype/login';
+import {
+    callGetStudentNoByStudentCodeName,
+    callListSemester,
+    callListSubject,
+    listSearchClassAttendance
+} from './../Actions/ClassAttendance'
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class ClassAttendanceSearch extends Component {
     constructor() {
@@ -51,10 +58,9 @@ class ClassAttendanceSearch extends Component {
 
     getStudentNo = async () => {
         try {
-            let classAttendanceObj = new classAttendance()
-            let returnStudentNo = await classAttendanceObj.callGetStudentNoByStudentCodeName(this.state.search)
-            if (returnStudentNo) {
-                let search = this.state.search.set('studentNo', returnStudentNo)
+            await this.props.callGetStudentNoByStudentCodeName(this.state.search)
+            if (this.props.student.returnStudentNo) {
+                let search = this.state.search.set('studentNo', this.props.student.returnStudentNo)
                 this.setState({ search });
             }
         } catch (err) {
@@ -64,9 +70,8 @@ class ClassAttendanceSearch extends Component {
 
     getListSemester = async () => {
         try {
-            let classAttendancetObj1 = new classAttendance()
-            let listSemester = await classAttendancetObj1.callListSemester()
-            listSemester.length > 0 && this.setState({ listSemester })
+            await this.props.callListSemester()
+            this.props.semester.listSemester.length > 0 && this.setState({ listSemester:this.props.semester.listSemester })
         } catch (err) {
             console.log(err)
         }
@@ -74,9 +79,8 @@ class ClassAttendanceSearch extends Component {
 
     getListSubject = async () => {
         try {
-            let classAttendancetObj2 = new classAttendance()
-            let listSubject = await classAttendancetObj2.callListSubject()
-            listSubject.length > 0 && this.setState({ listSubject })
+            await this.props.callListSubject()
+            this.props.subject.listSubject.length > 0 && this.setState({ listSubject:this.props.subject.listSubject })
         } catch (err) {
             console.log(err)
         }
@@ -100,9 +104,8 @@ class ClassAttendanceSearch extends Component {
                     .set('endDateSTR', dateFormat(this.state.tmpEndDate, "yyyy-mm-dd"));
                 this.setState({ search });
                 this.getStudentNo()
-                let classAttendanceObj = new classAttendance()
-                let listSearchClassAttendance = await classAttendanceObj.listSearchClassAttendance(this.state.search)
-                this.setState({ listSearchClassAttendance })
+                 await this.props.listSearchClassAttendance(this.state.search)
+                this.setState({ listSearchClassAttendance:this.props.classAttendance.listSearchClassAttendance })
                 if (this.state.listSearchClassAttendance.length === 0) {
                     alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
                         this.clear()
@@ -121,8 +124,7 @@ class ClassAttendanceSearch extends Component {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('10')
+            this.props.writeLogLogout('10')
         }
     }
 
@@ -131,14 +133,12 @@ class ClassAttendanceSearch extends Component {
             let stateLocal = localStorage.getItem('stateClassAttendanceSearch')
             let search = await Map(JSON.parse(stateLocal))
             this.setState({ search })
-            let classAttendanceObj = new classAttendance()
-            let listSearchClassAttendance = await classAttendanceObj.listSearchClassAttendance(this.state.search)
-            this.setState({ listSearchClassAttendance })
+            await this.props.listSearchClassAttendance(this.state.search)
+            this.setState({ listSearchClassAttendance:this.props.classAttendance.listSearchClassAttendance })
         } catch (err) {
             console.log(err)
         } finally {
-            let log = new login()
-            log.writeLogLogout('10')
+            this.props.writeLogLogout('10')
         }
     }
 
@@ -422,4 +422,20 @@ class ClassAttendanceSearch extends Component {
         )
     }
 }
-export default ClassAttendanceSearch;
+
+const mapStateToProps = state => ({
+    student: state.student,
+    semester: state.semester,
+    subject:state.subject,
+    classAttendance:state.classAttendance
+});
+
+export default connect(mapStateToProps,
+    {
+        callGetStudentNoByStudentCodeName,
+        callListSemester,
+        callListSubject,
+        listSearchClassAttendance,
+        writeLogLogout
+    })
+    (withRouter(ClassAttendanceSearch))

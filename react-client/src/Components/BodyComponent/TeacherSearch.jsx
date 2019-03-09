@@ -1,12 +1,17 @@
 import { Map } from 'immutable'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 import ReactTable from 'react-table'
 
 import 'react-table/react-table.css'
 
-import login from './../Prototype/login'
-import teacher from './../Prototype/teacher'
+import {
+    listSearchTeacher
+} from './../Actions/Teacher';
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class TeacherSearch extends Component {
     constructor() {
@@ -38,9 +43,8 @@ class TeacherSearch extends Component {
                 .set('teacherClassCount', this.state.tmpTeacherClassCount)
                 .set('teacherStatus', this.state.tmpTeacherStatus)
             this.setState({ search });
-            let teacherObj = new teacher()
-            let listSearchTeacher = await teacherObj.listSearchTeacher(this.state.search)
-            this.setState({ listSearchTeacher })
+            await this.props.listSearchTeacher(this.state.search)
+            this.setState({ listSearchTeacher: this.props.teacher.listSearchTeacher })
             this.state.listSearchTeacher.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
                 alertify.error('ไม่พบข้อมูลที่ค้นหา')
             }).show()
@@ -50,8 +54,7 @@ class TeacherSearch extends Component {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('5')
+            this.props.writeLogLogout('5')
         }
     }
 
@@ -60,14 +63,12 @@ class TeacherSearch extends Component {
             let stateLocal = localStorage.getItem('stateTeacherSearch')
             let search = await Map(JSON.parse(stateLocal))
             this.setState({ search })
-            let teacherObj = new teacher()
-            let listSearchTeacher = await teacherObj.listSearchTeacher(this.state.search)
-            this.setState({ listSearchTeacher })
+            await this.props.listSearchTeacher(this.state.search)
+            this.setState({ listSearchTeacher: this.props.teacher.listSearchTeacher })
         } catch (err) {
             console.log(err)
         } finally {
-            let log = new login()
-            log.writeLogLogout('5')
+            this.props.writeLogLogout('5')
         }
     }
 
@@ -169,4 +170,12 @@ class TeacherSearch extends Component {
     }
 }
 
-export default TeacherSearch;
+const mapStateToProps = state => ({
+    teacher: state.teacher
+});
+
+export default connect(mapStateToProps,
+    {
+        listSearchTeacher,
+        writeLogLogout
+    })(withRouter(TeacherSearch))

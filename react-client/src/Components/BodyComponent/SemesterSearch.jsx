@@ -1,12 +1,17 @@
 import { Map } from 'immutable'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect, Link,withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 import ReactTable from 'react-table'
 
 import 'react-table/react-table.css'
 
-import login from './../Prototype/login'
-import semester from './../Prototype/semester'
+import {
+    listSearchSemester
+} from './../Actions/Semester'
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class SemesterSearch extends Component {
     constructor() {
@@ -31,24 +36,22 @@ class SemesterSearch extends Component {
 
     searchSemester = async () => {
         try {
-            let search = await this.state.search.set('semesterStatusNo', this.state.tmpSemesterStatusNo)
-                .set('semesterTerm', this.state.tmpSemesterTerm)
-                .set('semesterYear', this.state.tmpSemesterYear)
-            this.setState({ search });
-            let semesterObj = new semester()
-            let listSearchSemester = await semesterObj.listSearchSemester(this.state.search)
-            this.setState({ listSearchSemester })
-            this.state.listSearchSemester.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
-                alertify.error('ไม่พบข้อมูล')
-            }).show()
-            localStorage.setItem('stateSemesterSearch', JSON.stringify(this.state.search));
+        let search = await this.state.search.set('semesterStatusNo', this.state.tmpSemesterStatusNo)
+            .set('semesterTerm', this.state.tmpSemesterTerm)
+            .set('semesterYear', this.state.tmpSemesterYear)
+        this.setState({ search });
+        await this.props.listSearchSemester(this.state.search)
+        this.setState({ listSearchSemester: this.props.semester.listSearchSemester })
+        this.state.listSearchSemester.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
+            alertify.error('ไม่พบข้อมูล')
+        }).show()
+        localStorage.setItem('stateSemesterSearch', JSON.stringify(this.state.search));
         } catch (err) {
             alertify.alert('ภาคการศึกษา', err, () => {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('3')
+            this.props.writeLogLogout('3')
         }
     }
 
@@ -57,14 +60,12 @@ class SemesterSearch extends Component {
             let stateLocal = localStorage.getItem('stateSemesterSearch')
             let search = await Map(JSON.parse(stateLocal))
             this.setState({ search })
-            let semesterObj = new semester()
-            let listSearchSemester = await semesterObj.listSearchSemester(this.state.search)
-            this.setState({ listSearchSemester })
+            await this.props.listSearchSemester(this.state.search)
+            this.setState({ listSearchSemester: this.props.semester.listSearchSemester })
         } catch (err) {
             console.log(err)
         } finally {
-            let log = new login()
-            log.writeLogLogout('3')
+            this.props.writeLogLogout('3')
         }
     }
 
@@ -151,4 +152,13 @@ class SemesterSearch extends Component {
     }
 }
 
-export default SemesterSearch;
+const mapStateToProps = state => ({
+    semester: state.semester
+});
+
+export default connect(mapStateToProps,
+    {
+        listSearchSemester,
+        writeLogLogout
+    })
+    (withRouter(SemesterSearch))

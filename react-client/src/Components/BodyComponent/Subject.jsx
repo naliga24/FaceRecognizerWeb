@@ -1,8 +1,17 @@
 import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 
 import login from './../Prototype/login'
-import subject from './../Prototype/subject'
+import {
+    callListTeacher,
+    checkSubjectId,
+    editSubject,
+    addSubject
+} from './../Actions/Subject';
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class Subject extends Component {
     constructor(props) {
@@ -28,9 +37,9 @@ class Subject extends Component {
 
     componentDidMount = async () => {
         try {
-            let subjectObj = new subject()
-            let listTeacher = await subjectObj.callListTeacher()
-            listTeacher.length > 0 && this.setState({ listTeacher })
+            await this.props.callListTeacher()
+            this.props.teacher.listTeacher.length > 0 ? 
+            this.setState({ listTeacher: this.props.teacher.listTeacher }) : this.setState({ listTeacher: null })
         } catch (err) {
             console.log(err)
         }
@@ -39,7 +48,6 @@ class Subject extends Component {
     saveSubject = async () => {
         try {
             if (this.state.subjectCodeName.length === 7 && this.state.subjectName && this.state.teacherNo) {
-                let subjectObj = new subject()
                 if ((this.state.subjectCodeName !== this.state.oldSubjectCodeName)
                     || (this.state.subjectName !== this.state.oldSubjectName)
                     || (this.state.studentLastName !== this.state.oldStudentLastName)
@@ -47,32 +55,33 @@ class Subject extends Component {
                     || (this.state.teacherNo !== this.state.oldTeacherNo)
                     || (this.state.subjectStatus !== this.state.oldSubjectStatus)) {
                     if (this.state.subjectCodeName !== this.state.oldSubjectCodeName) {
-                        let subjectIdFlag = await subjectObj.checkSubjectId(this.state.subjectCodeName)
-                        if (subjectIdFlag === '0') {
+                        await this.props.checkSubjectId(this.state.subjectCodeName)
+                        if (this.props.subject.subjectIdFlag === 0) {
                             if (this.state.flagEdit) {
-                                subjectObj.editSubject(this.state.subjectCodeName, this.state.subjectName, this.state.subjectDescription, this.state.teacherNo, this.state.subjectStatus, this.state.subjectNo, this.clear)
+                                this.props.editSubject(this.state.subjectCodeName, this.state.subjectName, this.state.subjectDescription, this.state.teacherNo, this.state.subjectStatus, this.state.subjectNo)
                                 alertify.alert('แก้ไข', `แก้ไขข้อมูลวิชาเปิดสอน "${this.state.subjectCodeName}" เรียบร้อย`, () => {
                                     this.gotoSubjectSearch()
                                 }).show()
                             } else {
-                                subjectObj.addSubject(this.state.subjectCodeName, this.state.subjectName, this.state.subjectDescription, this.state.teacherNo, this.clear)
+                                this.props.addSubject(this.state.subjectCodeName, this.state.subjectName, this.state.subjectDescription, this.state.teacherNo)
                                 alertify.alert('เพิ่ม', `เพิ่มข้อมูลวิชาเปิดสอน "${this.state.subjectCodeName}" เรียบร้อย`, () => {
                                     alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
                                 }).show()
+                                this.clear()
                             }
-                        } else if (subjectIdFlag === '1' && this.state.flagEdit) {
+                        } else if (this.props.subject.subjectIdFlag === 1 && this.state.flagEdit) {
                             alertify.alert('แก้ไข', `ไม่สามารถเแก้ไขข้อมูลวิชาเปิดสอน "${this.state.subjectCodeName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()
                         }
-                        else if (subjectIdFlag === '1' && !this.state.flagEdit) {
+                        else if (this.props.subject.subjectIdFlag === 1 && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลวิชาเปิดสอน "${this.state.subjectCodeName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
 
                     } else if (this.state.flagEdit) {
-                        subjectObj.editSubject(this.state.subjectCodeName, this.state.subjectName, this.state.subjectDescription, this.state.teacherNo, this.state.subjectStatus, this.state.subjectNo, this.clear)
+                        this.props.editSubject(this.state.subjectCodeName, this.state.subjectName, this.state.subjectDescription, this.state.teacherNo, this.state.subjectStatus, this.state.subjectNo)
                         alertify.alert('แก้ไข', `แก้ไขข้อมูลวิชาเปิดสอน "${this.state.subjectCodeName}" เรียบร้อย`, () => {
                             this.gotoSubjectSearch()
                         }).show()
@@ -104,11 +113,10 @@ class Subject extends Component {
             }).show()
         }
         finally {
-            let log = new login()
-            log.writeLogLogout('2')
+            this.props.writeLogLogout('2')
         }
     }
-    
+
     add = () => {
         this.setState({ buttonDisble: !this.state.buttonDisble });
     }
@@ -167,4 +175,16 @@ class Subject extends Component {
     }
 }
 
-export default withRouter(Subject)
+const mapStateToProps = state => ({
+    teacher: state.teacher,
+    subject:state.subject
+});
+
+export default connect(mapStateToProps,
+    {
+        callListTeacher,
+        checkSubjectId,
+        editSubject,
+        addSubject,
+        writeLogLogout
+    })(withRouter(Subject))

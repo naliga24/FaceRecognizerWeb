@@ -1,8 +1,15 @@
 import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 
-import login from './../Prototype/login'
-import teacher from './../Prototype/teacher'
+import {
+    checkTeacherFirstNameAndLastName,
+    editTeacher,
+    addTeacher
+} from './../Actions/Teacher';
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class Teacher extends Component {
     constructor(props) {
@@ -23,63 +30,61 @@ class Teacher extends Component {
 
     saveTeacher = async () => {
         try {
-            if (this.state.teacherFirstName && this.state.teacherLastName) {
-                let teacherObj = new teacher()
+        if (this.state.teacherFirstName && this.state.teacherLastName) {
+            if ((this.state.teacherFirstName !== this.state.oldTeaherFirstName)
+                || (this.state.teacherLastName !== this.state.oldTeaherLastName)
+                || (this.state.teacherStatus !== this.state.oldTeaherStatus)) {
                 if ((this.state.teacherFirstName !== this.state.oldTeaherFirstName)
-                    || (this.state.teacherLastName !== this.state.oldTeaherLastName)
-                    || (this.state.teacherStatus !== this.state.oldTeaherStatus)) {
-                    if ((this.state.teacherFirstName !== this.state.oldTeaherFirstName)
-                        || (this.state.teacherLastName !== this.state.oldTeaherLastName)) {
-                        let TeacherFirstNameAndLastNameFlag = await teacherObj.checkTeacherFirstNameAndLastName(this.state.teacherFirstName, this.state.teacherLastName)
-                        if (TeacherFirstNameAndLastNameFlag === '0') {
-                            if (this.state.flagEdit) {
-                                teacherObj.editTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.state.teacherStatus, this.state.teacherNo, this.clear)
-                                alertify.alert('แก้ไข', `แก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`, () => {
-                                    this.gotoTeacherSearch()
-                                }).show()
-                            } else {
-                                teacherObj.addTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.clear)
-                                alertify.alert('เพิ่ม', `เพิ่มข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`, () => {
-                                    alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
-                                }).show()
-                            }
-                        } else if (TeacherFirstNameAndLastNameFlag === '1' && this.state.flagEdit) {
-                            alertify.alert('แก้ไข', `ไม่สามารถเแก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" ชื่อมีในระบบแล้ว`, () => {
-                                alertify.error('ไม่สามารถเแก้ไขข้อมูล')
+                    || (this.state.teacherLastName !== this.state.oldTeaherLastName)) {
+                    await this.props.checkTeacherFirstNameAndLastName(this.state.teacherFirstName, this.state.teacherLastName)
+                    if (this.props.teacher.TeacherFirstNameAndLastNameFlag === 0) {
+                        if (this.state.flagEdit) {
+                            this.props.editTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.state.teacherStatus, this.state.teacherNo, this.clear)
+                            alertify.alert('แก้ไข', `แก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`, () => {
+                                this.gotoTeacherSearch()
                             }).show()
-                        } else if (TeacherFirstNameAndLastNameFlag === '1' && !this.state.flagEdit) {
-                            alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" ชื่อมีในระบบแล้ว`, () => {
-                                alertify.error('ไม่สามารถเพิ่มข้อมูล')
+                        } else {
+                            this.props.addTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.clear)
+                            alertify.alert('เพิ่ม', `เพิ่มข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`, () => {
+                                alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
                             }).show()
                         }
-                    } else if (this.state.flagEdit) {
-                        teacherObj.editTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.state.teacherStatus, this.state.teacherNo, this.clear)
-                        alertify.alert('แก้ไข', `แก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`, () => {
-                            this.gotoTeacherSearch()
+                    } else if (this.props.teacher.TeacherFirstNameAndLastNameFlag === 1 && this.state.flagEdit) {
+                        alertify.alert('แก้ไข', `ไม่สามารถเแก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" ชื่อมีในระบบแล้ว`, () => {
+                            alertify.error('ไม่สามารถเแก้ไขข้อมูล')
+                        }).show()
+                    } else if (this.props.teacher.TeacherFirstNameAndLastNameFlag === 1 && !this.state.flagEdit) {
+                        alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" ชื่อมีในระบบแล้ว`, () => {
+                            alertify.error('ไม่สามารถเพิ่มข้อมูล')
                         }).show()
                     }
                 } else if (this.state.flagEdit) {
-                    alertify.alert('แก้ไข', `ข้อมูลไม่มีการเปลี่ยนแปลง`, () => {
-                        alertify.success(`ข้อมูลไม่มีการเปลี่ยนแปลง`)
+                    this.props.editTeacher(this.state.teacherFirstName, this.state.teacherLastName, this.state.teacherStatus, this.state.teacherNo, this.clear)
+                    alertify.alert('แก้ไข', `แก้ไขข้อมูลอาจารย์ "${this.state.teacherFirstName} ${this.state.teacherLastName}" เรียบร้อย`, () => {
+                        this.gotoTeacherSearch()
                     }).show()
                 }
-            } else if (!this.state.teacherFirstName) {
-                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุชื่ออาจรย์', () => {
-                    alertify.error('โปรดระบุชื่ออาจรย์')
-                }).show()
-
-            } else if (!this.state.teacherLastName) {
-                alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุนามสกุลอาจารย์', () => {
-                    alertify.error('โปรดระบุนามสกุลอาจารย์')
+            } else if (this.state.flagEdit) {
+                alertify.alert('แก้ไข', `ข้อมูลไม่มีการเปลี่ยนแปลง`, () => {
+                    alertify.success(`ข้อมูลไม่มีการเปลี่ยนแปลง`)
                 }).show()
             }
+        } else if (!this.state.teacherFirstName) {
+            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุชื่ออาจรย์', () => {
+                alertify.error('โปรดระบุชื่ออาจรย์')
+            }).show()
+
+        } else if (!this.state.teacherLastName) {
+            alertify.alert('เพิ่ม/แก้ไข', 'โปรดระบุนามสกุลอาจารย์', () => {
+                alertify.error('โปรดระบุนามสกุลอาจารย์')
+            }).show()
+        }
         } catch (err) {
             alertify.alert('อาจารย์', err, () => {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('5')
+            this.props.writeLogLogout('5')
         }
     }
 
@@ -132,4 +137,14 @@ class Teacher extends Component {
     }
 }
 
-export default withRouter(Teacher);
+const mapStateToProps = state => ({
+    teacher: state.teacher
+});
+
+export default connect(mapStateToProps,
+    {
+        checkTeacherFirstNameAndLastName,
+        editTeacher,
+        addTeacher,
+        writeLogLogout
+    })(withRouter(Teacher))

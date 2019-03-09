@@ -1,12 +1,17 @@
 import { Map } from 'immutable'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 import ReactTable from 'react-table'
 
 import 'react-table/react-table.css'
 
-import login from './../Prototype/login'
-import student from './../Prototype/student'
+import {
+    listSearchStudent
+} from './../Actions/Student'
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class StudentSearch extends Component {
     constructor() {
@@ -34,13 +39,12 @@ class StudentSearch extends Component {
     searchStudent = async () => {
         try {
             let search = await this.state.search.set('studentCodeName', this.state.tmpStudentCodeName)
-                .set('studentFirstNam e', this.state.tmpStudentFirstName)
+                .set('studentFirstName', this.state.tmpStudentFirstName)
                 .set('studentLastName', this.state.tmpStudentLastName)
                 .set('studentStatus', this.state.tmpStudentStatus)
             this.setState({ search });
-            let studentObj = new student()
-            let listSearchStudent = await studentObj.listSearchStudent(this.state.search)
-            this.setState({ listSearchStudent })
+            await this.props.listSearchStudent(this.state.search)
+            this.setState({ listSearchStudent: this.props.student.listSearchStudent })
             this.state.listSearchStudent.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
                 alertify.error('ไม่พบข้อมูลที่ค้นหา')
             }).show()
@@ -50,8 +54,7 @@ class StudentSearch extends Component {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('4')
+            this.props.writeLogLogout('4')
         }
     }
 
@@ -60,14 +63,12 @@ class StudentSearch extends Component {
             let stateLocal = localStorage.getItem('stateStudentSearch')
             let search = await Map(JSON.parse(stateLocal))
             this.setState({ search })
-            let studentObj = new student()
-            let listSearchStudent = await studentObj.listSearchStudent(this.state.search)
-            this.setState({ listSearchStudent })
+            await this.props.listSearchStudent(this.state.search)
+            this.setState({ listSearchStudent: this.props.student.listSearchStudent })
         } catch (err) {
             console.log(err)
         } finally {
-            let log = new login()
-            log.writeLogLogout('4')
+            this.props.writeLogLogout('4')
         }
     }
 
@@ -166,4 +167,13 @@ class StudentSearch extends Component {
     }
 }
 
-export default StudentSearch;
+const mapStateToProps = state => ({
+    student: state.student
+});
+
+export default connect(mapStateToProps,
+    {
+        listSearchStudent,
+        writeLogLogout
+    })
+    (withRouter(StudentSearch))

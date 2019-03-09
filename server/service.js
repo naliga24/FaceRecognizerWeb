@@ -51,9 +51,9 @@ module.exports = (app) => {
   app.post('/selectTeacherInfoSearchTeacher', teacher.selectTeacherInfoSearchTeacher)
   /* Student.jsx */
   app.get('/selectStudentInfoStudentCodeName/:studentCodeName', student.selectStudentInfoStudentCodeName)
-  app.post('/updateStudentInfo', upload.single('studentImage'), student.updateStudentInfo)
+  app.post('/updateStudentInfo', student.updateStudentInfo)
   app.post('/updateStudentInfoNoImg', student.updateStudentInfoNoImg)
-  app.post('/insertStudentInfo', upload.single('studentImage'), student.insertStudentInfo)
+  app.post('/insertStudentInfo', student.insertStudentInfo)
   /* StudentSearch.jsx */
   app.post('/selectStudentInfoSearchStudent', student.selectStudentInfoSearchStudent)
   /* Semester.jsx */

@@ -1,6 +1,9 @@
 import { browserHistory } from 'react-router';
-import { BrowserRouter as Router, Route, Link, Provider } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import React, { Component } from 'react';
+
+import { Provider } from 'react-redux';
+import store from './store';
 
 import ClassAttendance from './BodyComponent/ClassAttendance';
 import ClassAttendanceSearch from './BodyComponent/ClassAttendanceSearch';
@@ -35,6 +38,7 @@ class App extends Component {
   }
   render() {
     return (
+      <Provider store={store}>
       <Router>
         <div>
           {!this.state.pdf && <NavBar />}
@@ -59,6 +63,7 @@ class App extends Component {
           {!this.state.pdf && <Footer />}
         </div>
       </Router>
+      </Provider>
     )
   }
 }

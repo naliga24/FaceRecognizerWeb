@@ -2,9 +2,15 @@ import { Map } from 'immutable'
 
 import { Redirect, withRouter } from 'react-router-dom';
 import React, { Component } from 'react';
-
-import classAttendance from './../Prototype/classAttendance';
-import login from './../Prototype/login';
+import { connect } from 'react-redux';
+import {
+    updateClassAttendance,
+    callGetStudentNoByClassAttendanceStudentKeyCodeName,
+    callListSearchStudent1
+} from './../Actions/ClassAttendance'
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 const imagenotfound = require('./../../../../server/image_assets/notfound(280&280).gif')
 
@@ -35,12 +41,10 @@ class ClassAttendance extends Component {
             studentNoFromClassAttendanceStudentKeyCodeName: '',//update
             studentNoFromSearch: '',//update
             confirmStatusNo: '',//update
-            search: Map({
-                studentCodeName: '',//search
-                studentFirstName: '',//search
-                studentLastName: '',//search
-                studentStatus: '',//search    
-            }),
+            studentCodeName: '',//search
+            studentFirstName: '',//search
+            studentLastName: '',//search
+            studentStatus: '',//search    
             flagEdit: this.props.location.flagEdit,
             flagConfirm: this.props.location.flagConfirm,
         };
@@ -52,27 +56,24 @@ class ClassAttendance extends Component {
 
     searchStudent = async () => {
         try {
-            let classAttendanceObj = new classAttendance()
-            let dataListStudent = await classAttendanceObj.callListSearchStudent(this.state.search)
-            this.setState({ dataListStudent })
-            this.state.dataListStudent.length === 0 && alertify.alert('ไม่พบข้อมูลนักศึกษาที่ค้นหา')
+            await this.props.callListSearchStudent1(this.state)
+            this.setState({ listSearchStudent: this.props.student.listSearchStudent1 })
+            this.state.listSearchStudent.length === 0 && alertify.alert('ไม่พบข้อมูลนักศึกษาที่ค้นหา')
         } catch (err) {
             alertify.alert('ค้นหาการเข้าชั้นเรียน', err, () => {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('10')
+            this.props.writeLogLogout('10')
         }
     }
 
     getStudentNoByClassAttendanceStudentKeyCodeName = async () => {
         try {
-            let classAttendanceObj = new classAttendance()
-            let studentNoFromClassAttendanceStudentKeyCodeName = await classAttendanceObj.callGetStudentNoByClassAttendanceStudentKeyCodeName(this.state.showClassAttendanceStudentKeyCodeName)
-            studentNoFromClassAttendanceStudentKeyCodeName && this.setState({
-                studentNoFromClassAttendanceStudentKeyCodeName: studentNoFromClassAttendanceStudentKeyCodeName.STUDENT_NO,
-                studentImageFromKeyCodeName: studentNoFromClassAttendanceStudentKeyCodeName.STUDENT_IMAGE
+            await this.props.callGetStudentNoByClassAttendanceStudentKeyCodeName(this.state.showClassAttendanceStudentKeyCodeName)
+            this.props.student.studentNoFromClassAttendanceStudentKeyCodeName && this.setState({
+                studentNoFromClassAttendanceStudentKeyCodeName: this.props.student.studentNoFromClassAttendanceStudentKeyCodeName[0].STUDENT_NO,
+                studentImageFromKeyCodeName: this.props.student.studentNoFromClassAttendanceStudentKeyCodeName[0].STUDENT_IMAGE
             })
         } catch (err) {
             console.log(err)
@@ -82,31 +83,14 @@ class ClassAttendance extends Component {
     saveClassAttendance = async (studentNo, confirmStatusNo) => {
         try {
             this.setState({ confirmStatusNo })
-            let classAttendanceObj = new classAttendance()
-            let updateClassAttendanceFlag = await classAttendanceObj.updateClassAttendance(studentNo, confirmStatusNo, this.state.showClassAttendanceCode)
-            if (this.state.flagConfirm) {
-                if (updateClassAttendanceFlag === '1') {
-                    alertify.alert('ยืนยันการเข้าชั้นเรียนเรียบร้อย')
-                }
-                else if (updateClassAttendanceFlag === '0') {
-                    alertify.alert('ไม่สามารถยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
-                }
-            } else if (this.state.flagEdit) {
-                if (updateClassAttendanceFlag === '1') {
-                    alertify.alert('แก้ไขการยืนยันการเข้าชั้นเรียนเรียบร้อย')
-                }
-                else if (updateClassAttendanceFlag === '0') {
-                    alertify.alert('ไม่สามารถแก้ไขการยืนยันการเข้าชั้นเรียนได้(เกิดข้อผิดพลาด)')
-                }
-            }
+            await this.props.updateClassAttendance(studentNo, confirmStatusNo, this.state.showClassAttendanceCode)
             this.gotoClassAttendanceSearch()
         } catch (err) {
             alertify.alert('การเข้าชั้นเรียน', err, () => {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('10')
+            this.props.writeLogLogout('10')
         }
     }
 
@@ -217,7 +201,7 @@ class ClassAttendance extends Component {
                             </thead>
                             <tbody>
                                 {
-                                    this.state.dataListStudent ? this.state.dataListStudent.map((item, index) => (
+                                    this.state.listSearchStudent ? this.state.listSearchStudent.map((item, index) => (
                                         <tr>
                                             <td>{item.STUDENT_CODE_NAME}</td>
                                             <td>{item.STUDENT_FIRST_NAME}</td>
@@ -241,4 +225,17 @@ class ClassAttendance extends Component {
         )
     }
 }
-export default withRouter(ClassAttendance)
+
+const mapStateToProps = state => ({
+    classAttendance: state.classAttendance,
+    student: state.student
+});
+
+export default connect(mapStateToProps,
+    {
+        updateClassAttendance,
+        callGetStudentNoByClassAttendanceStudentKeyCodeName,
+        callListSearchStudent1,
+        writeLogLogout
+    })
+    (withRouter(ClassAttendance))

@@ -1,12 +1,18 @@
 import { Map } from 'immutable'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
+
 import ReactTable from 'react-table'
 
 import 'react-table/react-table.css'
 
-import login from './../Prototype/login'
-import user from './../Prototype/user'
+import {
+    searchUser
+} from './../Actions/User';
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class UserSearch extends Component {
     constructor() {
@@ -31,9 +37,8 @@ class UserSearch extends Component {
             let search = await this.state.search.set('userLogin', this.state.tmpUserLogin)
                 .set('userName', this.state.tmpUserName)
             this.setState({ search });
-            let userObj = new user()
-            let listSearchUser = await userObj.searchUser(this.state.search)
-            this.setState({ listSearchUser })
+            await this.props.searchUser(this.state.search)
+            this.setState({ listSearchUser: this.props.user.listSearchUser })
             this.state.listSearchUser.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
                 alertify.error('ไม่พบข้อมูลที่ค้นหา')
             }).show()
@@ -43,8 +48,7 @@ class UserSearch extends Component {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('9')
+            this.props.writeLogLogout('9')
         }
     }
 
@@ -53,20 +57,17 @@ class UserSearch extends Component {
             let stateLocal = localStorage.getItem('stateUserSearch')
             let search = await Map(JSON.parse(stateLocal))
             this.setState({ search })
-            let userObj = new user()
-            let listSearchUser = await userObj.searchUser(this.state.search)
-            this.setState({ listSearchUser })
+            await this.props.searchUser(this.state.search)
+            this.setState({ listSearchUser: this.props.user.listSearchUser })
         } catch (err) {
             console.log(err)
         } finally {
-            let log = new login()
-            log.writeLogLogout('9')
+            this.props.writeLogLogout('9')
         }
     }
 
     onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
-        console.log(this.state)
     }
 
     render() {
@@ -157,4 +158,12 @@ class UserSearch extends Component {
     }
 }
 
-export default UserSearch;
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps,
+    {
+        searchUser,
+        writeLogLogout
+    })(withRouter(UserSearch))        

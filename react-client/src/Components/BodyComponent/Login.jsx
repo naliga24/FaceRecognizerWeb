@@ -1,8 +1,17 @@
-import { Redirect } from 'react-router-dom'
+import { Redirect, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 
-import login from './../Prototype/login'
-
+import {
+    callCheckUserLogin,
+    callCheckUserPassword,
+    callCheckUserStatus,
+    callGetPermissionDetail,
+    writeLogLogin,
+    writeLogLoginError,
+    callGetLoginNo,
+    writeLogLogout
+} from './../Actions/Login'
 
 class Login extends Component {
     constructor() {
@@ -12,7 +21,6 @@ class Login extends Component {
             userLogin: '',
             userPassword: '',
         };
-
     }
 
     onChange = (e) => {
@@ -20,31 +28,32 @@ class Login extends Component {
     }
 
     login = async () => {
+        console.log('login')
         if (this.state.userLogin && this.state.userPassword) {
-            let tmp = new login()
             try {
-                let userLoginFlag = await tmp.callCheckUserLogin(this.state.userLogin)
-                if (userLoginFlag === '1') {
-                    let userPasswordFlag = await tmp.callCheckUserPassword(this.state.userLogin, this.state.userPassword)
-                    if (userPasswordFlag === '1') {
-                        let userStatusFlag = await tmp.callCheckUserStatus(this.state.userLogin, this.state.userPassword)
-                        if (userStatusFlag === '1') {
-                            if(await tmp.callGetPermissionDetail(this.state.userLogin, this.state.userPassword)===true){
-                                tmp.writeLogLogin('1')
-                                window.location.reload()
-                            }
-                        } else if (userStatusFlag === '0') {
+                await this.props.callCheckUserLogin(this.state.userLogin)
+                if (this.props.user.userLoginFlag === 1) {
+                    await this.props.callCheckUserPassword(this.state.userLogin, this.state.userPassword)
+                    if (this.props.user.userPasswordFlag === 1) {
+                        await this.props.callCheckUserStatus(this.state.userLogin, this.state.userPassword)
+                        if (this.props.user.userStatusFlag === 1) {
+                            await this.props.callGetPermissionDetail(this.state.userLogin, this.state.userPassword)
+                            sessionStorage.setItem('token', this.props.userType.token)
+                            await this.props.writeLogLogin('1')
+                            window.location.reload()
+                        } else if (this.props.user.userStatusFlag === 0) {
                             alertify.alert('เข้าระบบ', `สถานะผู้ใช้ระบบเท่ากับ “ไม่ใช้งาน”`, () => {
                                 alertify.error('ไม่สามารถเข้าระบบ')
                             }).show()
                         }
-                    } else if (userPasswordFlag === '0') {
+                    } else if (this.props.user.userPasswordFlag === 0) {
                         alertify.alert('เข้าระบบ', `ชื่อ password ไม่ถูกต้อง`, () => {
                             alertify.error('ไม่สามารถเข้าระบบ')
                         }).show()
-                        tmp.writeLogLoginError('11', this.state.userLogin)
+                        await this.props.callGetLoginNo(this.state.userLogin)
+                        this.props.writeLogLoginError('11', this.props.user.userNo)
                     }
-                } else if (userLoginFlag === '0') {
+                } else if (this.props.user.userLoginFlag === 0) {
                     alertify.alert('เข้าระบบ', `ชื่อ username ไม่ถูกต้อง`, () => {
                         alertify.error('ไม่สามารถเข้าระบบ')
                     }).show()
@@ -84,4 +93,20 @@ class Login extends Component {
     }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+    user: state.user,
+    userType: state.userType,
+});
+
+export default connect(mapStateToProps,
+    {
+        callCheckUserLogin,
+        callCheckUserPassword,
+        callCheckUserStatus,
+        callGetPermissionDetail,
+        writeLogLogin,
+        writeLogLoginError,
+        callGetLoginNo,
+        writeLogLogout
+    })
+    (withRouter(Login))

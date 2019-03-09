@@ -1,8 +1,14 @@
-import { Redirect } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import configuration from './../Prototype/configuration';
-import login from './../Prototype/login';
+import {
+    callListPermission,
+    editUserType
+} from './../Actions/Configuration'
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class Configuration extends Component {
     constructor() {
@@ -31,9 +37,8 @@ class Configuration extends Component {
 
     selectUserTypeInfo = async () => {
         try {
-            let configObj = new configuration()
-            let listPermission = await configObj.callListPermission()
-            this.setState({ listPermission })
+            await this.props.callListPermission()
+            this.setState({ listPermission: this.props.userType.listPermission })
         } catch (err) {
             console.log(err)
         }
@@ -59,23 +64,14 @@ class Configuration extends Component {
                 }
             }
             if (userTypePermission[0] === '1' || userTypePermission[1] === '1' || userTypePermission[2] === '1' || userTypePermission[3] === '1' || userTypePermission[4] === '1' || userTypePermission[5] === '1' || userTypePermission[6] === '1') {
-                let configObj = new configuration()
-                let editFlag = await configObj.editUserType(userTypePermission, this.state.userTypeNo)
-                if (editFlag === '1') {
+                await this.props.editUserType(userTypePermission, this.state.userTypeNo)
+                console.log(this.props.userType.editFlag)
+                if (this.props.userType.editFlag === 1) {
                     alertify.alert('แก้ไข', `แก้ไขสิทธิ์ในการเข้าใช้งานของ "${this.state.userTypeName}" เรียบร้อย`, () => {
                         alertify.success(`แก้ไขสิทธิ์เรียบร้อย`)
                     }).show()
                     this.selectUserTypeInfo()
-                    this.setState({
-                        subject: null,
-                        semester: null,
-                        student: null,
-                        teacher: null,
-                        classAttendance: null,
-                        user: null,
-                        report: null,
-                        inputDisable: true
-                    })
+                    this.clear()
                 }
             } else {
                 alertify.alert('แก้ไข', `ต้องกำหนดสิทธิ์ในการเข้าใช้งานอย่างน้อย 1 เมนู`, () => {
@@ -87,8 +83,7 @@ class Configuration extends Component {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('8')
+            this.props.writeLogLogout('8')
         }
     }
 
@@ -103,12 +98,24 @@ class Configuration extends Component {
             }
             i += 1
         }
-        let htmlElement = document.getElementById("userTypeName")
-        htmlElement.value = this.state.listPermission[index].USER_TYPE_NAME
         this.setState({
             userTypeNo: this.state.listPermission[index].USER_TYPE_NO,
             userTypeName: this.state.listPermission[index].USER_TYPE_NAME,
             inputDisable: false
+        })
+    }
+
+    clear = () => {
+        this.setState({
+            subject: null,
+            semester: null,
+            student: null,
+            teacher: null,
+            classAttendance: null,
+            user: null,
+            report: null,
+            inputDisable: true,
+            userTypeName: '',
         })
     }
 
@@ -120,11 +127,13 @@ class Configuration extends Component {
                 <div class='configuration'>
                     <div class='button'>
                         <button type="submit" class="btn btn-default navbar-btn" onClick={this.saveConfiguration} disabled={this.state.inputDisable} >บันทึกข้อมูล</button>
+                        <button type="submit" class="btn btn-default navbar-btn" onClick={this.clear} >ยกเลิก</button>
+
                     </div>
 
                     <div class='status'>
                         <div id='top'>
-                            <label>ประเภทผู้ใช้งาน<input type="text" class="form-control" aria-describedby="sizing-addon1" id="userTypeName" disabled /></label>
+                            <label>ประเภทผู้ใช้งาน<input type="text" value={this.state.userTypeName} class="form-control" aria-describedby="sizing-addon1" disabled /></label>
                             <li class="list-group-item">
                                 <input type="checkbox" checked={this.state.subject} onClick={() => { this.setState({ subject: !this.state.subject }) }} disabled={this.state.inputDisable} /><span>วิชาเปิดสอน</span>
                             </li>
@@ -178,4 +187,14 @@ class Configuration extends Component {
     }
 }
 
-export default Configuration
+const mapStateToProps = state => ({
+    userType: state.userType
+});
+
+export default connect(mapStateToProps,
+    {
+        callListPermission,
+        editUserType,
+        writeLogLogout
+    })
+    (withRouter(Configuration))

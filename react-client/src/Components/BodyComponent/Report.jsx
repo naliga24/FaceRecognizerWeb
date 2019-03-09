@@ -1,11 +1,22 @@
 import { Redirect } from 'react-router-dom';
-import { BrowserRouter as Router, Route, Link, Provider } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Provider, withRouter } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 let dateFormat = require('dateformat')
 
-import login from './../Prototype/login'
-import report from './../Prototype/report'
+import {
+    callListSemester,
+    callListSubject,
+    callListPermissionAll,
+    callListReportAttendance,
+    displayReportAttendance,
+    callListReportTransaction,
+    displayReportTransaction
+} from './../Actions/Report'
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class Report extends Component {
     constructor(props) {
@@ -36,9 +47,8 @@ class Report extends Component {
 
     selectSemesterInfo = async () => {
         try {
-            let reportObj = new report()
-            let listSemester = await reportObj.callListSemester()
-            listSemester.length > 0 && this.setState({ listSemester })
+            await this.props.callListSemester()
+            this.props.semester.listSemester.length > 0 && this.setState({ listSemester: this.props.semester.listSemester })
         } catch (err) {
             console.log(err)
         }
@@ -46,9 +56,8 @@ class Report extends Component {
 
     selectSubjectInfo = async () => {
         try {
-            let reportObj = new report()
-            let listSubject = await reportObj.callListSubject()
-            listSubject.length > 0 && this.setState({ listSubject })
+            await this.props.callListSubject()
+            this.props.subject.listSubject.length > 0 && this.setState({ listSubject: this.props.subject.listSubject })
         } catch (err) {
             console.log(err)
         }
@@ -56,9 +65,8 @@ class Report extends Component {
 
     selectUserTypeInfo = async () => {
         try {
-            let tmp = new report()
-            let listUserType = await tmp.callListPermissionAll()
-            this.setState({ listUserType })
+            await this.props.callListPermissionAll()
+            this.setState({ listUserType: this.props.userType.listUserType })
         } catch (err) {
             console.log(err)
         }
@@ -78,11 +86,10 @@ class Report extends Component {
     getDataReportAttendance = async () => {
         try {
             if (this.state.subjectNo && this.state.semesterNo) {
-                let reportObj = new report()
-                let dataReport = await reportObj.callListReportAttendance(this.state)
-                if (dataReport) {
-                    let reportFlag = await reportObj.displayReportAttendance(dataReport, this.state.subjectCodeName, this.state.semesterName)
-                    if (reportFlag === '1') {
+                await this.props.callListReportAttendance(this.state)
+                if (this.props.classAttendance.dataReportAttendance) {
+                    await this.props.displayReportAttendance(this.props.classAttendance.dataReportAttendance, this.state.subjectCodeName, this.state.semesterName)
+                    if (this.props.report.reportAttendanceFlag === 1) {
                         window.open("/ShowPdfAttendance");
                     } else {
                         alertify.alert('รายงาน', 'โปรดลองใหม่อีกครั้ง', () => {
@@ -104,40 +111,37 @@ class Report extends Component {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('7')
+            this.props.writeLogLogout('7')
         }
     }
 
     getDataReportTransaction = async () => {
-            try {
-                if (this.state.startDateSTR && this.state.endDateSTR) {
-                let reportObj = new report()
-                let dataReport = await reportObj.callListReportTransaction(this.state)
-                if (dataReport) {
-                    let reportFlag = await reportObj.displayReportTransaction(dataReport, this.state.startDateSTR, this.state.endDateSTR, this.state.userTypeName)
-                    if (reportFlag === '1') {
-                        window.open("/ShowPdfTransaction");
-                    } else {
-                        alertify.alert('รายงาน', 'โปรดลองใหม่อีกครั้ง', () => {
-                            alertify.error('เกิดข้อผิดพลาด')
-                        })
-                    }
+        try {
+        if (this.state.startDateSTR && this.state.endDateSTR) {
+           await this.props.callListReportTransaction(this.state)
+            if (this.props.login.dataReportTransaction) {
+                 await this.props.displayReportTransaction(this.props.login.dataReportTransaction, this.state.startDateSTR, this.state.endDateSTR, this.state.userTypeName)
+                if (this.props.report.reportTransactionFlag === 1) {
+                    window.open("/ShowPdfTransaction");
                 } else {
-                    alertify.alert('รายงาน', 'ไม่พบรายการการเข้าใช้ระบบ', () => {
-                        alertify.error('ไม่พบข้อมูล')
+                    alertify.alert('รายงาน', 'โปรดลองใหม่อีกครั้ง', () => {
+                        alertify.error('เกิดข้อผิดพลาด')
                     })
                 }
-            }
-            } catch (err) {
-                alertify.alert('รายงาน', err, () => {
-                    alertify.error('เกิดข้อผิดพลาด')
-                }).show()
-            }finally{
-                let log = new login()
-                log.writeLogLogout('7')
+            } else {
+                alertify.alert('รายงาน', 'ไม่พบรายการการเข้าใช้ระบบ', () => {
+                    alertify.error('ไม่พบข้อมูล')
+                })
             }
         }
+        } catch (err) {
+            alertify.alert('รายงาน', err, () => {
+                alertify.error('เกิดข้อผิดพลาด')
+            }).show()
+        } finally {
+            this.props.writeLogLogout('7')
+        }
+    }
 
     handleChange = (name, date) => {
         let change1 = {}
@@ -234,4 +238,24 @@ class Report extends Component {
     }
 }
 
-export default Report;
+const mapStateToProps = state => ({
+    semester: state.semester,
+    subject: state.subject,
+    userType: state.userType,
+    classAttendance: state.classAttendance,
+    report: state.report,
+    login:state.login
+});
+
+export default connect(mapStateToProps,
+    {
+        callListSemester,
+        callListSubject,
+        callListPermissionAll,
+        callListReportAttendance,
+        displayReportAttendance,
+        callListReportTransaction,
+        displayReportTransaction,
+        writeLogLogout
+    })
+    (withRouter(Report))

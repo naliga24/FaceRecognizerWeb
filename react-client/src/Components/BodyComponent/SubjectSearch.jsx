@@ -1,12 +1,17 @@
 import { Map } from 'immutable'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 import ReactTable from 'react-table'
 
 import 'react-table/react-table.css'
 
-import login from './../Prototype/login'
-import subject from './../Prototype/subject'
+import {
+    listSearchSubject
+} from './../Actions/Subject';
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class SubjectSearch extends Component {
     constructor() {
@@ -40,9 +45,8 @@ class SubjectSearch extends Component {
                 .set('teacherLastName', this.state.tmpTeacherLastName)
                 .set('subjectStatus', this.state.tmpSubjectStatus)
             this.setState({ search });
-            let subjectObj = new subject()
-            let listSearchSubject = await subjectObj.listSearchSubject(this.state.search)
-            this.setState({ listSearchSubject })
+            await this.props.listSearchSubject(this.state.search)
+            this.setState({ listSearchSubject:this.props.subject.listSearchSubject })
             this.state.listSearchSubject.length === 0 && alertify.alert('ค้นหา', 'ไม่พบข้อมูลที่ค้นหา', () => {
                 alertify.error('ไม่พบข้อมูลที่ค้นหา')
             }).show()
@@ -51,9 +55,8 @@ class SubjectSearch extends Component {
             alertify.alert('วิชาเปิดสอน', err, () => {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
-        }finally{
-            let log = new login()
-            log.writeLogLogout('2')
+        } finally {
+            this.props.writeLogLogout('2')
         }
     }
 
@@ -63,14 +66,12 @@ class SubjectSearch extends Component {
             let stateLocal = localStorage.getItem('stateSubjectSearch')
             let search = await Map(JSON.parse(stateLocal))
             this.setState({ search })
-            let subjectObj = new subject()
-            let listSearchSubject = await subjectObj.listSearchSubject(this.state.search)
-            this.setState({ listSearchSubject })
+            await this.props.listSearchSubject(this.state.search)
+            this.setState({ listSearchSubject:this.props.subject.listSearchSubject })
         } catch (err) {
             console.log(err)
-        }finally{
-            let log = new login()
-            log.writeLogLogout('2')
+        } finally {
+            this.props.writeLogLogout('2')
         }
     }
 
@@ -191,4 +192,12 @@ class SubjectSearch extends Component {
     }
 }
 
-export default SubjectSearch;
+const mapStateToProps = state => ({
+    subject: state.subject
+});
+
+export default connect(mapStateToProps,
+    {
+        listSearchSubject,
+        writeLogLogout
+    })(withRouter(SubjectSearch))

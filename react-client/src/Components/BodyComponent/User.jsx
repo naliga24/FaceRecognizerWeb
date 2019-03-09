@@ -1,8 +1,16 @@
 import { Redirect, Link, withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 
-import login from './../Prototype/login'
-import user from './../Prototype/user'
+import {
+    getInactiveInfo,
+    checkUserLogin,
+    editUser,
+    addUser
+} from './../Actions/User';
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 let dateFormat = require('dateformat')
 
@@ -28,6 +36,7 @@ class User extends Component {
             flagEdit: this.props.location.flagEdit,
             buttonDisble: this.props.location.flagEdit,
             tmpDate: new Date(),
+            time:null
         };
     }
 
@@ -40,12 +49,11 @@ class User extends Component {
 
     userInactiveInfo = async () => {
         try {
-            let tmp = new user()
-            let inactive = await tmp.getInactiveInfo(this.state.userNo)
-            inactive && this.setState({
-                inactiveDate: inactive.INACTIVE_DATE,
-                inactiveTime: inactive.INACTIVE_TIME,
-                inactiveDetail: inactive.INACTIVE_DETAIL
+            await this.props.getInactiveInfo(this.state.userNo)
+            this.props.user.inactiveInfo && this.setState({
+                inactiveDate: this.props.user.inactiveInfo.INACTIVE_DATE,
+                inactiveTime: this.props.user.inactiveInfo.INACTIVE_TIME,
+                inactiveDetail: this.props.user.inactiveInfo.INACTIVE_DETAIL
             })
         } catch (err) {
             alertify.alert('ผู้ใช้ระบบ', err, () => {
@@ -57,7 +65,6 @@ class User extends Component {
     saveUser = async () => {
         try {
             if (this.state.userLogin && this.state.userPassword && this.state.userName && this.state.userType && this.state.userStatus) {
-                let tmp = new user()
                 if ((this.state.userLogin !== this.state.oldUserLogin)
                     || (this.state.userPassword !== this.state.oldUserPassword)
                     || (this.state.userName !== this.state.oldUserName)
@@ -65,30 +72,30 @@ class User extends Component {
                     || (this.state.inactiveDetail !== this.state.oldInactiveDetail)
                     || (this.state.userStatus !== this.state.oldUserStatus)) {
                     if (this.state.userLogin !== this.state.oldUserLogin) {
-                        let userLoginFlag = await tmp.checkUserLogin(this.state.userLogin)
-                        if (userLoginFlag === '0') {
+                        await this.props.checkUserLogin(this.state.userLogin)
+                        if (this.props.user.userLoginFlag === 0) {
                             if (this.state.flagEdit) {
-                                tmp.editUser(this.state, this.clear)
+                                this.props.editUser(this.state, this.clear)
                                 alertify.alert('แก้ไข', `แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {
                                     this.gotoUserSearch()
                                 }).show()
                             } else {
-                                tmp.addUser(this.state, this.clear)
+                                this.props.addUser(this.state, this.clear)
                                 alertify.alert('เพิ่ม', `เพิ่มข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {
                                     alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
                                 }).show()
                             }
-                        } else if (userLoginFlag === '1' && this.state.flagEdit) {
+                        } else if (this.props.user.userLoginFlag === 1 && this.state.flagEdit) {
                             alertify.alert('แก้ไข', `ไม่สามารถเแก้ไขข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเแก้ไขข้อมูล')
                             }).show()
-                        } else if (userLoginFlag === '1' && !this.state.flagEdit) {
+                        } else if (this.props.user.userLoginFlag === 1 && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
                     } else if (this.state.flagEdit) {
-                        tmp.editUser(this.state, this.clear)
+                        this.props.editUser(this.state, this.clear)
                         alertify.alert('แก้ไข', `แก้ข้อมูลผู้ใช้งานระบบ "${this.state.userLogin}" เรียบร้อย`, () => {
                             this.gotoUserSearch()
                         }).show()
@@ -120,8 +127,7 @@ class User extends Component {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('6')
+            this.props.writeLogLogout('6')
         }
     }
 
@@ -142,10 +148,17 @@ class User extends Component {
     }
 
     getCurrentDate = () => {
-        setInterval(() => {
-            this.state.tmpDate.setSeconds(this.state.tmpDate.getSeconds() + 1);
-            this.setState({ tmpDate: this.state.tmpDate })
-        }, 1000)
+        this.setState({
+            time: setInterval(() => {
+                this.state.tmpDate.setSeconds(this.state.tmpDate.getSeconds() + 1);
+                this.setState({ tmpDate: this.state.tmpDate })
+                console.log(this.state.tmpDate)
+            }, 1000)
+        })
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.time)
     }
 
     render() {
@@ -196,4 +209,16 @@ class User extends Component {
         );
     }
 }
-export default withRouter(User);
+
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps,
+    {
+        getInactiveInfo,
+        checkUserLogin,
+        editUser,
+        addUser,
+        writeLogLogout
+    })(withRouter(User))        

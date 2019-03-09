@@ -1,8 +1,15 @@
 import { Redirect, withRouter } from 'react-router-dom';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import login from './../Prototype/login';
-import semester from './../Prototype/semester';
+import {
+    checkSemesterName,
+    editSemester,
+    addSemester
+} from './../Actions/Semester'
+import {
+    writeLogLogout
+} from './../Actions/Login'
 
 class Semester extends Component {
     constructor(props) {
@@ -23,35 +30,35 @@ class Semester extends Component {
     saveSemester = async () => {
         try {
             if (this.state.tmpSemesterTerm && this.state.tmpSemesterYear) {
-                let semesterObj = new semester()
                 if ((this.state.semesterName !== this.state.oldSemesterName)
                     || (this.state.semesterStatusNo !== this.state.oldSemesterStatusNo)) {
                     if (this.state.semesterName !== this.state.oldSemesterName) {
-                        let semesterNameFlag = await semesterObj.checkSemesterName(this.state.semesterName)
-                        if (semesterNameFlag === '0') {
+                      await this.props.checkSemesterName(this.state.semesterName)
+                        if (this.props.semester.semesterNameFlag === 0) {
                             if (this.state.flagEdit) {
-                                semesterObj.editSemester(this.state, this.clear)
+                                this.props.editSemester(this.state)
                                 alertify.alert('แก้ไข', `แก้ไขข้อมูลภาคศึกษา "${this.state.semesterName}" เรียบร้อย`, () => {
                                     this.gotoSemesterSearch()
                                 }).show()
                             } else {
-                                semesterObj.addSemester(this.state.semesterName, this.clear)
+                                this.props.addSemester(this.state.semesterName)
                                 alertify.alert('เพิ่ม', `เพิ่มข้อมูลข้อมูลภาคศึกษา "${this.state.semesterName}" เรียบร้อย`, () => {
                                     alertify.success(`เพิ่มข้อมูลเรียบร้อย`)
                                 }).show()
+                                this.clear()
                             }
-                        } else if (semesterNameFlag === '1' && this.state.flagEdit) {
+                        } else if (this.props.semester.semesterNameFlag === 1 && this.state.flagEdit) {
                             alertify.alert('แก้ไข', `ไม่สามารถแก้ไขข้อมูลภาคศึกษา "${this.state.semesterName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถแก้ไขข้อมูล')
                             }).show()
                         }
-                        else if (semesterNameFlag === '1' && !this.state.flagEdit) {
+                        else if (this.props.semester.semesterNameFlag === 1 && !this.state.flagEdit) {
                             alertify.alert('เพิ่ม', `ไม่สามารถเพิ่มข้อมูลภาคศึกษา "${this.state.semesterName}" ชื่อมีในระบบแล้ว`, () => {
                                 alertify.error('ไม่สามารถเพิ่มข้อมูล')
                             }).show()
                         }
                     } else if (this.state.flagEdit) {
-                        semesterObj.editSemester(this.state, this.clear)
+                        this.props.editSemester(this.state)
                         alertify.alert('แก้ไข', `แก้ไขข้อมูลภาคศึกษา "${this.state.semesterName}" เรียบร้อย`, () => {
                             this.gotoSemesterSearch()
                         }).show()
@@ -76,8 +83,7 @@ class Semester extends Component {
                 alertify.error('เกิดข้อผิดพลาด')
             }).show()
         } finally {
-            let log = new login()
-            log.writeLogLogout('3')
+            this.props.writeLogLogout('3')
         }
     }
 
@@ -154,4 +160,15 @@ class Semester extends Component {
     }
 }
 
-export default withRouter(Semester);
+const mapStateToProps = state => ({
+semester:state.semester
+});
+
+export default connect(mapStateToProps,
+    {
+        checkSemesterName,
+        editSemester,
+        addSemester,
+        writeLogLogout
+    })
+    (withRouter(Semester))
