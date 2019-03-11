@@ -29,7 +29,7 @@ export const updateClassAttendance = (studentNo, confirmStatusNo, classAttendanc
   console.log('UPDATE_CLASS_ATTENDANCE')
 };
 
-export const callGetStudentNoByClassAttendanceStudentKeyCodeName = (classAttendanceStudentKeyCodeName)  => {
+export const callGetStudentNoByClassAttendanceStudentKeyCodeName = (classAttendanceStudentKeyCodeName) => {
   return getStudentNoByClassAttendanceStudentKeyCodeName(classAttendanceStudentKeyCodeName)
 }
 
@@ -58,18 +58,20 @@ export const listSearchClassAttendance = (data) => dispatch => {
     subjectNo: data.get('subjectNo'),
     confirmStatusNo: data.get('confirmStatusNo'),
     semesterNo: data.get('semesterNo'),
-  }).then(res =>
+  }).then(res => { 
     dispatch({
       type: LIST_SEARCH_CLASS_ATTENDANCE,
       payload: res.data
     })
-  ).catch(function (error) {
-    console.log(error);
-  });
-  console.log('UPDATE_CLASS_ATTENDANCE')
+    console.log('dispatch');
+}
+).catch (function (error) {
+  console.log(error);
+});
+console.log('UPDATE_CLASS_ATTENDANCE')
 }
 
-export const listReportAttendance = (data) =>dispatch=> {
+export const listReportAttendance = (data) => dispatch => {
   return axios.post('/selectClassAttendanceInfoForReport', {
     subjectNo: data.subjectNo, semesterNo: data.semesterNo
   }).then(res =>
@@ -83,6 +85,6 @@ export const listReportAttendance = (data) =>dispatch=> {
   console.log('LIST_REPORT_ATTENDANCE')
 }
 
-export const callListSearchStudent = (data)  => {
+export const callListSearchStudent = (data) => {
   return listSearchStudent(data)
 }

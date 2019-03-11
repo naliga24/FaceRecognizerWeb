@@ -7,7 +7,6 @@ ADD_SEMESTER,
 LIST_SEMESTER_SEARCH
 } from './types';
 
-
 export const listSemester = () => dispatch=>{
     return axios.get('/selectSemesterInfo').then(res =>
         dispatch({

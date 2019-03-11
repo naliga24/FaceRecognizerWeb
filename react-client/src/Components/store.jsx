@@ -14,3 +14,6 @@ const store = createStore(
 );
 
 export default store
+
+window.actions = []
+window.actions.push(store)

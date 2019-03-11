@@ -20,6 +20,7 @@ class Login extends Component {
         this.state = {
             userLogin: '',
             userPassword: '',
+            loading: false
         };
     }
 
@@ -28,9 +29,10 @@ class Login extends Component {
     }
 
     login = async () => {
-        console.log('login')
-        if (this.state.userLogin && this.state.userPassword) {
-            try {
+        try {
+            console.log('login')
+            if (this.state.userLogin && this.state.userPassword) {
+                this.setState({ loading: true })
                 await this.props.callCheckUserLogin(this.state.userLogin)
                 if (this.props.user.userLoginFlag === 1) {
                     await this.props.callCheckUserPassword(this.state.userLogin, this.state.userPassword)
@@ -42,30 +44,37 @@ class Login extends Component {
                             await this.props.writeLogLogin('1')
                             window.location.reload()
                         } else if (this.props.user.userStatusFlag === 0) {
+                            this.setState({ loading: false })
                             alertify.alert('เข้าระบบ', `สถานะผู้ใช้ระบบเท่ากับ “ไม่ใช้งาน”`, () => {
                                 alertify.error('ไม่สามารถเข้าระบบ')
                             }).show()
                         }
+                        this.setState({ loading: false })
                     } else if (this.props.user.userPasswordFlag === 0) {
+                        this.setState({ loading: false })
                         alertify.alert('เข้าระบบ', `ชื่อ password ไม่ถูกต้อง`, () => {
                             alertify.error('ไม่สามารถเข้าระบบ')
                         }).show()
                         await this.props.callGetLoginNo(this.state.userLogin)
                         this.props.writeLogLoginError('11', this.props.user.userNo)
                     }
+                    this.setState({ loading: false })
                 } else if (this.props.user.userLoginFlag === 0) {
+                    this.setState({ loading: false })
                     alertify.alert('เข้าระบบ', `ชื่อ username ไม่ถูกต้อง`, () => {
                         alertify.error('ไม่สามารถเข้าระบบ')
                     }).show()
                 }
+                this.setState({ loading: false })
             }
-            catch (err) {
-                alertify.alert('เข้าระบบ', err, () => {
+            else {
+                alertify.alert('เข้าระบบ', `กรอกข้อมูลไม่ครบ`, () => {
                     alertify.error('ไม่สามารถเข้าระบบ')
                 }).show()
             }
-        } else {
-            alertify.alert('เข้าระบบ', `กรอกข้อมูลไม่ครบ`, () => {
+        }
+        catch (err) {
+            alertify.alert('เข้าระบบ', err, () => {
                 alertify.error('ไม่สามารถเข้าระบบ')
             }).show()
         }
@@ -86,7 +95,7 @@ class Login extends Component {
                         <span class="input-group-addon" id="sizing-addon1">#</span>
                         <input type="text" class="form-control" maxLength='4' placeholder="Password" aria-describedby="sizing-addon1" name="userPassword" onChange={this.onChange} required />
                     </div><br />
-                    <button type="submit" class="btn btn-default navbar-btn" onClick={this.login}>เข้าสู่ระบบ</button>
+                    <button type="submit" class="btn btn-default navbar-btn" onClick={this.login}>{this.state.loading && <i className='fa fa-refresh fa-spin'></i>} เข้าสู่ระบบ</button>
                 </div >
             </div>
         );
@@ -96,6 +105,7 @@ class Login extends Component {
 const mapStateToProps = state => ({
     user: state.user,
     userType: state.userType,
+    login: state.login
 });
 
 export default connect(mapStateToProps,
