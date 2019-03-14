@@ -22,8 +22,8 @@ export const listSubject = () =>dispatch=> {
     console.log('LIST_SUBJECT')
 }
 
-export const callListTeacher = () => dispatch => {
-    return listTeacher(dispatch)
+export const callListTeacher = () => {
+    return listTeacher()
 }
 
 export const checkSubjectId = (subjectCodeName) => dispatch => {

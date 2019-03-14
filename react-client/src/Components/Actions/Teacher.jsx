@@ -7,7 +7,7 @@ import {
     LIST_SEARCH_TEACHER
 } from './types';
 
-export const listTeacher = () =>dispatch=> {
+export const listTeacher = () => dispatch => {
     return axios.get('/selectTeacherInfo').then(res =>
         dispatch({
             type: LIST_TEACHER,
