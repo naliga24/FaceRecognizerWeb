@@ -1,5 +1,5 @@
 const path = require('path');
-
+//comment
 const SRC_DIR = path.join(__dirname, '/react-client/src');
 const DIST_DIR = path.join(__dirname, '/react-client/dist');
 const webpack = require('webpack');
