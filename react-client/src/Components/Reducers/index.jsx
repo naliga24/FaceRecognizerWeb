@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import itemReducer from './itemReducer';
 import classAttendanceReducer from './classAttendanceReducer';
 import studentReducer from './studentReducer';
 import semesterReducer from './semesterReducer';
